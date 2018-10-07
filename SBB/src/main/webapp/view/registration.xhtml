@@ -14,19 +14,19 @@
     <h:form>
         <h:panelGrid columns="2" border="0">
             <h:outputText value="first name"/>
-            <h:inputText value="#{LoginController.firstName}" />
+            <h:inputText value="#{RegistrationController.firstName}" />
             <h:outputText value="last name"/>
-            <h:inputText value="#{LoginController.lastName}" />
+            <h:inputText value="#{RegistrationController.lastName}" />
             <h:outputText value="email"/>
-            <h:inputText value="#{LoginController.email}" />
+            <h:inputText value="#{RegistrationController.email}" />
             <h:outputText value="user name"/>
-            <h:inputText value="#{LoginController.login}" />
+            <h:inputText value="#{RegistrationController.userName}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="Password"/>
-            <h:inputSecret value="#{LoginController.password}" />
+            <h:inputSecret value="#{RegistrationController.password}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="Password confirmation"/>
-            <h:inputSecret value="#{LoginController.password}" />
+            <h:inputSecret value="#{RegistrationController.password}" required="true" requiredMessage="The input field is empty"/>
         </h:panelGrid>
-        <h:commandButton value="OK" action="#{LoginController.checkLogin}" />
+        <h:commandButton value="Registration" action="#{RegistrationController.createUser}" />
     </h:form>
 </h:body>
 </html>
