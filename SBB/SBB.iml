@@ -18,6 +18,7 @@
       <configuration process_explicitly_annotated="false">
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/spring-config.xml</file>
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/ApplicationContext.xml</file>
         </fileset>
       </configuration>
     </facet>
@@ -25,6 +26,7 @@
       <configuration>
         <datasource-map>
           <unit-entry name="hibernate.cfg.xml" value="6d347d6c-ca7e-4275-a70d-806f22f4c577" />
+          <unit-entry name="sessionFactory" value="dataSource" />
         </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/hibernate.cfg.xml" />
@@ -36,7 +38,6 @@
         <setting name="provider-name" value="" />
         <datasource-mapping>
           <factory-entry name="NewPersistenceUnit" />
-          <factory-entry name="emf" value="dataSource" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/Java/META-INF/persistence.xml" />
       </configuration>

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service("userBo")
 @Transactional
 public class UserBoImpl implements UserBo {
@@ -28,8 +26,4 @@ public class UserBoImpl implements UserBo {
         userDao.createUser(user);
     }
 
-    @Override
-    public List<UserEntity> listUsers() {
-        return userDao.listUser();
-    }
 }

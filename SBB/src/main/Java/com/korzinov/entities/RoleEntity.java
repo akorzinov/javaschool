@@ -1,6 +1,11 @@
 package com.korzinov.entities;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "role", schema = "sbb")
@@ -19,7 +24,6 @@ public class RoleEntity {
         this.roleId = roleId;
     }
 
-    @Basic
     @Column(name = "role", nullable = false, length = 45)
     public String getRole() {
         return role;

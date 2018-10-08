@@ -2,14 +2,14 @@ package com.korzinov.controllers;
 
 import com.korzinov.bo.UserBo;
 import com.korzinov.entities.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.util.List;
 
 @ManagedBean(name="RegistrationController")
 @SessionScoped
@@ -20,15 +20,14 @@ public class RegistrationController {
     private String lastName;
     private String email;
     private String userName;
-    private List<UserEntity> listUsers;
 
+    @ManagedProperty(value = "#{userBo}")
     private UserBo userBo;
 
     public UserBo getUserBo() {
         return userBo;
     }
 
-    @Autowired
     public void setUserBo(UserBo userBo) {
         this.userBo = userBo;
     }
@@ -81,14 +80,12 @@ public class RegistrationController {
         u.setUserName(userName);
         u.setPassword(password);
         u.setEnabled((byte)1);
-//        u.setUserId(3);
         try {
             userBo.createUser(u);
-        } catch (DataIntegrityViolationException e) {
-            createMessage("User name is already used",FacesMessage.SEVERITY_ERROR);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            createMessage("User name or email is already used",FacesMessage.SEVERITY_ERROR);
             return null;
         }
-        listUsers.add(u);
         createMessage("Registration successful", FacesMessage.SEVERITY_INFO);
         return "welcome?faces-redirect=true"; }
 
