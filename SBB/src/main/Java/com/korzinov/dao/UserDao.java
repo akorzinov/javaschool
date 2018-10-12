@@ -6,4 +6,6 @@ public interface UserDao {
 
     void createUser(UserEntity user);
 
+    UserEntity findByUserName(String username);
+
 }

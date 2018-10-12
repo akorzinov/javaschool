@@ -132,7 +132,17 @@
       <artifactId> mysql-connector-java </artifactId>
       <version> 5.1.35 </version>
     </dependency>
-
+    <!--Web Dependencies-->
+    <dependency>
+      <groupId>javax.servlet.jsp.jstl</groupId>
+      <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.web</groupId>
+      <artifactId>javax.servlet.jsp.jstl</artifactId>
+      <version>1.2.2</version>
+    </dependency>
   </dependencies>
 
   <build>

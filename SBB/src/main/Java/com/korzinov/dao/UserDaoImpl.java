@@ -6,6 +6,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
 
@@ -25,5 +28,15 @@ public class UserDaoImpl implements UserDao {
     public void createUser(UserEntity user) {
 //            getSession().persist(user);
             getSession().save(user);
+    }
+
+    @Override
+    public UserEntity findByUserName(String username) {
+        List<UserEntity> users = new ArrayList<>();
+        users = getSession().createQuery("from UserEntity where userName=?").setParameter(0, username).list();
+        if (users.size() > 0) {
+            return users.get(0);
+        } else
+        return null;
     }
 }

@@ -11,14 +11,15 @@
 
 <h:body>
     <h:form>
+        <h:outputText style="color: red" value="Invalid username or password"/>
         <h:panelGrid columns="2" border="0">
-            <h:outputText value="Username"/>
-            <h:inputText id="j_username" value="#{LoginController.login}" />
+            <h:outputText value="Login"/>
+            <h:inputText value="#{LoginController.login}" />
             <h:outputText value="Password"/>
-            <h:inputSecret id="j_password" value="#{LoginController.password}" />
+            <h:inputSecret value="#{LoginController.password}" />
         </h:panelGrid>
-        <h:commandButton value="Login" action="#{LoginController.checkLogin}" />
-        <h:commandButton value="Registration" action="#{LoginController.registration}"  />
+        <h:commandButton value="OK" action="#{LoginController.checkLogin}" />
+        <h:commandButton value="Registration" action="#{LoginController.registration}" />
     </h:form>
 </h:body>
 </html>

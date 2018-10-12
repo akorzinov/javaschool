@@ -20,7 +20,7 @@ public class UserEntity {
     private String email;
     private String userName;
     private String password;
-    private Byte enabled;
+    private Boolean enabled;
     private Set<RoleEntity> roles = new HashSet<>();
 
     @Id
@@ -79,12 +79,12 @@ public class UserEntity {
         this.password = password;
     }
 
-    @Column(name = "enabled", nullable = true)
-    public Byte getEnabled() {
+    @Column(name = "enabled", nullable = false)
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Byte enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 

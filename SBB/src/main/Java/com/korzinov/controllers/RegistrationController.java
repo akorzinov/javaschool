@@ -1,6 +1,6 @@
 package com.korzinov.controllers;
 
-import com.korzinov.bo.UserBo;
+import com.korzinov.services.UserRegistrationService;
 import com.korzinov.entities.UserEntity;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ManagedBean(name="RegistrationController")
 @SessionScoped
@@ -21,15 +22,16 @@ public class RegistrationController {
     private String email;
     private String userName;
 
-    @ManagedProperty(value = "#{userBo}")
-    private UserBo userBo;
 
-    public UserBo getUserBo() {
-        return userBo;
+    @ManagedProperty(value = "#{userBo}")
+    private UserRegistrationService userRegistrationService;
+
+    public UserRegistrationService getUserRegistrationService() {
+        return userRegistrationService;
     }
 
-    public void setUserBo(UserBo userBo) {
-        this.userBo = userBo;
+    public void setUserRegistrationService(UserRegistrationService userRegistrationService) {
+        this.userRegistrationService = userRegistrationService;
     }
 
     public String getUserName() {
@@ -74,14 +76,15 @@ public class RegistrationController {
 
     public String createUser() {
         UserEntity u = new UserEntity();
+        String cryptedPassword = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setFirstName(firstName);
         u.setLastName(lastName);
         u.setEmail(email);
         u.setUserName(userName);
-        u.setPassword(password);
-        u.setEnabled((byte)1);
+        u.setPassword(cryptedPassword);
+        u.setEnabled(true);
         try {
-            userBo.createUser(u);
+            userRegistrationService.createUser(u);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             createMessage("User name or email is already used",FacesMessage.SEVERITY_ERROR);
             return null;
