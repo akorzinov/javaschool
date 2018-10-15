@@ -34,10 +34,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="userDetailsService" class="com.korzinov.services.UserDetailsServiceImpl">
-        <property name="userDao" ref="userDao"/>
-    </bean>
-
     <import resource="spring-security.xml"/>
 
 </beans>

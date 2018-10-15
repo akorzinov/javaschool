@@ -1,14 +1,9 @@
 package com.korzinov.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "role", schema = "sbb")
+@Table(name = "role")
 public class RoleEntity {
     private int roleId;
     private String role;
@@ -33,7 +28,7 @@ public class RoleEntity {
         this.role = role;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public UserEntity getUser() { return user; }
 

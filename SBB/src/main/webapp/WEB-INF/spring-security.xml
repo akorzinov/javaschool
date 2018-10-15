@@ -7,24 +7,50 @@
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
-
-    <http auto-config="true">
-        <intercept-url pattern="/view/admin/*" access="ROLE_ADMIN" />
-        <intercept-url pattern="/view/user/*" access="ROLE_USER"/>
-        <intercept-url pattern="view/registration.xhtml" access="permitAll"/>
-        <intercept-url pattern="view/loginfailed.xhtml" access="permitAll"/>
-        <form-login login-page="/view/login.xhtml" authentication-failure-url="/view/loginfailed.xhtml"/>
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/login" access="permitAll()"/>
+        <intercept-url pattern="/registration" access="permitAll()"/>
+        <intercept-url pattern="/views/**" access="hasRole('ROLE_ADMIN')"/>
+        <form-login login-page="/login.xhtml"
+                    authentication-failure-url="/login.xhtml?auth=fail"
+                    username-parameter="username"
+                    password-parameter="password"/>
+        <logout logout-success-url="/login.xhtml"/>
     </http>
 
-    <authentication-manager>
+    <authentication-manager id="providerManager">
         <authentication-provider user-service-ref="userDetailsService">
-            <!--<jdbc-user-service data-source-ref="dataSource"/>-->
-            <password-encoder ref="bcrypt"/>
+            <password-encoder hash="bcrypt"/>
         </authentication-provider>
     </authentication-manager>
 
-    <beans:bean id="bcrypt" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
-        <beans:constructor-arg name="strength" value="12"/>
+    <!--<beans:bean id="bcrypt" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">-->
+        <!--<beans:constructor-arg name="strength" value="12"/>-->
+    <!--</beans:bean>-->
+
+    <beans:bean id="userDetailsService" class="com.korzinov.services.UserDetailsServiceImpl">
+        <beans:property name="userDao" ref="userDao"/>
     </beans:bean>
+
+    <beans:bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <beans:property name="userDetailsService" ref="userDetailsService"/>
+    </beans:bean>
+
+    <beans:bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="filterProcessesUrl" value="/login"/>
+        <beans:property name="usernameParameter" value="username"/>
+        <beans:property name="passwordParameter" value="password"/>
+    </beans:bean>
+
+    <beans:bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+        <beans:constructor-arg>
+            <beans:list>
+                <beans:ref bean="daoAuthenticationProvider"/>
+            </beans:list>
+        </beans:constructor-arg>
+    </beans:bean>
+
+    <!--<beans:bean id="userDetailsService" class="com.korzinov.services.UserDetailsServiceImpl"/>-->
 
 </beans:beans>

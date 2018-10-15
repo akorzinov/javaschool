@@ -8,10 +8,5 @@
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
     <mapping class="com.korzinov.entities.RoleEntity"/>
     <mapping class="com.korzinov.entities.UserEntity"/>
-    <!-- <property name="connection.username"/> -->
-    <!-- <property name="connection.password"/> -->
-
-    <!-- DB schema will be updated if needed -->
-    <!-- <property name="hbm2ddl.auto">createUser</property> -->
   </session-factory>
 </hibernate-configuration>

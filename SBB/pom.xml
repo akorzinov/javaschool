@@ -86,6 +86,12 @@
       <artifactId>spring-instrument</artifactId>
       <version>5.1.0.RELEASE</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>2.1.0.RELEASE</version>
+    </dependency>
     <!-- Spring Security Libraries -->
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -111,6 +117,12 @@
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-acl</artifactId>
       <version>5.1.0.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.webflow/spring-faces -->
+    <dependency>
+      <groupId>org.springframework.webflow</groupId>
+      <artifactId>spring-faces</artifactId>
+      <version>2.5.1.RELEASE</version>
     </dependency>
     <!--Hibernate-->
     <!-- hibernate-entitymanager -->
@@ -143,6 +155,25 @@
       <artifactId>javax.servlet.jsp.jstl</artifactId>
       <version>1.2.2</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.11.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.11.1</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
