@@ -6,10 +6,13 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <title>Welcome</title>
+    <title>Welcome User</title>
 </h:head>
 
 <h:body>
-    <h:outputText value="Welcome to SBB: #{LoginController.login}!" />
+    <h:outputText value="Welcome to user's SBB: #{LoginController.login}!" />
+    <h:form>
+        <h:outputLink value="#{request.contextPath}/logout">logout</h:outputLink>
+    </h:form>
 </h:body>
 </html>

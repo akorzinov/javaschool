@@ -1,4 +1,4 @@
-package com.korzinov.bo;
+package com.korzinov.services;
 
 import com.korzinov.dao.UserDao;
 import com.korzinov.entities.UserEntity;
@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("userBo")
+@Service("userRegistrationService")
 @Transactional
-public class UserBoImpl implements UserBo {
+public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     @Autowired
     private UserDao userDao;

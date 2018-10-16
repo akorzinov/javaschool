@@ -1,8 +1,8 @@
-package com.korzinov.bo;
+package com.korzinov.services;
 
 import com.korzinov.entities.UserEntity;
 
-public interface UserBo {
+public interface UserRegistrationService {
 
     void createUser(UserEntity user);
 }

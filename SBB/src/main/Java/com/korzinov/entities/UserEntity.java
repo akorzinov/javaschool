@@ -1,18 +1,11 @@
 package com.korzinov.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user", schema = "sbb")
+@Table(name = "user"/*, schema = "sbb"*/)
 public class UserEntity {
     private int userId;
     private String firstName;
@@ -20,7 +13,7 @@ public class UserEntity {
     private String email;
     private String userName;
     private String password;
-    private Byte enabled;
+    private Boolean enabled;
     private Set<RoleEntity> roles = new HashSet<>();
 
     @Id
@@ -79,16 +72,17 @@ public class UserEntity {
         this.password = password;
     }
 
-    @Column(name = "enabled", nullable = true)
-    public Byte getEnabled() {
+
+    @Column(name = "enabled", nullable = false)
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Byte enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
     public Set<RoleEntity> getRoles() { return roles; }
 
     public void setRoles(Set<RoleEntity> roles) { this.roles = roles; }
