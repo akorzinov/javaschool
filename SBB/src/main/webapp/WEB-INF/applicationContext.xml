@@ -34,6 +34,14 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="userDao" class="com.korzinov.dao.UserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="myUserDetailsService" class="com.korzinov.services.UserDetailsServiceImpl">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
     <import resource="spring-security.xml"/>
 
 </beans>

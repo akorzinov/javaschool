@@ -26,43 +26,44 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userDao.findByUserName(username);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (RoleEntity role : user.getRoles()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
-        }
-        return new User(user.getUserName(), user.getPassword(), grantedAuthorities);
-    }
-
-
 //    @Override
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//
 //        UserEntity user = userDao.findByUserName(username);
-//        List<GrantedAuthority> authorities = buildUserAuthority(user.getRoles());
-//
-//        return buildUserForAuthentication(user, authorities);
-//    }
-//
-//    private User buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {
-//        return new User(user.getUserName(),user.getPassword(),user.getEnabled(), true, true, true, authorities);
-//    }
-//
-//    private List<GrantedAuthority> buildUserAuthority(Set<RoleEntity> usersRoles) {
-//
-//        Set<GrantedAuthority> setAuths = new HashSet<>();
-//        for (RoleEntity role: usersRoles) {
-//            setAuths.add(new SimpleGrantedAuthority(role.getRole()));
+//        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+//        for (RoleEntity role : user.getRoles()) {
+//            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
 //        }
-//        List<GrantedAuthority> result = new ArrayList<>(setAuths);
-//        return result;
+//        return new User(user.getUserName(), user.getPassword(), grantedAuthorities);
 //    }
-//
-//    public UserDao getUserDao() {
-//        return userDao;
-//    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("Inside loadUserByUsername");
+        UserEntity user = userDao.findByUserName(username);
+        System.out.println(user);
+        System.out.println("after findByUserName");
+        List<GrantedAuthority> authorities = buildUserAuthority(user.getRoles());
+        return buildUserForAuthentication(user, authorities);
+    }
+
+    private User buildUserForAuthentication(UserEntity user, List<GrantedAuthority> authorities) {
+        return new User(user.getUserName(),user.getPassword(),user.getEnabled(), true, true, true, authorities);
+    }
+
+    private List<GrantedAuthority> buildUserAuthority(Set<RoleEntity> usersRoles) {
+
+        Set<GrantedAuthority> setAuths = new HashSet<>();
+        for (RoleEntity role: usersRoles) {
+            setAuths.add(new SimpleGrantedAuthority(role.getRole()));
+        }
+        List<GrantedAuthority> result = new ArrayList<>(setAuths);
+        return result;
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
 //
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;

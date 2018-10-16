@@ -21,11 +21,11 @@
     <h:form>
         <h:panelGrid columns="2" border="0">
             <h:outputText value="Username"/>
-            <h:inputText id="username"  value="#{LoginController.login}"/>
+            <h:inputText id="username"  value="#{LoginController.username}"/>
             <h:outputText value="Password"/>
             <h:inputSecret id="password"  value="#{LoginController.password}" />
         </h:panelGrid>
-        <h:commandButton type="submit" id="login" value="Login" action="#{LoginController.checkLogin}"  />
+        <h:commandButton type="submit" value="Login" action="#{LoginController.login}"  />
         <h:commandButton value="Registration" action="#{LoginController.registration}"  />
     </h:form>
 </h:body>

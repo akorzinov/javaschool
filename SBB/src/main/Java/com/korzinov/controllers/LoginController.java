@@ -3,7 +3,6 @@ package com.korzinov.controllers;
 import org.springframework.stereotype.Controller;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -18,15 +17,16 @@ import java.io.Serializable;
 @ManagedBean (name= "LoginController")
 @SessionScoped
 public class LoginController implements Serializable{
-    private String login;
+    private String username;
     private String password;
 
-    public String checkLogin() throws ServletException, IOException {
+    public void login() throws ServletException, IOException {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        username = context.getRequestParameterMap().get("username");
+        System.out.println("Login controller username is " + username);
         RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/login");
         dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
         FacesContext.getCurrentInstance().responseComplete();
-        return null;
     }
 
     public String logout() throws ServletException, IOException {
@@ -43,11 +43,11 @@ public class LoginController implements Serializable{
         return "registration?faces-redirect=true";
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) { this.login = login; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getPassword() {
         return password;

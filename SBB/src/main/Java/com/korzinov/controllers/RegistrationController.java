@@ -1,6 +1,5 @@
 package com.korzinov.controllers;
 
-import com.korzinov.models.UserModel;
 import com.korzinov.services.UserRegistrationService;
 import com.korzinov.entities.UserEntity;
 import org.hibernate.exception.ConstraintViolationException;
