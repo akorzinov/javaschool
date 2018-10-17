@@ -128,7 +128,7 @@ public class UserEntity {
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
-                ", roles=" + roles +
+                ", roles=" + this.getRoles() +
                 '}';
     }
 }

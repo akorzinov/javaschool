@@ -1,9 +1,7 @@
 package com.korzinov.controllers;
 
 import org.springframework.stereotype.Controller;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -14,19 +12,19 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
-@ManagedBean (name= "LoginController")
+@Named(value = "loginController")
 @SessionScoped
+@Controller
 public class LoginController implements Serializable{
     private String username;
     private String password;
 
-    public void login() throws ServletException, IOException {
+    public String login() throws ServletException, IOException {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        username = context.getRequestParameterMap().get("username");
-        System.out.println("Login controller username is " + username);
         RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/login");
         dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
         FacesContext.getCurrentInstance().responseComplete();
+        return null;
     }
 
     public String logout() throws ServletException, IOException {

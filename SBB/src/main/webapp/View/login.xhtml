@@ -18,15 +18,15 @@
             Reason: Bad Credentials! Please Try Again.
         </div>
     </c:if>
-    <h:form>
+    <h:form prependId="false" id="form_login">
         <h:panelGrid columns="2" border="0">
             <h:outputText value="Username"/>
-            <h:inputText id="username"  value="#{LoginController.username}"/>
+            <h:inputText  id="username" value="#{loginController.username}" />
             <h:outputText value="Password"/>
-            <h:inputSecret id="password"  value="#{LoginController.password}" />
+            <h:inputSecret id="password"  value="#{loginController.password}" />
         </h:panelGrid>
-        <h:commandButton type="submit" value="Login" action="#{LoginController.login}"  />
-        <h:commandButton value="Registration" action="#{LoginController.registration}"  />
+        <h:commandButton type="submit" value="Login" action="#{loginController.login}"  />
+        <h:commandButton value="Registration" action="#{loginController.registration}"  />
     </h:form>
 </h:body>
 </html>

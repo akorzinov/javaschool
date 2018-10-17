@@ -40,32 +40,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserEntity findByUserName(String username) {
-//        -----------------------------1-----------------------------
-//        List<UserEntity> users = new ArrayList<UserEntity>();
-        System.out.println("username is " + username);
+
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
         CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
         Root<UserEntity> root = query.from(UserEntity.class);
         query.select(root).where(cb.equal(root.get("userName"),username));
         Query<UserEntity> q = getSession().createQuery(query);
         UserEntity user = q.getSingleResult();
-        System.out.println(user.toString());
         return user;
 
-//----------------------------------2-------------------------------------
-//        Criteria crit = getSession().createCriteria(UserEntity.class);
-//        crit.add(Restrictions.eq("userName", username));
-//        UserEntity user = (UserEntity)crit.uniqueResult();
-//        if (user != null) {
-//            Hibernate.initialize(user.getRoles());
-//        }
-//        return user;
-//----------------------------------3-------------------------------------------
-//        users = getSession().createQuery("from UserEntity where userName=?").setParameter(0, username).list();
-//        if (users.size() > 0) {
-//            return users.get(0);
-//        } else
-//        return null;
     }
 
 }

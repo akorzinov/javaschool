@@ -1,29 +1,27 @@
 package com.korzinov.controllers;
 
+import com.korzinov.entities.RoleEntity;
+import com.korzinov.services.RoleRegistrationService;
 import com.korzinov.services.UserRegistrationService;
 import com.korzinov.entities.UserEntity;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.servlet.support.RequestContext;
+import java.io.Serializable;
 
-import java.util.List;
-
-@ManagedBean(name="RegistrationController")
+@Named(value = "registrationController")
 @SessionScoped
 @Controller
-public class RegistrationController {
+public class RegistrationController implements Serializable {
 
-    @ManagedProperty(value = "#{userRegistrationService}")
+    @Autowired
     private UserRegistrationService userCreateService;
+
+    @Autowired
+    private RoleRegistrationService roleRegistrationService;
 
     private String confirmPassword;
     private UserEntity user = new UserEntity();
@@ -31,16 +29,21 @@ public class RegistrationController {
     public String createUser() throws Exception {
         try {
             this.validateUser();
-            UserEntity u = new UserEntity();
+            UserEntity newUser = new UserEntity();
             String cryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
-            u.setFirstName(user.getFirstName());
-            u.setLastName(user.getLastName());
-            u.setEmail(user.getEmail());
-            u.setUserName(user.getUserName());
-            u.setPassword(cryptedPassword);
-            u.setEnabled(true);
+            newUser.setFirstName(user.getFirstName());
+            newUser.setLastName(user.getLastName());
+            newUser.setEmail(user.getEmail());
+            newUser.setUserName(user.getUserName());
+            newUser.setPassword(cryptedPassword);
+            newUser.setEnabled(true);
+            userCreateService.createUser(newUser);
 
-            userCreateService.createUser(u);
+            RoleEntity newRole = new RoleEntity();
+            newRole.setRole("ROLE_USER");
+            newRole.setUser(newUser);
+            roleRegistrationService.createRole(newRole);
+
             return "login";
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -61,6 +64,14 @@ public class RegistrationController {
         this.userCreateService = userCreateService;
     }
 
+    public RoleRegistrationService getRoleRegistrationService() {
+        return roleRegistrationService;
+    }
+
+    public void setRoleRegistrationService(RoleRegistrationService roleRegistrationService) {
+        this.roleRegistrationService = roleRegistrationService;
+    }
+
     public String getConfirmPassword() {
         return confirmPassword;
     }
@@ -77,49 +88,4 @@ public class RegistrationController {
         this.user = user;
     }
 
-//    @Autowired
-//    private UserModel userModel;
-//
-//    @ManagedProperty(value = "#{userRegistrationService}")
-//    private UserRegistrationService userRegistrationService;
-//
-//    public UserRegistrationService getUserRegistrationService() {
-//        return userRegistrationService;
-//    }
-//
-//    public void setUserRegistrationService(UserRegistrationService userRegistrationService) {
-//        this.userRegistrationService = userRegistrationService;
-//    }
-//
-//    public String createUser() {
-//        UserEntity u = new UserEntity();
-//        String cryptedPassword = new BCryptPasswordEncoder().encode(userModel.getPassword());
-//        u.setFirstName(userModel.getFirstName());
-//        u.setLastName(userModel.getLastName());
-//        u.setEmail(userModel.getEmail());
-//        u.setUserName(userModel.getUserName());
-//        u.setPassword(cryptedPassword);
-//        u.setEnabled(true);
-//        try {
-//            userRegistrationService.createUser(u);
-//        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
-//            createMessage("User name or email is already used",FacesMessage.SEVERITY_ERROR);
-//            return null;
-//        }
-//        createMessage("Registration successful", FacesMessage.SEVERITY_INFO);
-//        return "welcome?faces-redirect=true"; }
-//
-//    public void createMessage(String msg, FacesMessage.Severity severity) {
-//        FacesMessage message = new FacesMessage(msg);
-//        message.setSeverity(severity);
-//        FacesContext.getCurrentInstance().addMessage(null,message);
-//    }
-//
-//    public UserModel getUserModel() {
-//        return userModel;
-//    }
-//
-//    public void setUserModel(UserModel userModel) {
-//        this.userModel = userModel;
-//    }
 }

@@ -14,19 +14,19 @@
     <h:form>
         <h:panelGrid columns="2" border="0">
             <h:outputText value="first name"/>
-            <h:inputText value="#{RegistrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
+            <h:inputText value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="last name"/>
-            <h:inputText value="#{RegistrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
+            <h:inputText value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="email"/>
-            <h:inputText value="#{RegistrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
+            <h:inputText value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="user name"/>
-            <h:inputText value="#{RegistrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
+            <h:inputText value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="Password"/>
-            <h:inputSecret value="#{RegistrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
+            <h:inputSecret value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
             <h:outputText value="Password confirmation"/>
-            <h:inputSecret value="#{RegistrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
+            <h:inputSecret value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
         </h:panelGrid>
-        <h:commandButton value="Registration" action="#{RegistrationController.createUser}" />
+        <h:commandButton value="Registration" action="#{registrationController.createUser}" />
     </h:form>
 </h:body>
 </html>

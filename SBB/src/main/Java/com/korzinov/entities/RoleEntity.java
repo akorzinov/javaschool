@@ -11,6 +11,7 @@ public class RoleEntity {
 
     @Id
     @Column(name = "role_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getRoleId() {
         return roleId;
     }
@@ -47,6 +48,15 @@ public class RoleEntity {
         if (role != null ? !role.equals(that.role) : that.role != null) return false;
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "RoleEntity{" +
+                "roleId=" + this.getRoleId() +
+                ", role='" + this.role + '\'' +
+                ", user=" + this.getUser().getUserId() +
+                '}';
     }
 
     @Override
