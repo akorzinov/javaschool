@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
-    <persistence-unit name="NewPersistenceUnit"/>
+    <persistence-unit name="NewPersistenceUnit">
+        <class>com.korzinov.entities.RoleEntity</class>
+        <class>com.korzinov.entities.UserEntity</class>
+        <class>com.korzinov.entities.StationEntity</class>
+        <class>com.korzinov.entities.TicketEntity</class>
+        <class>com.korzinov.entities.TrainEntity</class>
+        <class>com.korzinov.entities.ScheduleEntity</class>
+    </persistence-unit>
 </persistence>

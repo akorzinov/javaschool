@@ -12,7 +12,6 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/spring-security.xml
             /WEB-INF/applicationContext.xml
         </param-value>
     </context-param>
@@ -49,7 +48,7 @@
         <session-timeout>30</session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>/login.xhtml</welcome-file>
+        <welcome-file>View/login.xhtml</welcome-file>
     </welcome-file-list>
     <!-- Spring Security: JSF integration -->
     <context-param>

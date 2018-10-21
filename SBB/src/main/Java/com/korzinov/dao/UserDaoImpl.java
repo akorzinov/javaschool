@@ -1,11 +1,12 @@
 package com.korzinov.dao;
 
 import com.korzinov.entities.UserEntity;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -26,6 +27,9 @@ public class UserDaoImpl implements UserDao {
         return sessionFactory.getCurrentSession();
     }
 
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public void createUser(UserEntity user) {
@@ -36,24 +40,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public UserEntity findByUserName(String username) {
-        List<UserEntity> users = new ArrayList<>();
 
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<UserEntity> q = cb.createQuery(UserEntity.class);
-        Root<UserEntity> c = q.from(UserEntity.class);
-        ParameterExpression<String> p = cb.parameter(String.class);
-        q.select(c).where(cb.equal(c.get("username"),p));
+        CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+        query.select(root).where(cb.equal(root.get("userName"),username));
+        Query<UserEntity> q = getSession().createQuery(query);
+        UserEntity user = q.getSingleResult();
+        return user;
 
-        TypedQuery<UserEntity> query = getSession().createQuery(q);
-        query.setParameter(p, username);
-        users = query.getResultList();
-
-//        Criteria c = getSession().createCriteria(UserEntity.class);
-//        users = getSession().createQuery("from UserEntity where userName=?").setParameter(0, username).list();
-
-        if (users.size() > 0) {
-            return users.get(0);
-        } else
-        return null;
     }
+
 }

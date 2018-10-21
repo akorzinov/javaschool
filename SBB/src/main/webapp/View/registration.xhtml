@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Registration page</title>
+</h:head>
+
+<h:body>
+    <h:form>
+        <h:panelGrid columns="3" border="0">
+
+            <h:outputText value="first name"/>
+            <h:inputText id="firstname" value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="firstname" style="color:red" />
+            <h:outputText value="last name"/>
+            <h:inputText id="lastname" value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="lastname" style="color:red" />
+            <h:outputText value="date of birth"/>
+            <h:inputText id="birthday" value="#{registrationController.user.birthday}" required="true" requiredMessage="The input field is empty">
+                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+            </h:inputText>
+            <h:message for="birthday" style="color:red" />
+            <h:outputText value="email"/>
+            <h:inputText id="email" value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="email" style="color:red" />
+            <h:outputText value="user name"/>
+            <h:inputText id="username" value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="username" style="color:red" />
+            <h:outputText value="Password"/>
+            <h:inputSecret id="password" value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="password" style="color:red" />
+            <h:outputText value="Password confirmation"/>
+            <h:inputSecret id="confpassword" value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="confpassword" style="color:red" />
+
+        </h:panelGrid>
+        <h:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" />
+        <h:button value="Back" outcome="login"/>
+    </h:form>
+</h:body>
+</html>
