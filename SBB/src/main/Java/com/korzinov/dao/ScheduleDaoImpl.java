@@ -33,23 +33,16 @@ public class ScheduleDaoImpl implements ScheduleDao {
         Root<ScheduleEntity> schedule = query.from(ScheduleEntity.class);
         Join<ScheduleEntity, StationEntity> station = schedule.join("stationByStationId");
         Join<ScheduleEntity, TrainEntity> train = schedule.join("trainByTrainId");
-
         Predicate predicate = cb.greaterThanOrEqualTo(schedule.<Date>get("departureTime"), date);
-
         query.multiselect(train.get("trainName"),station.get("stationName"),schedule.get("departureTime"),
                 schedule.get("arrivalTime"), schedule.get("freeSeats"), schedule.get("orderStation"));
         query.where(
                     cb.and(
-                            station.get("stationName").in(depStation,destStation),
-                            predicate
-                            /*cb.ge(schedule.<Date>get("departureTime"), date) bug IDE :( */   ))
+                            station.get("stationName").in(depStation,destStation), predicate))
                     .orderBy(cb.asc(train.get("trainId")));
 
         TypedQuery<FindTrain> q = getSession().createQuery(query);
         List<FindTrain> result = q.getResultList();
-
-        System.out.println("result: " + result.toString());
-        System.out.println("date is: " + date);
 
                     /*удаление одиночных записей*/
         for (int i = 0; i < result.size(); i++) {
@@ -109,7 +102,21 @@ public class ScheduleDaoImpl implements ScheduleDao {
             }
         }
 
-        System.out.println("result1: " + result.toString());
+        return result;
+    }
+
+    @Override
+    public List<FindTrain> findScheduleByStation(String station) {
+        CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+        Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+        Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+        Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+        query.multiselect(tr.get("trainName"), sc.get("arrivalTime"), sc.get("departureTime"));
+        Predicate predicate = cb.like(st.<String>get("stationName"), "%" + station + "%");
+        query.where(predicate);
+        TypedQuery<FindTrain> q = getSession().createQuery(query);
+        List<FindTrain> result = q.getResultList();
         return result;
     }
 

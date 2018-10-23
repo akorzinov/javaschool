@@ -46,7 +46,7 @@
 
         <h:form id="formFoundTrains" >
                 <p:dataTable id="foundTrainsTable" value="#{findTrainsForUserController.listFoundTrains}" paginator="true"
-                             paginatorPosition="bottom" var="tr">
+                             paginatorPosition="bottom" var="tr" rows="10">
                 <p:column headerText="Train name">
                     <h:outputText value="#{tr.trainName}"/>
                 </p:column>

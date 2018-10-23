@@ -23,6 +23,8 @@ public class FindTrainsForUserController implements Serializable{
     private Date date;
     private List<FindTrain> listFoundTrains = new ArrayList<>();
     private Boolean renderTable;
+    private String station;
+    private List<FindTrain> listSchedule;
 
     public FindTrainsForUserController() {}
 
@@ -32,6 +34,11 @@ public class FindTrainsForUserController implements Serializable{
     public void findTrain() {
         renderTable = true;
         listFoundTrains = scheduleService.findTrainsForUser(getDepStation(),getDestStation(),getDate());
+    }
+
+    public void ScheduleByStation() {
+        listSchedule = scheduleService.findScheduleByStation(getStation());
+
     }
 
     public String buyTicket() {
@@ -86,5 +93,21 @@ public class FindTrainsForUserController implements Serializable{
 
     public void setRenderTable(Boolean renderTable) {
         this.renderTable = renderTable;
+    }
+
+    public String getStation() {
+        return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
+    }
+
+    public List<FindTrain> getListSchedule() {
+        return listSchedule;
+    }
+
+    public void setListSchedule(List<FindTrain> listSchedule) {
+        this.listSchedule = listSchedule;
     }
 }

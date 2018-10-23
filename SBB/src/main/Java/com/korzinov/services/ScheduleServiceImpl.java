@@ -23,6 +23,11 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleDao.findTrainsForUser(depStation,destStation,date);
     }
 
+    @Override
+    public List<FindTrain> findScheduleByStation(String station) {
+        return scheduleDao.findScheduleByStation(station);
+    }
+
     public ScheduleDao getScheduleDao() {
         return scheduleDao;
     }

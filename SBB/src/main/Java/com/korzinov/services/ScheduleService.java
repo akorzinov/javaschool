@@ -10,4 +10,5 @@ import java.util.List;
 public interface ScheduleService {
 
     List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date);
+    List<FindTrain> findScheduleByStation(String station);
 }

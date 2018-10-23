@@ -27,6 +27,32 @@
         </p:menubar>
     </h:form>
 
+    <p:panel>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputText value="Enter name station"/>
+                <h:outputText/>
+                <p:inputText value="#{findTrainsForUserController.station}"/>
+                <p:commandButton value="Search" action="#{findTrainsForUserController.ScheduleByStation}" update="formStation:foundStationTable"/>
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="formStation">
+            <p:dataTable id="foundStationTable" value="#{findTrainsForUserController.listSchedule}" var="st" paginator="true"
+                         paginatorPosition="bottom" rows="10">
+                <p:column headerText="Train name">
+                    <h:outputText value="#{st.trainName}"/>
+                </p:column>
+                <p:column headerText="Arrival time">
+                    <h:outputText value="#{st.arrivalTime}"/>
+                </p:column>
+                <p:column headerText="Departure time">
+                    <h:outputText value="#{st.departureTime}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
+
 
 
 </h:body>

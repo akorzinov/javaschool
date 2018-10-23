@@ -24,6 +24,12 @@ public class FindTrain {
         this.orderStation = orderStation;
     }
 
+    public FindTrain(String trainName, Date arrivalTime, Date departureTime) {
+        this.trainName = trainName;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
+    }
+
     public String getTrainName() {
         return trainName;
     }
