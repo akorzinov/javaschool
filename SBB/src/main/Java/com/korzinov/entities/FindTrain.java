@@ -92,4 +92,5 @@ public class FindTrain {
                 "\n\t" + ", stationDest=" + stationDest +
                 '}';
     }
+
 }

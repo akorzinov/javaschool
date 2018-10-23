@@ -24,6 +24,8 @@ public class FindTrainsForUserController implements Serializable{
     private List<FindTrain> listFoundTrains = new ArrayList<>();
     private Boolean renderTable;
 
+    public FindTrainsForUserController() {}
+
     @Autowired
     private ScheduleService scheduleService;
 

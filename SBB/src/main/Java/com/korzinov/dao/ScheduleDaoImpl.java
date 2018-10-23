@@ -50,7 +50,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
         System.out.println("result: " + result.toString());
         System.out.println("date is: " + date);
-                        /*удаление одиночных записей*/
+
+                    /*удаление одиночных записей*/
         for (int i = 0; i < result.size(); i++) {
             if (result.size()==1) {
                 result.remove(0);
@@ -62,19 +63,19 @@ public class ScheduleDaoImpl implements ScheduleDao {
             }
             if (!(i + 2 == result.size())) {
                 if (!(result.get(i).getTrainName().equals(result.get(i + 1).getTrainName()))) {
-                result.remove(i);
-                i = i - 2;
+                    result.remove(i);
+                    i = i - 2;
                 } else if (i + 3 == result.size()) {
                     i--;
                 }
                 i++;
             } else if (!(result.get(i+1).getTrainName().equals(result.get(i).getTrainName()))) {
                 result.remove(i + 1);
-                i--;
+                if (!(i==1)){
+                    i--;
+                }
             } else i++;
         }
-
-        if (result.isEmpty()) return null;
 
                     /*удаление записей неправильного направления*/
         for (int i = 0; i < result.size()-1 ; i+=2) {

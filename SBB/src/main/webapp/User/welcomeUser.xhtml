@@ -10,68 +10,67 @@
       xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Welcome User</title>
+    <title>Welcome to SBB</title>
 </h:head>
 
 <h:body>
-    <h:outputText value="Welcome to user's SBB: #{loginController.username}!" />
+
     <h:form>
-        <h:outputLink value="#{request.contextPath}/logout">logout</h:outputLink>
+        <p:menubar>
+            <p:menuitem value="Find train" outcome="welcomeUser"/>
+            <p:menuitem value="Stations schedule" outcome="stationSchedule"/>
+            <p:menuitem value="Buy tickets" outcome="buyTickets" rendered="#{sec:areAllGranted('ROLE_USER')}"/>
+            <p:menuitem value="Configure schedule" outcome="configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure stations" outcome="configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="See train details" outcome="trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
+        </p:menubar>
     </h:form>
 
-    <h:form id="formInput">
-        <h:panelGrid columns="4" border="0">
-            <h:outputText value="From"/>
-            <h:outputText value="To"/>
-            <h:outputText value="Enter date"/>
-            <h:outputText/>
-            <p:inputText id="dep" value="#{findTrainsForUserController.depStation}" required="true"/>
-            <p:inputText id="dest" value="#{findTrainsForUserController.destStation}" required="true"/>
-            <p:inputText id="day" value="#{findTrainsForUserController.date}" required="true">
-                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>  <!--2018-10-19-->
-            </p:inputText>
-            <p:commandButton id="submitButton" value="Search" action="#{findTrainsForUserController.findTrain}"
-                             update="formFoundTrains:foundTrainsTable"/>
-        </h:panelGrid>
-    </h:form>
+    <p:panel id="mainForm">
+        <h:form id="formInput" >
+            <h:panelGrid columns="4" border="0">
+                <h:outputText value="From"/>
+                <h:outputText value="To"/>
+                <h:outputText value="Enter date"/>
+                <h:outputText/>
+                <p:inputText id="dep" value="#{findTrainsForUserController.depStation}" required="true"/>
+                <p:inputText id="dest" value="#{findTrainsForUserController.destStation}" required="true"/>
+                <p:inputText id="day" value="#{findTrainsForUserController.date}" required="true">
+                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>  <!--2018-10-19-->
+                </p:inputText>
+                <p:commandButton id="submitButton" value="Search" action="#{findTrainsForUserController.findTrain}"
+                                 update="formFoundTrains:foundTrainsTable"/>
+            </h:panelGrid>
+        </h:form>
 
-    <h:form id="formFoundTrains">
-            <p:dataTable id="foundTrainsTable" value="#{findTrainsForUserController.listFoundTrains}" paginator="true"
-                         paginatorPosition="bottom" var="tr">
-            <p:column headerText="Train name">
-                <h:outputText value="#{tr.trainName}"/>
-            </p:column>
-            <p:column headerText="Departure station">
-                <h:outputText value="#{tr.stationName}"/>
-            </p:column>
-            <p:column headerText="Destination station">
-                <h:outputText value="#{tr.stationDest}"/>
-            </p:column>
-            <p:column headerText="Time departure">
-                <h:outputText value="#{tr.departureTime}"/>
-            </p:column>
-            <p:column headerText="Arrival time">
-                <h:outputText value="#{tr.arrivalTime}"/>
-            </p:column>
-            <p:column headerText="Free seats">
-                <h:outputText value="#{tr.freeSeats}"/>
-            </p:column>
-            <p:column headerText="Buy">
-                <p:commandButton value="buy tickets" action="#{findTrainsForUserController.buyTicket}" update="foundTrainsTable"/>
-            </p:column>
-            </p:dataTable>
-    </h:form>
-
-    <h:form rendered="#{sec:areAllGranted('ROLE_ADMIN')}">
-        <h:panelGrid columns="2">
-            <h:outputText value="Enter number train"/>
-            <h:outputText/>
-            <p:inputText required="true"/>
-            <p:commandButton value="Search"/>
-            <h:outputText/>
-            <p:commandButton value="See all list"/>
-        </h:panelGrid>
-    </h:form>
+        <h:form id="formFoundTrains" >
+                <p:dataTable id="foundTrainsTable" value="#{findTrainsForUserController.listFoundTrains}" paginator="true"
+                             paginatorPosition="bottom" var="tr">
+                <p:column headerText="Train name">
+                    <h:outputText value="#{tr.trainName}"/>
+                </p:column>
+                <p:column headerText="Departure station">
+                    <h:outputText value="#{tr.stationName}"/>
+                </p:column>
+                <p:column headerText="Destination station">
+                    <h:outputText value="#{tr.stationDest}"/>
+                </p:column>
+                <p:column headerText="Time departure">
+                    <h:outputText value="#{tr.departureTime}"/>
+                </p:column>
+                <p:column headerText="Arrival time">
+                    <h:outputText value="#{tr.arrivalTime}"/>
+                </p:column>
+                <p:column headerText="Free seats">
+                    <h:outputText value="#{tr.freeSeats}"/>
+                </p:column>
+                <p:column headerText="Buy">
+                    <p:commandButton value="buy tickets" action="#{findTrainsForUserController.buyTicket}" update="foundTrainsTable"/>
+                </p:column>
+                </p:dataTable>
+        </h:form>
+    </p:panel>
 
 </h:body>
 </html>
