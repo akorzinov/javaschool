@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:sec="http://www.springframework.org/security/tags">
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Login page</title>
 </h:head>
@@ -15,18 +15,20 @@
     <c:if test="${'fail' eq param.auth}">
         <div style="color:red">
             Login Failed!<br/>
-            Reason: Bad Credentials! Please Try Again.
+            Reason: Bad username or password! Please Try Again.
         </div>
     </c:if>
     <h:form prependId="false" id="form_login">
-        <h:panelGrid columns="2" border="0">
+        <h:panelGrid columns="3">
             <h:outputText value="Username"/>
-            <h:inputText  id="username" value="#{loginController.username}" />
+            <p:inputText  id="username" value="#{loginController.username}" required="true" requiredMessage="required field"/>
+            <p:message for="username" style="color:red"/>
             <h:outputText value="Password"/>
-            <h:inputSecret id="password"  value="#{loginController.password}" />
+            <p:password id="password"  value="#{loginController.password}" required="true" requiredMessage="required field"/>
+            <p:message for="password" style="color:red" />
         </h:panelGrid>
-        <h:commandButton type="submit" value="Login" action="#{loginController.login}"  />
-        <h:commandButton value="Registration" action="#{loginController.registration}"  />
+        <p:button value="Registration" outcome="registration"/>
+        <p:commandButton ajax="false" value="Login" action="#{loginController.login}"/>
     </h:form>
 </h:body>
 </html>

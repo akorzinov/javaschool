@@ -1,20 +1,25 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user"/*, schema = "sbb"*/)
+@Table(name = "user")
 public class UserEntity {
     private int userId;
-    private String firstName;
-    private String lastName;
-    private String email;
     private String userName;
     private String password;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private Date birthday;
     private Boolean enabled;
     private Set<RoleEntity> roles = new HashSet<>();
+    private Set<TicketEntity> ticketsByUserId;
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -25,33 +30,6 @@ public class UserEntity {
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    @Column(name = "first_name", nullable = false, length = 50)
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Column(name = "last_name", nullable = false, length = 50)
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Column(name = "email", nullable = false, length = 50)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Column(name = "user_name", nullable = false, length = 50)
@@ -72,6 +50,42 @@ public class UserEntity {
         this.password = password;
     }
 
+    @Column(name = "email", nullable = false, length = 50)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "first_name", nullable = false, length = 50)
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @Column(name = "last_name", nullable = false, length = 50)
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @Column(name = "birthday", nullable = false, length = 10)
+    @Temporal(TemporalType.DATE)
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
     @Column(name = "enabled", nullable = false)
     public Boolean getEnabled() {
@@ -86,7 +100,6 @@ public class UserEntity {
     public Set<RoleEntity> getRoles() { return roles; }
 
     public void setRoles(Set<RoleEntity> roles) { this.roles = roles; }
-
 
     @Override
     public boolean equals(Object o) {
@@ -122,13 +135,23 @@ public class UserEntity {
     public String toString() {
         return "UserEntity{" +
                 "userId=" + userId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
                 ", enabled=" + enabled +
                 ", roles=" + this.getRoles() +
                 '}';
+    }
+
+    @OneToMany(mappedBy = "userByUserId")
+    public Set<TicketEntity> getTicketsByUserId() {
+        return ticketsByUserId;
+    }
+
+    public void setTicketsByUserId(Set<TicketEntity> ticketsByUserId) {
+        this.ticketsByUserId = ticketsByUserId;
     }
 }

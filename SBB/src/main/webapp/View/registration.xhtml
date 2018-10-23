@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Registration page</title>
@@ -12,21 +13,35 @@
 
 <h:body>
     <h:form>
-        <h:panelGrid columns="2" border="0">
+        <h:panelGrid columns="3" border="0">
+
             <h:outputText value="first name"/>
-            <h:inputText value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
+            <p:inputText id="firstname" value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
+            <p:message for="firstname" style="color:red" />
             <h:outputText value="last name"/>
-            <h:inputText value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
+            <p:inputText id="lastname" value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
+            <p:message for="lastname" style="color:red" />
+            <h:outputText value="date of birth"/>
+            <p:inputText id="birthday" value="#{registrationController.user.birthday}" required="true" requiredMessage="The input field is empty">
+                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+            </p:inputText>
+            <p:message for="birthday" style="color:red" />
             <h:outputText value="email"/>
-            <h:inputText value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
+            <p:inputText id="email" value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
+            <p:message for="email" style="color:red" />
             <h:outputText value="user name"/>
-            <h:inputText value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
+            <p:inputText id="username" value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
+            <h:message for="username" style="color:red" />
             <h:outputText value="Password"/>
-            <h:inputSecret value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
+            <p:password id="password" value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
+            <p:message for="password" style="color:red" />
             <h:outputText value="Password confirmation"/>
-            <h:inputSecret value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
+            <p:password id="confpassword" value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
+            <p:message for="confpassword" style="color:red" />
+
         </h:panelGrid>
-        <h:commandButton value="Registration" action="#{registrationController.createUser}" />
+        <p:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" ajax="false"/>
+        <p:button value="Back" outcome="login"/>
     </h:form>
 </h:body>
 </html>

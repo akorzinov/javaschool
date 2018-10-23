@@ -36,6 +36,7 @@ public class RegistrationController implements Serializable {
             newUser.setEmail(user.getEmail());
             newUser.setUserName(user.getUserName());
             newUser.setPassword(cryptedPassword);
+            newUser.setBirthday(user.getBirthday());
             newUser.setEnabled(true);
             userCreateService.createUser(newUser);
 
@@ -46,7 +47,7 @@ public class RegistrationController implements Serializable {
 
             return "login";
         } catch (DataAccessException e) {
-            e.printStackTrace();
+            e.printStackTrace();                                /*надо обработать исключение, чтобы выводило сообщение*/
         }
         return null;
     }
