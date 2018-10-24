@@ -4,6 +4,8 @@ import com.korzinov.entities.RoleEntity;
 import com.korzinov.services.RoleRegistrationService;
 import com.korzinov.services.UserRegistrationService;
 import com.korzinov.entities.UserEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;

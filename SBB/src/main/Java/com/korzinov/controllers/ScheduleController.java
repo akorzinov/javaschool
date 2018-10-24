@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Named(value = "findTrainsForUserController")
+@Named(value = "scheduleController")
 @SessionScoped
-//@Controller
-//@ViewScoped
-public class FindTrainsForUserController implements Serializable{
+@Controller
+public class ScheduleController implements Serializable{
 
     private String depStation;
     private String destStation;
@@ -26,7 +25,7 @@ public class FindTrainsForUserController implements Serializable{
     private String station;
     private List<FindTrain> listSchedule;
 
-    public FindTrainsForUserController() {}
+    public ScheduleController() {}
 
     @Autowired
     private ScheduleService scheduleService;

@@ -19,7 +19,7 @@
         <p:menubar>
             <p:menuitem value="Find train" outcome="welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="stationSchedule"/>
-            <p:menuitem value="Buy tickets" outcome="buyTickets" rendered="#{sec:areAllGranted('ROLE_USER')}"/>
+            <p:menuitem value="Buy tickets" outcome="buyTickets"/>
             <p:menuitem value="Configure schedule" outcome="configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
@@ -32,13 +32,13 @@
             <h:panelGrid columns="2">
                 <h:outputText value="Enter name station"/>
                 <h:outputText/>
-                <p:inputText value="#{findTrainsForUserController.station}"/>
-                <p:commandButton value="Search" action="#{findTrainsForUserController.ScheduleByStation}" update="formStation:foundStationTable"/>
+                <p:inputText value="#{scheduleController.station}"/>
+                <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="formStation:foundStationTable"/>
             </h:panelGrid>
         </h:form>
 
         <h:form id="formStation">
-            <p:dataTable id="foundStationTable" value="#{findTrainsForUserController.listSchedule}" var="st" paginator="true"
+            <p:dataTable id="foundStationTable" value="#{scheduleController.listSchedule}" var="st" paginator="true"
                          paginatorPosition="bottom" rows="10">
                 <p:column headerText="Train name">
                     <h:outputText value="#{st.trainName}"/>

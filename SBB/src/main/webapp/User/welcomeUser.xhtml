@@ -19,7 +19,7 @@
         <p:menubar>
             <p:menuitem value="Find train" outcome="welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="stationSchedule"/>
-            <p:menuitem value="Buy tickets" outcome="buyTickets" rendered="#{sec:areAllGranted('ROLE_USER')}"/>
+            <p:menuitem value="Buy tickets" outcome="buyTickets"/>
             <p:menuitem value="Configure schedule" outcome="configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
@@ -34,18 +34,18 @@
                 <h:outputText value="To"/>
                 <h:outputText value="Enter date"/>
                 <h:outputText/>
-                <p:inputText id="dep" value="#{findTrainsForUserController.depStation}" required="true"/>
-                <p:inputText id="dest" value="#{findTrainsForUserController.destStation}" required="true"/>
-                <p:inputText id="day" value="#{findTrainsForUserController.date}" required="true">
+                <p:inputText id="dep" value="#{scheduleController.depStation}" required="true"/>
+                <p:inputText id="dest" value="#{scheduleController.destStation}" required="true"/>
+                <p:inputText id="day" value="#{scheduleController.date}" required="true">
                     <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>  <!--2018-10-19-->
                 </p:inputText>
-                <p:commandButton id="submitButton" value="Search" action="#{findTrainsForUserController.findTrain}"
+                <p:commandButton id="submitButton" value="Search" action="#{scheduleController.findTrain}"
                                  update="formFoundTrains:foundTrainsTable"/>
             </h:panelGrid>
         </h:form>
 
         <h:form id="formFoundTrains" >
-                <p:dataTable id="foundTrainsTable" value="#{findTrainsForUserController.listFoundTrains}" paginator="true"
+                <p:dataTable id="foundTrainsTable" value="#{scheduleController.listFoundTrains}" paginator="true"
                              paginatorPosition="bottom" var="tr" rows="10">
                 <p:column headerText="Train name">
                     <h:outputText value="#{tr.trainName}"/>
@@ -66,7 +66,7 @@
                     <h:outputText value="#{tr.freeSeats}"/>
                 </p:column>
                 <p:column headerText="Buy">
-                    <p:commandButton value="buy tickets" action="#{findTrainsForUserController.buyTicket}" update="foundTrainsTable"/>
+                    <p:commandButton value="buy tickets" action="#{scheduleController.buyTicket}" update="foundTrainsTable"/>
                 </p:column>
                 </p:dataTable>
         </h:form>

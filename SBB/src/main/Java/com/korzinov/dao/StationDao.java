@@ -2,7 +2,16 @@ package com.korzinov.dao;
 
 import com.korzinov.entities.StationEntity;
 
+import java.util.List;
+
 public interface StationDao {
 
-    StationEntity findByNameStation(String nameStation);
+    List<StationEntity> findByNameStation(String nameStation);
+
+    void addStation(StationEntity st);
+
+    void updateStation(StationEntity st);
+
+    void deleteStation(StationEntity st);
+
 }

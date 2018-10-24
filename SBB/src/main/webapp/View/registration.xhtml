@@ -12,36 +12,37 @@
 </h:head>
 
 <h:body>
-    <h:form>
-        <h:panelGrid columns="3" border="0">
-
-            <h:outputText value="first name"/>
-            <p:inputText id="firstname" value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
-            <p:message for="firstname" style="color:red" />
-            <h:outputText value="last name"/>
-            <p:inputText id="lastname" value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
-            <p:message for="lastname" style="color:red" />
-            <h:outputText value="date of birth"/>
-            <p:inputText id="birthday" value="#{registrationController.user.birthday}" required="true" requiredMessage="The input field is empty">
-                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
-            </p:inputText>
-            <p:message for="birthday" style="color:red" />
-            <h:outputText value="email"/>
-            <p:inputText id="email" value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
-            <p:message for="email" style="color:red" />
-            <h:outputText value="user name"/>
-            <p:inputText id="username" value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="username" style="color:red" />
-            <h:outputText value="Password"/>
-            <p:password id="password" value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
-            <p:message for="password" style="color:red" />
-            <h:outputText value="Password confirmation"/>
-            <p:password id="confpassword" value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
-            <p:message for="confpassword" style="color:red" />
-
-        </h:panelGrid>
-        <p:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" ajax="false"/>
-        <p:button value="Back" outcome="login"/>
-    </h:form>
+    <p:panel style="position: absolute; left: 0; right: 0; bottom: 0; top: 0;">
+        <h:form style="position: absolute; left: 200px; right: 0; bottom: 0; top: 200px; width: 800px; height: 600px;
+                max-width: 100%; max-height: 100%; margin: auto; overflow: auto;">
+            <h:panelGrid columns="3" border="0">
+                <h:outputText value="first name"/>
+                <p:inputText id="firstname" value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
+                <p:message for="firstname" style="color:red" />
+                <h:outputText value="last name"/>
+                <p:inputText id="lastname" value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
+                <p:message for="lastname" style="color:red" />
+                <h:outputText value="date of birth"/>
+                <p:inputText id="birthday" value="#{registrationController.user.birthday}" required="true" requiredMessage="The input field is empty">
+                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+                </p:inputText>
+                <p:message for="birthday" style="color:red" />
+                <h:outputText value="email"/>
+                <p:inputText id="email" value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
+                <p:message for="email" style="color:red" />
+                <h:outputText value="user name"/>
+                <p:inputText id="username" value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
+                <p:message for="username" style="color:red" />
+                <h:outputText value="Password"/>
+                <p:password id="password" value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
+                <p:message for="password" style="color:red" />
+                <h:outputText value="Password confirmation"/>
+                <p:password id="confpassword" value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
+                <p:message for="confpassword" style="color:red" />
+            </h:panelGrid>
+            <p:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" ajax="false"/>
+            <p:button value="Back" outcome="login"/>
+        </h:form>
+    </p:panel>
 </h:body>
 </html>

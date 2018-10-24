@@ -73,8 +73,6 @@ public class TrainEntity {
                 "trainId=" + trainId +
                 ", trainName='" + trainName + '\'' +
                 ", quantitySeats=" + quantitySeats +
-                ", schedulesByTrainId=" + schedulesByTrainId +
-                ", ticketsByTrainId=" + ticketsByTrainId +
                 '}';
     }
 

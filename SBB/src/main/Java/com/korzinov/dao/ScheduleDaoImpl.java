@@ -30,16 +30,18 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
         CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
-        Root<ScheduleEntity> schedule = query.from(ScheduleEntity.class);
-        Join<ScheduleEntity, StationEntity> station = schedule.join("stationByStationId");
-        Join<ScheduleEntity, TrainEntity> train = schedule.join("trainByTrainId");
-        Predicate predicate = cb.greaterThanOrEqualTo(schedule.<Date>get("departureTime"), date);
-        query.multiselect(train.get("trainName"),station.get("stationName"),schedule.get("departureTime"),
-                schedule.get("arrivalTime"), schedule.get("freeSeats"), schedule.get("orderStation"));
+        Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+        Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+        Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+        Predicate predicate = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
+        Predicate predicate2 = cb.or(cb.like(st.<String>get("stationName"),"%" + depStation + "%"),
+                                    cb.like(st.<String>get("stationName"),"%" + destStation + "%"));
+        query.multiselect(tr.get("trainName"),st.get("stationName"),sc.get("departureTime"),
+                sc.get("arrivalTime"), sc.get("freeSeats"), sc.get("orderStation"));
         query.where(
-                    cb.and(
-                            station.get("stationName").in(depStation,destStation), predicate))
-                    .orderBy(cb.asc(train.get("trainId")));
+                    cb.and(predicate2, predicate))
+//                            cb.and(st.get("stationName").in(depStation,destStation), predicate))
+                    .orderBy(cb.asc(tr.get("trainId")));
 
         TypedQuery<FindTrain> q = getSession().createQuery(query);
         List<FindTrain> result = q.getResultList();
