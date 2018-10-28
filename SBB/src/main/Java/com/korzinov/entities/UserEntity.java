@@ -1,8 +1,6 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -96,10 +94,19 @@ public class UserEntity {
         this.enabled = enabled;
     }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER)
     public Set<RoleEntity> getRoles() { return roles; }
 
     public void setRoles(Set<RoleEntity> roles) { this.roles = roles; }
+
+    @OneToMany(mappedBy = "userByUserId")
+    public Set<TicketEntity> getTicketsByUserId() {
+        return ticketsByUserId;
+    }
+
+    public void setTicketsByUserId(Set<TicketEntity> ticketsByUserId) {
+        this.ticketsByUserId = ticketsByUserId;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -144,14 +151,5 @@ public class UserEntity {
                 ", enabled=" + enabled +
                 ", roles=" + this.getRoles() +
                 '}';
-    }
-
-    @OneToMany(mappedBy = "userByUserId")
-    public Set<TicketEntity> getTicketsByUserId() {
-        return ticketsByUserId;
-    }
-
-    public void setTicketsByUserId(Set<TicketEntity> ticketsByUserId) {
-        this.ticketsByUserId = ticketsByUserId;
     }
 }

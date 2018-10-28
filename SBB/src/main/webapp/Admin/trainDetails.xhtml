@@ -17,12 +17,12 @@
 
     <h:form>
         <p:menubar>
-            <p:menuitem value="Find train" outcome="welcomeUser"/>
-            <p:menuitem value="Stations schedule" outcome="stationSchedule"/>
-            <p:menuitem value="Buy tickets" outcome="buyTickets"/>
-            <p:menuitem value="Configure schedule" outcome="configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
-            <p:menuitem value="Configure stations" outcome="configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
-            <p:menuitem value="See train details" outcome="trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
+            <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
+            <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
+            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
         </p:menubar>
     </h:form>

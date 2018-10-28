@@ -8,6 +8,8 @@ public interface StationDao {
 
     List<StationEntity> findByNameStation(String nameStation);
 
+    int findIdByStationName(String stName);
+
     void addStation(StationEntity st);
 
     void updateStation(StationEntity st);

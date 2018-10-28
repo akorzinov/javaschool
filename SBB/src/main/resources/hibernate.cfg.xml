@@ -6,7 +6,7 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://localhost:3307/sbb</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <mapping class="com.korzinov.entities.RoleEntity"/>
+      <mapping class="com.korzinov.entities.RoleEntity"/>
       <mapping class="com.korzinov.entities.UserEntity"/>
       <mapping class="com.korzinov.entities.StationEntity"/>
       <mapping class="com.korzinov.entities.TicketEntity"/>

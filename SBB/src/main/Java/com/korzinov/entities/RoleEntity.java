@@ -29,7 +29,7 @@ public class RoleEntity {
         this.role = role;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     public UserEntity getUser() { return user; }
 

@@ -27,7 +27,6 @@ public class StationDaoImpl implements StationDao {
     public List<StationEntity> findByNameStation(String nameStation) {
 
         try {
-            System.out.println("station: " + nameStation);
             CriteriaBuilder cb = getSession().getCriteriaBuilder();
             CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
             Root<StationEntity> st = query.from(StationEntity.class);
@@ -43,6 +42,18 @@ public class StationDaoImpl implements StationDao {
             return null;
         }
 
+    }
+
+    @Override
+    public int findIdByStationName(String stName) {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+            Root<StationEntity> st = query.from(StationEntity.class);
+            query.select(st).where(cb.equal(st.<String>get("stationName"),stName));
+            Query<StationEntity> q = getSession().createQuery(query);
+            StationEntity result = q.getSingleResult();
+            logger.info("Station ID: " + result.getStationId());
+            return result.getStationId();
     }
 
     @Override

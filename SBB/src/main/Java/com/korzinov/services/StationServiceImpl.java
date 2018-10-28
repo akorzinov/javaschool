@@ -37,6 +37,11 @@ public class StationServiceImpl implements StationService {
         stationDao.deleteStation(st);
     }
 
+    @Override
+    public int findIdByStationName(String stName) {
+        return stationDao.findIdByStationName(stName);
+    }
+
     public StationDao getStationDao() {
         return stationDao;
     }

@@ -13,4 +13,6 @@ public interface StationService {
     void updateStation(StationEntity st);
 
     void deleteStation(StationEntity st);
+
+    int findIdByStationName(String stName);
 }

@@ -1,9 +1,7 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "schedule")

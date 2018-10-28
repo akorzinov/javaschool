@@ -1,9 +1,9 @@
 package com.korzinov.dao;
 
-import com.korzinov.entities.FindTrain;
-import com.korzinov.entities.ScheduleEntity;
-import com.korzinov.entities.StationEntity;
-import com.korzinov.entities.TrainEntity;
+import com.korzinov.entities.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Metamodel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,6 +20,8 @@ import java.util.*;
 
 @Repository
 public class ScheduleDaoImpl implements ScheduleDao {
+
+    static final Logger logger = LogManager.getLogger(ScheduleDaoImpl.class);
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -120,6 +122,62 @@ public class ScheduleDaoImpl implements ScheduleDao {
         TypedQuery<FindTrain> q = getSession().createQuery(query);
         List<FindTrain> result = q.getResultList();
         return result;
+    }
+
+    @Override
+    public List<RouteModel> findRoute(String trainName) {
+
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<RouteModel> query = cb.createQuery(RouteModel.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            query.multiselect(sc.get("recordId"),sc.get("freeSeats"), tr.get("trainName"),
+                    tr.get("quantitySeats"),sc.get("orderStation"),st.get("stationName"),
+                    sc.get("arrivalTime"), sc.get("departureTime"));
+            query.where(cb.equal(tr.get("trainName"),trainName));
+            TypedQuery<RouteModel> q = getSession().createQuery(query);
+            List<RouteModel> result = q.getResultList();
+            for (RouteModel r : result) {
+                logger.info("Route model: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public void addRoute(ScheduleEntity schedule) {
+        try {
+            getSession().save(schedule);
+            logger.info("Route successfully saved, Route: " + schedule);
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void updateRoute(ScheduleEntity schedule) {
+        try {
+            getSession().update(schedule);
+            logger.info("Route successfully update, Route: " + schedule);
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteRoute(ScheduleEntity schedule) {
+        try {
+            getSession().delete(schedule);
+            logger.info("Route successfully delete, Route: " + schedule);
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+        }
     }
 
     public Session getSession() {
