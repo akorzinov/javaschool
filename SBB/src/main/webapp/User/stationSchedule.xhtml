@@ -45,12 +45,12 @@
                 </p:column>
                 <p:column headerText="Arrival time">
                     <h:outputText value="#{st.arrivalTime}">
-                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Departure time">
                     <h:outputText value="#{st.departureTime}">
-                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
             </p:dataTable>

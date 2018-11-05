@@ -16,4 +16,6 @@ public interface StationDao {
 
     void deleteStation(StationEntity st);
 
+    String findStationNameById(int id);
+
 }

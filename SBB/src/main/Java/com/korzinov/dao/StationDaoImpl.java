@@ -46,14 +46,14 @@ public class StationDaoImpl implements StationDao {
 
     @Override
     public int findIdByStationName(String stName) {
-            CriteriaBuilder cb = getSession().getCriteriaBuilder();
-            CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
-            Root<StationEntity> st = query.from(StationEntity.class);
-            query.select(st).where(cb.equal(st.<String>get("stationName"),stName));
-            Query<StationEntity> q = getSession().createQuery(query);
-            StationEntity result = q.getSingleResult();
-            logger.info("Station ID: " + result.getStationId());
-            return result.getStationId();
+        CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+        Root<StationEntity> st = query.from(StationEntity.class);
+        query.select(st).where(cb.equal(st.<String>get("stationName"),stName));
+        Query<StationEntity> q = getSession().createQuery(query);
+        StationEntity result = q.getSingleResult();
+        logger.info("Station ID: " + result.getStationId());
+        return result.getStationId();
     }
 
     @Override
@@ -84,6 +84,18 @@ public class StationDaoImpl implements StationDao {
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
         }
+    }
+
+    @Override
+    public String findStationNameById(int id) {
+        CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+        Root<StationEntity> st = query.from(StationEntity.class);
+        query.select(st).where(cb.equal(st.get("stationId"),id));
+        Query<StationEntity> q = getSession().createQuery(query);
+        StationEntity result = q.getSingleResult();
+        logger.info("Station name: " + result.getStationName());
+        return result.getStationName();
     }
 
     public Session getSession() {

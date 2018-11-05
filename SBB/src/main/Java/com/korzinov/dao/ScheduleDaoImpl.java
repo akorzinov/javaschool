@@ -37,75 +37,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
         Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
         Predicate predicate = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
         Predicate predicate2 = cb.or(cb.like(st.<String>get("stationName"),"%" + depStation + "%"),
-                                    cb.like(st.<String>get("stationName"),"%" + destStation + "%"));
+                cb.like(st.<String>get("stationName"),"%" + destStation + "%"));
         query.multiselect(tr.get("trainName"),st.get("stationName"),sc.get("departureTime"),
                 sc.get("arrivalTime"), sc.get("freeSeats"), sc.get("orderStation"));
         query.where(
-                    cb.and(predicate2, predicate))
-//                            cb.and(st.get("stationName").in(depStation,destStation), predicate))
-                    .orderBy(cb.asc(tr.get("trainId")));
-
+                cb.and(predicate2, predicate))
+                .orderBy(cb.asc(tr.get("trainId")));
         TypedQuery<FindTrain> q = getSession().createQuery(query);
         List<FindTrain> result = q.getResultList();
-
-                    /*удаление одиночных записей*/
-        for (int i = 0; i < result.size(); i++) {
-            if (result.size()==1) {
-                result.remove(0);
-                continue;
-            }
-            if (i == 2 & result.size()==3) {
-                result.remove(2);
-                continue;
-            }
-            if (!(i + 2 == result.size())) {
-                if (!(result.get(i).getTrainName().equals(result.get(i + 1).getTrainName()))) {
-                    result.remove(i);
-                    i = i - 2;
-                } else if (i + 3 == result.size()) {
-                    i--;
-                }
-                i++;
-            } else if (!(result.get(i+1).getTrainName().equals(result.get(i).getTrainName()))) {
-                result.remove(i + 1);
-                if (!(i==1)){
-                    i--;
-                }
-            } else i++;
-        }
-
-                    /*удаление записей неправильного направления*/
-        for (int i = 0; i < result.size()-1 ; i+=2) {
-            if (result.get(i).getStationName().equals(depStation)) {
-                if (result.get(i).getOrderStation() > result.get(i + 1).getOrderStation()) {
-                    result.remove(i);
-                    result.remove(i);
-                    i-=2;
-                }
-            } else {
-                if (result.get(i).getOrderStation() < result.get(i + 1).getOrderStation()) {
-                    result.remove(i);
-                    result.remove(i);
-                    i-=2;
-                }
-            }
-
-        }
-                    /*переправка списка в 1 строку на 1 поезд*/
-        for (int i = 0; i < result.size() - 1; i++) {
-            if (result.get(i).getStationName().equals(depStation)) {
-                result.get(i).setStationDest(destStation);
-                result.get(i).setArrivalTime(result.get(i + 1).getArrivalTime());
-                result.remove(i + 1);
-            } else {
-                result.get(i).setStationName(depStation);
-                result.get(i).setStationDest(destStation);
-                result.get(i).setDepartureTime(result.get(i + 1).getDepartureTime());
-                result.get(i).setFreeSeats(result.get(i + 1).getFreeSeats());
-                result.remove(i + 1);
-            }
-        }
-
         return result;
     }
 
@@ -136,11 +75,30 @@ public class ScheduleDaoImpl implements ScheduleDao {
             query.multiselect(sc.get("recordId"),sc.get("freeSeats"), tr.get("trainName"),
                     tr.get("quantitySeats"),sc.get("orderStation"),st.get("stationName"),
                     sc.get("arrivalTime"), sc.get("departureTime"));
-            query.where(cb.equal(tr.get("trainName"),trainName));
+            query.where(cb.like(tr.<String>get("trainName"),"%" + trainName + "%")).orderBy(cb.asc(sc.get("orderStation")));
             TypedQuery<RouteModel> q = getSession().createQuery(query);
             List<RouteModel> result = q.getResultList();
             for (RouteModel r : result) {
                 logger.info("Route model: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<ScheduleEntity> findScheduleByTrain(TrainEntity train) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<ScheduleEntity> query = cb.createQuery(ScheduleEntity.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            query.select(sc).where(cb.equal(sc.get("trainByTrainId"), train));
+            Query<ScheduleEntity> q = getSession().createQuery(query);
+            List<ScheduleEntity> result = q.getResultList();
+            for (ScheduleEntity s : result) {
+                logger.info("Schedule list: " + s);
             }
             return result;
         } catch (HibernateException e) {
@@ -177,6 +135,19 @@ public class ScheduleDaoImpl implements ScheduleDao {
             logger.info("Route successfully delete, Route: " + schedule);
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void updateFreeSeats(List<ScheduleEntity> listSchedule) {
+        for (ScheduleEntity s : listSchedule) {
+            try {
+                getSession().update(s);
+                logger.info("Free seats successfully update, Train: " + s.getTrainByTrainId().getTrainName() +
+                        " FreeSeats: " + s.getFreeSeats());
+            } catch (HibernateException e) {
+                logger.error("Hibernate exception " + e.getMessage());
+            }
         }
     }
 

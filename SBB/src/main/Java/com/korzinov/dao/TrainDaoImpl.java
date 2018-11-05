@@ -33,7 +33,7 @@ public class TrainDaoImpl implements TrainDao {
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
         CriteriaQuery<TrainEntity> query = cb.createQuery(TrainEntity.class);
         Root<TrainEntity> root = query.from(TrainEntity.class);
-        query.select(root).where(cb.equal(root.get("trainName"),nameTrain));
+        query.select(root).where(cb.like(root.<String>get("trainName"),"%" + nameTrain + "%"));
         Query<TrainEntity> q = getSession().createQuery(query);
         List<TrainEntity> trainList = q.getResultList();
         return trainList;

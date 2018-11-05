@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class TicketTableModel {
 
+    private int id;
     private String trainName;
     private String departureStationName;
     private String destinationStationName;
@@ -15,7 +16,8 @@ public class TicketTableModel {
 
     public TicketTableModel() {}
 
-    public TicketTableModel(String trainName, String departureStationName, String destinationStationName, Date departureTime, Date arrivalTime, String firstName, String lastName, Date birthday) {
+    public TicketTableModel(int id, String trainName, String departureStationName, String destinationStationName, Date departureTime, Date arrivalTime, String firstName, String lastName, Date birthday) {
+        this.id = id;
         this.trainName = trainName;
         this.departureStationName = departureStationName;
         this.destinationStationName = destinationStationName;
@@ -88,5 +90,52 @@ public class TicketTableModel {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketTableModel{" +
+                "id=" + id +
+                ", trainName='" + trainName + '\'' +
+                ", departureStationName='" + departureStationName + '\'' +
+                ", destinationStationName='" + destinationStationName + '\'' +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday=" + birthday +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TicketTableModel that = (TicketTableModel) o;
+
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + trainName.hashCode();
+        result = 31 * result + departureStationName.hashCode();
+        result = 31 * result + destinationStationName.hashCode();
+        result = 31 * result + departureTime.hashCode();
+        result = 31 * result + arrivalTime.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        result = 31 * result + birthday.hashCode();
+        return result;
     }
 }

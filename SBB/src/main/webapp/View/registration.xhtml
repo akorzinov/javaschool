@@ -24,7 +24,7 @@
                 <p:message for="lastname" style="color:red" />
                 <h:outputText value="date of birth"/>
                 <p:inputText id="birthday" value="#{registrationController.user.birthday}" required="true" requiredMessage="The input field is empty">
-                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                 </p:inputText>
                 <p:message for="birthday" style="color:red" />
                 <h:outputText value="email"/>

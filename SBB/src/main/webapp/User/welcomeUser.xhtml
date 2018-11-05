@@ -37,7 +37,7 @@
                 <p:inputText id="dep" value="#{scheduleController.depStation}" required="true"/>
                 <p:inputText id="dest" value="#{scheduleController.destStation}" required="true"/>
                 <p:inputText id="day" value="#{scheduleController.date}" required="true">
-                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>  <!--2018-10-19-->
+                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                 </p:inputText>
                 <p:commandButton id="submitButton" value="Search" action="#{scheduleController.findTrain}"
                                  update="formFoundTrains:foundTrainsTable"/>
@@ -58,19 +58,22 @@
                 </p:column>
                 <p:column headerText="Time departure">
                     <h:outputText value="#{tr.departureTime}">
-                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm"
+                                           timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Arrival time">
                     <h:outputText value="#{tr.arrivalTime}">
-                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm"
+                                           timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Free seats">
                     <h:outputText value="#{tr.freeSeats}"/>
                 </p:column>
                 <p:column headerText="Buy">
-                    <p:commandButton value="buy tickets" action="#{scheduleController.buyTicket}">
+                    <p:commandButton value="buy tickets" action="#{scheduleController.buyTicket}"
+                                     disabled="#{(tr.freeSeats == '0')||(tr.currentTime > tr.departureTime)}">
                         <f:setPropertyActionListener value="#{tr}" target="#{ticketController.findTrain}"/>
                     </p:commandButton>
                 </p:column>

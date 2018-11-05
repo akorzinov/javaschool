@@ -42,114 +42,125 @@
                     <h:outputText/>
                     <h:outputText value="Birthday"/>
                     <p:inputText id="bDay" value="#{ticketController.ticketForTable.birthday}">
-                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                     </p:inputText>
                     <p:commandButton id="add" value="Add passanger" action="#{ticketController.addPassenger}"
                                      update="formTicket :formTable:ticketTable"/>
                     <p:commandButton id="buy" value="Buy" action="#{ticketController.buyTickets}"
-                                     update="formTicket :formTable:ticketTable"/>
+                                     update="formTicket :formTable:ticketTable :formTable2:boughtTickets"/>
                 </h:panelGrid>
             </p:fieldset>
         </h:form>
 
         <h:form id="formTable">
 
-            <p:dataTable id="ticketTable" var="tk" value="#{ticketController.listTicket}" paginator="true"
-                         paginatorPosition="bottom" rows="10"> <!--editable="true"-->
-                <!--<p:ajax event="rowEdit" listener="#{ticketController.editPass}" update="formTicket :formTable:ticketTable"/>-->
+            <p:dataTable id="ticketTable" var="tk" value="#{ticketController.listTicket}" editable="true">
+                <p:ajax event="rowEdit" listener="#{ticketController.editTicket}" update="formTicket :formTable:ticketTable"/>
                 <f:facet name="header">
                     Tickets
                 </f:facet>
                 <p:column headerText="Train name">
-                        <f:facet name="output">
-                            <h:outputText value="#{tk.trainName}"/>
-                        </f:facet>
+                    <h:outputText value="#{tk.trainName}"/>
                 </p:column>
                 <p:column headerText="Departure station">
-                        <f:facet name="output">
-                            <h:outputText value="#{tk.destinationStationName}"/>
-                        </f:facet>
+                    <h:outputText value="#{tk.departureStationName}"/>
                 </p:column>
                 <p:column headerText="Destination station">
-                        <f:facet name="output">
-                            <h:outputText value="#{tk.destinationStationName}"/>
-                        </f:facet>
+                    <h:outputText value="#{tk.destinationStationName}"/>
                 </p:column>
                 <p:column headerText="Departure time">
-                        <f:facet name="output">
-                            <h:outputText value="#{tk.departureTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
-                            </h:outputText>
-                        </f:facet>
+                    <h:outputText value="#{tk.departureTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Arrival time">
-                        <f:facet name="output">
-                            <h:outputText value="#{tk.arrivalTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
-                            </h:outputText>
-                        </f:facet>
+                    <h:outputText value="#{tk.arrivalTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
                 </p:column>
-                <!--<p:column headerText="First name">-->
-                    <!--<p:cellEditor>-->
-                        <!--<f:facet name="output">-->
-                            <!--<h:outputText value="#{tk.firstName}"/>-->
-                        <!--</f:facet>-->
-                        <!--<f:facet name="input">-->
-                            <!--<p:inputText value="#{tk.firstName}"/>-->
-                        <!--</f:facet>-->
-                    <!--</p:cellEditor>-->
-                <!--</p:column>-->
-                <!--<p:column headerText="Last name">-->
-                    <!--<p:cellEditor>-->
-                        <!--<f:facet name="output">-->
-                            <!--<h:outputText value="#{tk.lastName}"/>-->
-                        <!--</f:facet>-->
-                        <!--<f:facet name="input">-->
-                            <!--<p:inputText value="#{tk.lastName}"/>-->
-                        <!--</f:facet>-->
-                    <!--</p:cellEditor>-->
-                <!--</p:column>-->
-                <!--<p:column headerText="Birthday">-->
-                    <!--<p:cellEditor>-->
-                        <!--<f:facet name="output">-->
-                            <!--<h:outputText value="#{tk.birthday}">-->
-                                <!--<f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>-->
-                            <!--</h:outputText>-->
-                        <!--</f:facet>-->
-                        <!--<f:facet name="input">-->
-                            <!--<p:inputText value="#{tk.birthday}">-->
-                                <!--<f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>-->
-                            <!--</p:inputText>-->
-                        <!--</f:facet>-->
-                    <!--</p:cellEditor>-->
-                <!--</p:column>-->
-                <!--<p:column headerText="Edit">-->
-                    <!--<p:rowEditor/>-->
-                <!--</p:column>-->
-                <!--<p:column headerText="Delete">-->
-                    <!--<p:commandButton action="#{ticketController.deletePass(tk)}"-->
-                                     <!--update="formTicket :formTable:ticketTable" icon="ui-icon-close"/>-->
-                <!--</p:column>-->
                 <p:column headerText="First name">
+                    <p:cellEditor>
                         <f:facet name="output">
                             <h:outputText value="#{tk.firstName}"/>
                         </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{tk.firstName}"/>
+                        </f:facet>
+                    </p:cellEditor>
                 </p:column>
                 <p:column headerText="Last name">
+                    <p:cellEditor>
                         <f:facet name="output">
                             <h:outputText value="#{tk.lastName}"/>
                         </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{tk.lastName}"/>
+                        </f:facet>
+                    </p:cellEditor>
                 </p:column>
                 <p:column headerText="Birthday">
+                    <p:cellEditor>
                         <f:facet name="output">
                             <h:outputText value="#{tk.birthday}">
-                                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+                                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                             </h:outputText>
                         </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{tk.birthday}">
+                                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
+                            </p:inputText>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Edit">
+                    <p:rowEditor/>
+                </p:column>
+                <p:column headerText="Delete">
+                    <p:commandButton action="#{ticketController.deleteTicket(tk)}"
+                                     update="formTicket :formTable:ticketTable" icon="ui-icon-close"/>
                 </p:column>
 
             </p:dataTable>
 
+        </h:form>
+
+        <h:form id="formTable2">
+            <p:dataTable id="boughtTickets" var="bt" value="#{ticketController.load()}" paginator="true"
+                         paginatorPosition="bottom" rows="10">
+                <f:facet name="header">
+                    Bought tickets
+                </f:facet>
+                <p:column headerText="Train name">
+                    <h:outputText value="#{bt.trainName}"/>
+                </p:column>
+                <p:column headerText="Departure station">
+                    <h:outputText value="#{bt.departureStationName}"/>
+                </p:column>
+                <p:column headerText="Destination station">
+                    <h:outputText value="#{bt.destinationStationName}"/>
+                </p:column>
+                <p:column headerText="Departure time">
+                    <h:outputText value="#{bt.departureTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Arrival time">
+                    <h:outputText value="#{bt.arrivalTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="First name">
+                    <h:outputText value="#{bt.firstName}"/>
+                </p:column>
+                <p:column headerText="Last name">
+                    <h:outputText value="#{bt.lastName}"/>
+                </p:column>
+                <p:column headerText="Birthday">
+                    <h:outputText value="#{bt.birthday}">
+                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
         </h:form>
 
     </p:panel>

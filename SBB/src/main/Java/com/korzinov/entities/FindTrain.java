@@ -11,6 +11,7 @@ public class FindTrain {
     private int freeSeats;
     private int orderStation;
     private String stationDest;
+    private Date currentTime = new Date(System.currentTimeMillis() + 600000L);
 
     public FindTrain() {
     }
@@ -84,6 +85,14 @@ public class FindTrain {
 
     public void setStationDest(String stationDest) {
         this.stationDest = stationDest;
+    }
+
+    public Date getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(Date currentTime) {
+        this.currentTime = currentTime;
     }
 
     @Override

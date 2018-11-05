@@ -1,9 +1,6 @@
 package com.korzinov.dao;
 
-import com.korzinov.entities.FindTrain;
-import com.korzinov.entities.RouteModel;
-import com.korzinov.entities.ScheduleEntity;
-import com.korzinov.entities.StationEntity;
+import com.korzinov.entities.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,9 +14,13 @@ public interface ScheduleDao {
 
     List<RouteModel> findRoute(String trainName);
 
+    List<ScheduleEntity> findScheduleByTrain(TrainEntity train);
+
     void addRoute(ScheduleEntity schedule);
 
     void updateRoute(ScheduleEntity schedule);
 
     void deleteRoute(ScheduleEntity schedule);
+
+    void updateFreeSeats(List<ScheduleEntity> listSchedule);
 }

@@ -36,7 +36,7 @@
                 <h:outputText/>
                 <p:inputText value="#{scheduleController.trainName}"/>
                 <p:commandButton value="Search" action="#{scheduleController.findRoute}"
-                                 update="formForTable:ScheduleTable :formForTable:trainTable"/>
+                                 update="formForTable2:ScheduleTable :formForTable:trainTable"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new train route" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
@@ -47,7 +47,7 @@
                     <h:outputText value="Quantity of seats"/>
                     <p:inputText id="quantity" value="#{scheduleController.train.quantitySeats}"/>
                     <p:commandButton value="Add Train" action="#{scheduleController.addTrain}"
-                                     update="formForTable:ScheduleTable :formForTable:trainTable"/>
+                                     update="formForTable2:ScheduleTable :formForTable:trainTable"/>
                 </h:panelGrid>
                 <h:panelGrid columns="1">
                     <p:fieldset id="addSceduleForm" collapsed="true" legend="Add new direction" toggleable="true" toggleSpeed="500">
@@ -59,14 +59,14 @@
                             <p:inputText value="#{scheduleController.schedule.orderStation}"/>
                             <h:outputText value="Arrival time"/>
                             <p:inputText value="#{scheduleController.schedule.arrivalTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                             </p:inputText>
                             <h:outputText value="Departure time"/>
                             <p:inputText value="#{scheduleController.schedule.departureTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                             </p:inputText>
                             <p:commandButton id="addButton" value="Add route" action="#{scheduleController.addRoute}"
-                                             update="schedule1 :formForTable:ScheduleTable :formForTable:trainTable"/>
+                                             update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
                         </h:panelGrid>
                     </p:fieldset>
                 </h:panelGrid>
@@ -77,7 +77,7 @@
 
             <p:dataTable id="trainTable" var="tr" value="#{scheduleController.listTrain}" editable="true">
                 <p:ajax event="rowEdit" listener="#{scheduleController.editTrain}"
-                        update="schedule1 :formForTable:ScheduleTable :formForTable:trainTable"/>
+                        update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
                 <p:column headerText="Train name">
                     <p:cellEditor>
                         <f:facet name="output">
@@ -103,14 +103,18 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{scheduleController.deleteTrain(tr)}"
-                                     update="schedule1 :formForTable:ScheduleTable :formForTable:trainTable"
+                                     update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"
                                      icon="ui-icon-close"/>
                 </p:column>
             </p:dataTable>
 
+        </h:form>
+
+        <h:form id="formForTable2">
+
             <p:dataTable id="ScheduleTable" var="sc" value="#{scheduleController.listRoute}" editable="true" paginator="true"
                          paginatorPosition="bottom" rows="10">
-                <p:ajax event="rowEdit" listener="#{scheduleController.editRoute}" update="schedule1 :formForTable:ScheduleTable"/>
+                <p:ajax event="rowEdit" listener="#{scheduleController.editRoute}" update="schedule1 :formForTable2:ScheduleTable"/>
                 <f:facet name="header">
                     Schedule
                 </f:facet>
@@ -138,12 +142,12 @@
                     <p:cellEditor>
                         <f:facet name="output">
                             <h:outputText value="#{sc.arrivalTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                             </h:outputText>
                         </f:facet>
                         <f:facet name="input">
                             <p:inputText value="#{sc.arrivalTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                             </p:inputText>
                         </f:facet>
                     </p:cellEditor>
@@ -152,12 +156,12 @@
                     <p:cellEditor>
                         <f:facet name="output">
                             <h:outputText value="#{sc.departureTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                             </h:outputText>
                         </f:facet>
                         <f:facet name="input">
                             <p:inputText value="#{sc.departureTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                             </p:inputText>
                         </f:facet>
                     </p:cellEditor>
@@ -167,7 +171,7 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{scheduleController.deleteRoute(sc)}"
-                                     update="schedule1 :formForTable:ScheduleTable" icon="ui-icon-close"/>
+                                     update="schedule1 :formForTable2:ScheduleTable" icon="ui-icon-close"/>
                 </p:column>
             </p:dataTable>
 

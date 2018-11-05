@@ -74,7 +74,6 @@ public class ScheduleController implements Serializable{
     public String addRoute() {
         trainService.addTrain(train);
         schedule.setFreeSeats(trainService.findByNameTrain(train.getTrainName()).get(0).getQuantitySeats());
-//                train.getQuantitySeats());
         schedule.setTrainByTrainId(trainService.findByNameTrain(train.getTrainName()).get(0));
         try {
             schedule.setStationByStationId(stationService.findByNameStation(stationName).get(0));
@@ -172,8 +171,6 @@ public class ScheduleController implements Serializable{
     }
 
     public void setDate(Date date) {
-        long d = date.getTime();
-        date.setTime(d - 10800000L);
         this.date = date;
     }
 
