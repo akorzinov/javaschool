@@ -35,13 +35,13 @@
                 <p:ajax event="toggle"/>
                 <h:panelGrid columns="3" >
                     <h:outputText value="First name"/>
-                    <p:inputText id="fName" value="#{ticketController.ticketForTable.firstName}"/>
+                    <p:inputText id="fName" value="#{ticketBean.ticketForTable.firstName}"/>
                     <h:outputText/>
                     <h:outputText value="Last name"/>
-                    <p:inputText id="lName" value="#{ticketController.ticketForTable.lastName}"/>
+                    <p:inputText id="lName" value="#{ticketBean.ticketForTable.lastName}"/>
                     <h:outputText/>
                     <h:outputText value="Birthday"/>
-                    <p:inputText id="bDay" value="#{ticketController.ticketForTable.birthday}">
+                    <p:inputText id="bDay" value="#{ticketBean.ticketForTable.birthday}">
                         <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                     </p:inputText>
                     <p:commandButton id="add" value="Add passanger" action="#{ticketController.addPassenger}"
@@ -54,8 +54,9 @@
 
         <h:form id="formTable">
 
-            <p:dataTable id="ticketTable" var="tk" value="#{ticketController.listTicket}" editable="true">
+            <p:dataTable id="ticketTable" var="tk" value="#{ticketBean.listTicket}" editable="true">
                 <p:ajax event="rowEdit" listener="#{ticketController.editTicket}" update="formTicket :formTable:ticketTable"/>
+                <p:ajax event="rowEditInit" listener="#{ticketController.editInit}"/>
                 <f:facet name="header">
                     Tickets
                 </f:facet>
@@ -157,7 +158,7 @@
                 </p:column>
                 <p:column headerText="Birthday">
                     <h:outputText value="#{bt.birthday}">
-                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
+                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
             </p:dataTable>

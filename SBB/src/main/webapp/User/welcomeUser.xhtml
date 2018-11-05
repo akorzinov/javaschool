@@ -73,8 +73,8 @@
                 </p:column>
                 <p:column headerText="Buy">
                     <p:commandButton value="buy tickets" action="#{scheduleController.buyTicket}"
-                                     disabled="#{(tr.freeSeats == '0')||(tr.currentTime > tr.departureTime)}">
-                        <f:setPropertyActionListener value="#{tr}" target="#{ticketController.findTrain}"/>
+                                     disabled="#{(tr.freeSeats == '0') || (tr.currentTime.after(tr.departureTime))}">
+                        <f:setPropertyActionListener value="#{tr}" target="#{ticketBean.findTrain}"/>
                     </p:commandButton>
                 </p:column>
                 </p:dataTable>

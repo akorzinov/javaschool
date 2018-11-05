@@ -16,6 +16,18 @@ public class TicketTableModel {
 
     public TicketTableModel() {}
 
+    public TicketTableModel(TicketTableModel t) {
+        this.id = t.id;
+        this.trainName = t.trainName;
+        this.departureStationName = t.departureStationName;
+        this.destinationStationName = t.destinationStationName;
+        this.departureTime = t.departureTime;
+        this.arrivalTime = t.arrivalTime;
+        this.firstName = t.firstName;
+        this.lastName = t.lastName;
+        this.birthday = t.birthday;
+    }
+
     public TicketTableModel(int id, String trainName, String departureStationName, String destinationStationName, Date departureTime, Date arrivalTime, String firstName, String lastName, Date birthday) {
         this.id = id;
         this.trainName = trainName;

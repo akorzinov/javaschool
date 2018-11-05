@@ -1,15 +1,15 @@
 package com.korzinov.services;
 
+import com.korzinov.beans.TicketBean;
 import com.korzinov.dao.*;
 import com.korzinov.entities.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.primefaces.component.roweditor.RowEditorRenderer;
+import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -20,7 +20,8 @@ import java.util.List;
 @Transactional
 public class TicketServiceImpl implements TicketService {
 
-    static final Logger logger = LogManager.getLogger(TicketServiceImpl.class);
+    @Autowired
+    private TicketBean ticketBean;
 
     @Autowired
     private TicketDao ticketDao;
@@ -38,19 +39,6 @@ public class TicketServiceImpl implements TicketService {
     private TrainDao trainDao;
 
     @Override
-    public UserEntity getUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userName = auth.getName();
-        UserEntity user = userDao.findByUserName(userName);
-        return user;
-    }
-
-    @Override
-    public boolean checkSamePass(TrainEntity train, String firstName, String lastName, Date birthday) {
-        return ticketDao.checkSamePass(train, firstName, lastName, birthday);
-    }
-
-    @Override
     public List<TicketTableModel> listTickets() {
         List<TicketEntity> listTickets = ticketDao.listTickets(getUser());
         List<TicketTableModel> listBoughtTickets = new ArrayList<>();
@@ -66,11 +54,16 @@ public class TicketServiceImpl implements TicketService {
             ticket.setBirthday(listTickets.get(i).getBirthday());
             listBoughtTickets.add(ticket);
         }
-        return listBoughtTickets;
+        ticketBean.setListBoughtTicket(listBoughtTickets);
+
+        return ticketBean.getListBoughtTicket();
     }
 
     @Override
-    public List<TicketTableModel> buyTickets(List<TicketEntity> tickets, List<TicketTableModel> listTicket) {
+    public void buyTickets() {
+
+        List<TicketTableModel> listTicket = ticketBean.getListTicket();
+        List<TicketEntity> tickets = listTicketsDb(listTicket);
 
         TrainEntity train = new TrainEntity();
         int freeSeats = 0;
@@ -91,12 +84,12 @@ public class TicketServiceImpl implements TicketService {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Tickets has been booked successfully"));
             listTicket.clear();
-            return listTicket;
+            ticketBean.setListTicket(listTicket);
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Sorry, there are only " + freeSeats + " free seats and you want to book " +
                      tickets.size() + " tickets, you can find other train"));
-            return listTicket;
+            ticketBean.setListTicket(listTicket);
         }
 
     }
@@ -118,6 +111,96 @@ public class TicketServiceImpl implements TicketService {
             newListTicket.add(ticket);
         }
         return newListTicket;
+    }
+
+    @Override
+    public void addPassenger() {
+
+        if (checkSamePassenger(trainDao.findByNameTrain(ticketBean.getFindTrain().getTrainName()).get(0), /*need check*/
+            ticketBean.getTicketForTable().getFirstName(), ticketBean.getTicketForTable().getLastName(),
+            ticketBean.getTicketForTable().getBirthday())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Specified passenger already registered to this train"));
+        } else {
+            if (checkSamePassList(ticketBean.getListTicket(),ticketBean.getTicketForTable().getFirstName(),
+                    ticketBean.getTicketForTable().getLastName(), ticketBean.getTicketForTable().getBirthday())) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage("Specified passenger already exist in your list"));
+            } else {
+                TicketTableModel newPass = new TicketTableModel();
+                newPass.setTrainName(ticketBean.getFindTrain().getTrainName());
+                newPass.setDepartureStationName(ticketBean.getFindTrain().getStationName());
+                newPass.setDestinationStationName(ticketBean.getFindTrain().getStationDest());
+                newPass.setDepartureTime(ticketBean.getFindTrain().getDepartureTime());
+                newPass.setArrivalTime(ticketBean.getFindTrain().getArrivalTime());
+                newPass.setFirstName(ticketBean.getTicketForTable().getFirstName());
+                newPass.setLastName(ticketBean.getTicketForTable().getLastName());
+                newPass.setBirthday(ticketBean.getTicketForTable().getBirthday());
+                newPass.setId(ticketBean.getListTicket().size());
+
+                ticketBean.getListTicket().add(newPass);
+            }
+        }
+    }
+
+    /*сделать еще проверку с бд*/
+    @Override
+    public void editTicket(RowEditEvent event) {
+        TicketTableModel ticket = (TicketTableModel)event.getObject();
+        if (checkSamePassList(ticketBean.getListTicket(),ticket.getFirstName(), ticket.getLastName(), ticket.getBirthday())) {
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Specified passenger already exist in your list"));
+            int i = ticketBean.getListTicket().indexOf(ticket);
+            ticketBean.getListTicket().set(i, ticketBean.getOldValue());
+        } else {
+            int i = ticketBean.getListTicket().indexOf(ticket);
+            ticketBean.getListTicket().set(i, ticket);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Ticket Updated"));
+        }
+    }
+
+    @Override
+    public void editInit(RowEditEvent event) {
+        TicketTableModel oldTicket = new TicketTableModel((TicketTableModel)event.getObject());
+        ticketBean.setOldValue(oldTicket);
+    }
+
+    @Override
+    public String deleteTicket(TicketTableModel ticket) {
+        int i = ticketBean.getListTicket().indexOf(ticket);
+        ticketBean.getListTicket().remove(i);
+//        for (TicketTableModel t: ticketBean.getListTicket()) {   доделать здесь перправку id
+//            t.setId();
+//        }
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Ticket Deleted"));
+        return null;
+    }
+
+    @Override
+    public UserEntity getUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String userName = auth.getName();
+        UserEntity user = userDao.findByUserName(userName);
+        return user;
+    }
+
+    @Override
+    public boolean checkSamePassenger(TrainEntity train, String firstName, String lastName, Date birthday) {
+        return ticketDao.checkSamePass(train, firstName, lastName, birthday);
+    }
+
+    @Override
+    public boolean checkSamePassList(List<TicketTableModel> listTicket, String firstName, String lastName, Date birthday) {
+        for (TicketTableModel t: listTicket) {
+            if ((t.getFirstName().equals(firstName)) & (t.getLastName().equals(lastName))
+                    & (t.getBirthday().equals(birthday))) {
+                        return true;
+                    }
+                }
+        return false;
     }
 
     public TicketDao getTicketDao() {
@@ -158,5 +241,13 @@ public class TicketServiceImpl implements TicketService {
 
     public void setTrainDao(TrainDao trainDao) {
         this.trainDao = trainDao;
+    }
+
+    public TicketBean getTicketBean() {
+        return ticketBean;
+    }
+
+    public void setTicketBean(TicketBean ticketBean) {
+        this.ticketBean = ticketBean;
     }
 }
