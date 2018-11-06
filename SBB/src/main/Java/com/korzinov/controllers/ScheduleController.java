@@ -19,6 +19,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class ScheduleController implements Serializable{
     /*поиск поездов по станции*/
     private String depStation;
     private String destStation;
-    private Date date;
+    private Date date = Calendar.getInstance().getTime();
     private List<FindTrain> listFoundTrains = new ArrayList<>();
     /*расписание по станции*/
     private String station;

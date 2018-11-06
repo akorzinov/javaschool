@@ -11,6 +11,11 @@
 
 <h:head>
     <title>Welcome to SBB</title>
+    <script type="text/javascript">
+        PrimeFaces.locales['en_GB'] = {
+            firstDay : 1
+        };
+    </script>
 </h:head>
 
 <h:body>
@@ -29,18 +34,20 @@
 
     <p:panel id="mainForm">
         <h:form id="formInput" >
-            <h:panelGrid columns="4" border="0">
+            <p:growl/>
+            <h:panelGrid columns="5" border="0">
                 <h:outputText value="From"/>
                 <h:outputText value="To"/>
                 <h:outputText value="Enter date"/>
                 <h:outputText/>
-                <p:inputText id="dep" value="#{scheduleController.depStation}" required="true"/>
-                <p:inputText id="dest" value="#{scheduleController.destStation}" required="true"/>
-                <p:inputText id="day" value="#{scheduleController.date}" required="true">
-                    <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
-                </p:inputText>
+                <h:outputText/>
+                <p:inputText id="dep" value="#{scheduleController.depStation}" required="true" requiredMessage="Station from is required"/>
+                <p:inputText id="dest" value="#{scheduleController.destStation}" required="true" requiredMessage="Station to is required"/>
+                <p:calendar id="calendar" value="#{scheduleController.date}" required="true" showOn="button"
+                            locale="en_GB" requiredMessage="Enter date" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
+                </p:calendar>
                 <p:commandButton id="submitButton" value="Search" action="#{scheduleController.findTrain}"
-                                 update="formFoundTrains:foundTrainsTable"/>
+                                 update="formInput :formFoundTrains:foundTrainsTable"/>
             </h:panelGrid>
         </h:form>
 
@@ -82,4 +89,5 @@
     </p:panel>
 
 </h:body>
+
 </html>

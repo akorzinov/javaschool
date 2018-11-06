@@ -116,7 +116,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void addPassenger() {
 
-        if (checkSamePassenger(trainDao.findByNameTrain(ticketBean.getFindTrain().getTrainName()).get(0), /*need check*/
+        if (checkSamePassenger(trainDao.findByNameTrain(ticketBean.getFindTrain().getTrainName()).get(0),
             ticketBean.getTicketForTable().getFirstName(), ticketBean.getTicketForTable().getLastName(),
             ticketBean.getTicketForTable().getBirthday())) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -143,16 +143,21 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    /*сделать еще проверку с бд*/
     @Override
     public void editTicket(RowEditEvent event) {
         TicketTableModel ticket = (TicketTableModel)event.getObject();
-        if (checkSamePassList(ticketBean.getListTicket(),ticket.getFirstName(), ticket.getLastName(), ticket.getBirthday())) {
+        int index = ticketBean.getListTicket().indexOf(ticket);
+        ticketBean.getListTicket().set(index, ticketBean.getOldValue());
+        if (checkSamePassList(ticketBean.getListTicket(), ticket.getFirstName(), ticket.getLastName(), ticket.getBirthday())) {
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already exist in your list"));
             int i = ticketBean.getListTicket().indexOf(ticket);
             ticketBean.getListTicket().set(i, ticketBean.getOldValue());
+        } else if (checkSamePassenger(trainDao.findByNameTrain(ticket.getTrainName()).get(0), ticket.getFirstName(),
+                ticket.getLastName(), ticket.getBirthday())) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Specified passenger already registered to this train"));
         } else {
             int i = ticketBean.getListTicket().indexOf(ticket);
             ticketBean.getListTicket().set(i, ticket);
@@ -171,9 +176,9 @@ public class TicketServiceImpl implements TicketService {
     public String deleteTicket(TicketTableModel ticket) {
         int i = ticketBean.getListTicket().indexOf(ticket);
         ticketBean.getListTicket().remove(i);
-//        for (TicketTableModel t: ticketBean.getListTicket()) {   доделать здесь перправку id
-//            t.setId();
-//        }
+        for (int j = i; j < ticketBean.getListTicket().size(); j++) {
+            ticketBean.getListTicket().get(j).setId(ticketBean.getListTicket().get(j).getId() - 1);
+        }
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Ticket Deleted"));
         return null;
