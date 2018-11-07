@@ -11,6 +11,11 @@
 
 <h:head>
     <title>Welcome to SBB</title>
+    <script type="text/javascript">
+        PrimeFaces.locales['en_GB'] = {
+            firstDay : 1
+        };
+    </script>
 </h:head>
 
 <h:body>
@@ -33,21 +38,17 @@
             <p:growl id="growl"/>
             <p:fieldset id="addForm" collapsed="true" legend="Add new passager" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
-                <h:panelGrid columns="3" >
+                <h:panelGrid columns="2" >
                     <h:outputText value="First name"/>
                     <p:inputText id="fName" value="#{ticketBean.ticketForTable.firstName}"/>
-                    <h:outputText/>
                     <h:outputText value="Last name"/>
                     <p:inputText id="lName" value="#{ticketBean.ticketForTable.lastName}"/>
-                    <h:outputText/>
                     <h:outputText value="Birthday"/>
-                    <p:inputText id="bDay" value="#{ticketBean.ticketForTable.birthday}">
-                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
-                    </p:inputText>
+                    <p:calendar id="calendar" value="#{ticketBean.ticketForTable.birthday}" showOn="button"
+                                locale="en_GB" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
+                    </p:calendar>
                     <p:commandButton id="add" value="Add passanger" action="#{ticketController.addPassenger}"
                                      update="formTicket :formTable:ticketTable"/>
-                    <p:commandButton id="buy" value="Buy" action="#{ticketController.buyTickets}"
-                                     update="formTicket :formTable:ticketTable :formTable2:boughtTickets"/>
                 </h:panelGrid>
             </p:fieldset>
         </h:form>
@@ -122,6 +123,9 @@
                 </p:column>
 
             </p:dataTable>
+
+            <p:commandButton id="buy" value="Buy" action="#{ticketController.buyTickets}"
+                             update="formTicket :formTable:ticketTable :formTable2:boughtTickets"/>
 
         </h:form>
 

@@ -1,24 +1,20 @@
 package com.korzinov.services;
 
-import com.korzinov.entities.FindTrain;
 import com.korzinov.entities.RouteModel;
-import com.korzinov.entities.ScheduleEntity;
+import org.primefaces.event.RowEditEvent;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public interface ScheduleService {
 
-    List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date);
+    void findTrainsForUser();
 
-    List<FindTrain> findScheduleByStation(String station);
+    void findScheduleByStation();
 
-    List<RouteModel> findRoute(String trainName);
+    void findRoute();
 
-    void addRoute(ScheduleEntity schedule);
+    void addRoute();
 
-    void updateRoute(ScheduleEntity schedule);
+    void updateRoute(RowEditEvent event);
 
-    void deleteRoute(ScheduleEntity schedule);
+    void deleteRoute(RouteModel rm);
 }

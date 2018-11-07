@@ -1,13 +1,14 @@
 package com.korzinov.services;
 
+import com.korzinov.beans.StationBean;
 import com.korzinov.dao.StationDao;
 import com.korzinov.entities.StationEntity;
+import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 @Service
 @Transactional
@@ -16,25 +17,35 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private StationDao stationDao;
 
+    @Autowired
+    private StationBean stationBean;
+
     @Override
-    public List<StationEntity> findByNameStation(String nameStation) {
-        return stationDao.findByNameStation(nameStation);
+    public void findByNameStation() {
+        stationBean.setListStation(stationDao.findByNameStation(stationBean.getStationNameForSearch()));
     }
 
     @Override
-    public void addStation(StationEntity st) {
-        stationDao.addStation(st);
-
+    public void addStation() {
+        stationDao.addStation(stationBean.getStation());
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Station " + stationBean.getStation().getStationName() + " Successfully added"));
     }
 
     @Override
-    public void updateStation(StationEntity st) {
+    public void updateStation(RowEditEvent event) {
+        StationEntity st = (StationEntity)event.getObject();
         stationDao.updateStation(st);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Station " + st.getStationName() + " Updated"));
     }
 
     @Override
     public void deleteStation(StationEntity st) {
         stationDao.deleteStation(st);
+        stationBean.setListStation(stationDao.findByNameStation(stationBean.getStationNameForSearch()));
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Station " + st.getStationName() + " Deleted"));
     }
 
     @Override
@@ -48,5 +59,13 @@ public class StationServiceImpl implements StationService {
 
     public void setStationDao(StationDao stationDao) {
         this.stationDao = stationDao;
+    }
+
+    public StationBean getStationBean() {
+        return stationBean;
+    }
+
+    public void setStationBean(StationBean stationBean) {
+        this.stationBean = stationBean;
     }
 }

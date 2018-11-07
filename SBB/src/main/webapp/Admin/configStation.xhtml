@@ -34,14 +34,14 @@
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="Enter name of station to edit"/>
                 <h:outputText/>
-                <p:inputText value="#{stationController.stationNameForSearch}"/>
+                <p:inputText value="#{stationBean.stationNameForSearch}"/>
                 <p:commandButton value="Search" action="#{stationController.FindStation}" update="formForTable:stationsTable"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new station" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
                 <h:panelGrid columns="2">
                     <h:outputText value="Station name"/>
-                    <p:inputText id="stName" value="#{stationController.station.stationName}"/>
+                    <p:inputText id="stName" value="#{stationBean.station.stationName}"/>
                     <p:commandButton id="addButton" action="#{stationController.addStation}"
                                      update="station1 :formForTable:stationsTable" value="Add station"/>
                 </h:panelGrid>
@@ -49,7 +49,7 @@
         </h:form>
 
         <h:form id="formForTable">
-            <p:dataTable id="stationsTable" var="st" value="#{stationController.listStation}" editable="true">
+            <p:dataTable id="stationsTable" var="st" value="#{stationBean.listStation}" editable="true">
                 <p:ajax event="rowEdit" listener="#{stationController.editStation}" update="station1 :formForTable:stationsTable"/>
                 <p:column headerText="Name station">
                     <p:cellEditor>

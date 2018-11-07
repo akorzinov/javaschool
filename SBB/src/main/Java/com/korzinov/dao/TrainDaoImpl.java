@@ -79,6 +79,8 @@ public class TrainDaoImpl implements TrainDao {
         try {
             getSession().delete(tr);
             logger.info("Train successfully delete, Train: " + tr);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Train " + tr.getTrainName() + " Deleted"));
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null,

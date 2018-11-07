@@ -1,6 +1,8 @@
 package com.korzinov.dao;
 
 import com.korzinov.entities.UserEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
@@ -23,18 +25,16 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    public Session getSession() {
-        return sessionFactory.getCurrentSession();
-    }
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
 
     @Override
     public void createUser(UserEntity user) {
-//            getSession().persist(user);
+        try {
             getSession().save(user);
+            logger.info("User successfully created, User: " + user);
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+        }
 
     }
 
@@ -49,6 +49,14 @@ public class UserDaoImpl implements UserDao {
         UserEntity user = q.getSingleResult();
         return user;
 
+    }
+
+    public Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
 }

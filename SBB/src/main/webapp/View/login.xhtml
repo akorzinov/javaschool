@@ -23,13 +23,12 @@
         <h:form prependId="false" id="form_login"
                 style="position: absolute; left: 0; right: 0; bottom: 0; top: 0; width: 500px; height: 300px;
                 max-width: 100%; max-height: 100%; margin: auto; overflow: auto;">
-            <h:panelGrid columns="3">
+            <p:growl/>
+            <h:panelGrid columns="2">
                 <h:outputText value="Username"/>
-                <p:inputText  id="username" value="#{loginController.username}" required="true" requiredMessage="required field"/>
-                <p:message for="username" style="color:red"/>
+                <p:inputText  id="username" value="#{loginController.username}" required="true" requiredMessage="username is required field"/>
                 <h:outputText value="Password"/>
-                <p:password id="password"  value="#{loginController.password}" required="true" requiredMessage="required field"/>
-                <p:message for="password" style="color:red" />
+                <p:password id="password"  value="#{loginController.password}" required="true" requiredMessage="password is required field"/>
             </h:panelGrid>
             <p:button value="Registration" outcome="registration"/>
             <p:commandButton ajax="false" value="Login" action="#{loginController.login}"/>
