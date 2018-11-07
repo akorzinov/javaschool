@@ -1,8 +1,15 @@
 package com.korzinov.services;
 
 import com.korzinov.entities.TrainEntity;
+import org.primefaces.event.RowEditEvent;
 
 public interface TrainService {
 
-    TrainEntity findByNameTrain();
+    void findByNameTrain();
+
+    void addTrain();
+
+    void updateTrain(RowEditEvent event);
+
+    void deleteTrain(TrainEntity tr);
 }

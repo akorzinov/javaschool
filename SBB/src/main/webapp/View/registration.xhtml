@@ -4,43 +4,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Registration page</title>
+    <script type="text/javascript">
+        PrimeFaces.locales['en_GB'] = {
+            firstDay : 1
+        };
+    </script>
 </h:head>
 
 <h:body>
-    <h:form>
-        <h:panelGrid columns="3" border="0">
-
-            <h:outputText value="first name"/>
-            <h:inputText id="firstname" value="#{registrationController.user.firstName}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="firstname" style="color:red" />
-            <h:outputText value="last name"/>
-            <h:inputText id="lastname" value="#{registrationController.user.lastName}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="lastname" style="color:red" />
-            <h:outputText value="date of birth"/>
-            <h:inputText id="birthday" value="#{registrationController.user.birthday}" required="true" requiredMessage="The input field is empty">
-                <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd"/>
-            </h:inputText>
-            <h:message for="birthday" style="color:red" />
-            <h:outputText value="email"/>
-            <h:inputText id="email" value="#{registrationController.user.email}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="email" style="color:red" />
-            <h:outputText value="user name"/>
-            <h:inputText id="username" value="#{registrationController.user.userName}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="username" style="color:red" />
-            <h:outputText value="Password"/>
-            <h:inputSecret id="password" value="#{registrationController.user.password}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="password" style="color:red" />
-            <h:outputText value="Password confirmation"/>
-            <h:inputSecret id="confpassword" value="#{registrationController.confirmPassword}" required="true" requiredMessage="The input field is empty"/>
-            <h:message for="confpassword" style="color:red" />
-
-        </h:panelGrid>
-        <h:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" />
-        <h:button value="Back" outcome="login"/>
-    </h:form>
+    <p:panel style="position: absolute; left: 0; right: 0; bottom: 0; top: 0;">
+        <h:form style="position: absolute; left: 200px; right: 0; bottom: 0; top: 200px; width: 800px; height: 600px;
+                max-width: 100%; max-height: 100%; margin: auto; overflow: auto;">
+            <p:growl/>
+            <h:panelGrid columns="2" border="0">
+                <h:outputText value="first name"/>
+                <p:inputText id="firstname" value="#{userBean.user.firstName}" required="true" requiredMessage="First name is required"/>
+                <h:outputText value="last name"/>
+                <p:inputText id="lastname" value="#{userBean.user.lastName}" required="true" requiredMessage="Last name is required"/>
+                <h:outputText value="date of birth"/>
+                <p:calendar id="calendar" value="#{userBean.user.birthday}" showOn="button" required="true" requiredMessage="Birthday is required"
+                            locale="en_GB" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
+                </p:calendar>
+                <h:outputText value="email"/>
+                <p:inputText id="email" value="#{userBean.user.email}" required="true" requiredMessage="Email is required"/>
+                <h:outputText value="user name"/>
+                <p:inputText id="username" value="#{userBean.user.userName}" required="true" requiredMessage="Username is required"/>
+                <h:outputText value="Password"/>
+                <p:password id="password" value="#{userBean.user.password}" required="true" requiredMessage="Password is required"/>
+                <h:outputText value="Password confirmation"/>
+                <p:password id="confpassword" value="#{userBean.confirmPassword}" required="true" requiredMessage="Confirm password is required"/>
+            </h:panelGrid>
+            <p:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" ajax="false"/>
+            <p:button value="Back" outcome="login"/>
+        </h:form>
+    </p:panel>
 </h:body>
 </html>

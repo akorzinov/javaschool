@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:sec="http://www.springframework.org/security/tags"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Welcome to SBB</title>
+</h:head>
+
+<h:body>
+
+    <h:form>
+        <p:menubar>
+            <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
+            <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
+            <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
+            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
+        </p:menubar>
+    </h:form>
+
+    <p:panel>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputText value="Enter name station"/>
+                <h:outputText/>
+                <p:inputText value="#{scheduleController.station}"/>
+                <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="formStation:foundStationTable"/>
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="formStation">
+            <p:dataTable id="foundStationTable" value="#{scheduleController.listSchedule}" var="st" paginator="true"
+                         paginatorPosition="bottom" rows="10">
+                <p:column headerText="Train name">
+                    <h:outputText value="#{st.trainName}"/>
+                </p:column>
+                <p:column headerText="Arrival time">
+                    <h:outputText value="#{st.arrivalTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Departure time">
+                    <h:outputText value="#{st.departureTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
+
+
+
+</h:body>
+</html>

@@ -1,8 +1,7 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Set;
+import java.util.Date;
 
 @Entity
 @Table(name = "schedule")
@@ -10,8 +9,8 @@ public class ScheduleEntity {
     private int recordId;
     private int orderStation;
     private int freeSeats;
-    private Timestamp arrivalTime;
-    private Timestamp departureTime;
+    private Date arrivalTime;
+    private Date departureTime;
     private TrainEntity trainByTrainId;
     private StationEntity stationByStationId;
 
@@ -48,21 +47,23 @@ public class ScheduleEntity {
 
     @Basic
     @Column(name = "arrival_time", nullable = false)
-    public Timestamp getArrivalTime() {
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Timestamp arrivalTime) {
+    public void setArrivalTime(Date arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
     @Basic
     @Column(name = "departure_time", nullable = false)
-    public Timestamp getDepartureTime() {
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(Timestamp departureTime) {
+    public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
     }
 
@@ -125,4 +126,5 @@ public class ScheduleEntity {
     public void setStationByStationId(StationEntity stationByStationId) {
         this.stationByStationId = stationByStationId;
     }
+
 }

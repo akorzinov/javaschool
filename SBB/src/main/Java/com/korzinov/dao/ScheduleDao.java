@@ -1,12 +1,26 @@
 package com.korzinov.dao;
 
-import com.korzinov.entities.ScheduleEntity;
-import com.korzinov.entities.StationEntity;
+import com.korzinov.entities.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public interface ScheduleDao {
 
-    List<ScheduleEntity> findTrainsForUser(String depStation, String destStation/*, Date date*/);
+    List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date);
+
+    List<FindTrain> findScheduleByStation(String station);
+
+    List<RouteModel> findRoute(String trainName);
+
+    List<ScheduleEntity> findScheduleByTrain(TrainEntity train);
+
+    void addRoute(ScheduleEntity schedule);
+
+    void updateRoute(ScheduleEntity schedule);
+
+    void deleteRoute(ScheduleEntity schedule);
+
+    void updateFreeSeats(List<ScheduleEntity> listSchedule);
 }

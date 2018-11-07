@@ -6,30 +6,33 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:sec="http://www.springframework.org/security/tags"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>Login page</title>
 </h:head>
 
 <h:body>
-    <c:if test="${'fail' eq param.auth}">
-        <div style="color:red">
-            Login Failed!<br/>
-            Reason: Bad Credentials! Please Try Again.
-        </div>
-    </c:if>
-    <h:form prependId="false" id="form_login">
-        <p:panelGrid columns="3">
-            <h:outputText value="Username"/>
-            <p:inputText  id="username" value="#{loginController.username}" required="true" requiredMessage="required field"/>
-            <p:message for="username" style="color:red"/>
-            <h:outputText value="Password"/>
-            <p:password id="password"  value="#{loginController.password}" required="true" requiredMessage="required field"/>
-            <p:message for="password" style="color:red" />
-        </p:panelGrid>
-        <p:button value="Registration" outcome="registration"/>
-        <p:commandButton ajax="false" value="Login" action="#{loginController.login}"/>
-    </h:form>
+    <p:panel style="position: absolute; left: 0; right: 0; bottom: 0; top: 0;">
+        <c:if test="${'fail' eq param.auth}">
+            <div style="color:red; position: absolute; left: 0; right: 0; bottom: 0; top: -300px; width: 500px; height: 100px;
+                        max-width: 100%; max-height: 100%; margin: auto; overflow: auto;">
+                Login Failed!<br/>
+                Reason: Bad username or password! Please Try Again.
+            </div>
+        </c:if>
+        <h:form prependId="false" id="form_login"
+                style="position: absolute; left: 0; right: 0; bottom: 0; top: 0; width: 500px; height: 300px;
+                max-width: 100%; max-height: 100%; margin: auto; overflow: auto;">
+            <p:growl/>
+            <h:panelGrid columns="2">
+                <h:outputText value="Username"/>
+                <p:inputText  id="username" value="#{loginController.username}" required="true" requiredMessage="username is required field"/>
+                <h:outputText value="Password"/>
+                <p:password id="password"  value="#{loginController.password}" required="true" requiredMessage="password is required field"/>
+            </h:panelGrid>
+            <p:button value="Registration" outcome="registration"/>
+            <p:commandButton ajax="false" value="Login" action="#{loginController.login}"/>
+        </h:form>
+    </p:panel>
 </h:body>
 </html>
