@@ -1,6 +1,6 @@
 package com.korzinov.controllers;
 
-import com.korzinov.entities.TicketTableModel;
+import com.korzinov.models.TicketTableModel;
 import com.korzinov.services.TicketService;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;

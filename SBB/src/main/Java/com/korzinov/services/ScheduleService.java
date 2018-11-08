@@ -1,6 +1,6 @@
 package com.korzinov.services;
 
-import com.korzinov.entities.RouteModel;
+import com.korzinov.models.RouteModel;
 import org.primefaces.event.RowEditEvent;
 
 

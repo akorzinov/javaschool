@@ -1,7 +1,7 @@
 package com.korzinov.beans;
 
-import com.korzinov.entities.FindTrain;
-import com.korzinov.entities.RouteModel;
+import com.korzinov.models.FindTrain;
+import com.korzinov.models.RouteModel;
 import com.korzinov.entities.ScheduleEntity;
 import com.korzinov.entities.TrainEntity;
 import javax.inject.Named;

@@ -29,14 +29,21 @@ public class TrainDaoImpl implements TrainDao {
 
     @Override
     public List<TrainEntity> findByNameTrain(String nameTrain) {
-
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<TrainEntity> query = cb.createQuery(TrainEntity.class);
-        Root<TrainEntity> root = query.from(TrainEntity.class);
-        query.select(root).where(cb.like(root.<String>get("trainName"),"%" + nameTrain + "%"));
-        Query<TrainEntity> q = getSession().createQuery(query);
-        List<TrainEntity> trainList = q.getResultList();
-        return trainList;
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<TrainEntity> query = cb.createQuery(TrainEntity.class);
+            Root<TrainEntity> root = query.from(TrainEntity.class);
+            query.select(root).where(cb.like(root.<String>get("trainName"), "%" + nameTrain + "%"));
+            Query<TrainEntity> q = getSession().createQuery(query);
+            List<TrainEntity> trainList = q.getResultList();
+            for (TrainEntity t : trainList) {
+                logger.info("Tickets: " + t);
+            }
+            return trainList;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -53,8 +60,6 @@ public class TrainDaoImpl implements TrainDao {
         }   else {
             logger.info("Train already exist, trying to add route to current train");
         }
-//        FacesContext.getCurrentInstance().addMessage(null,
-//                new FacesMessage("Train " + tr.getTrainName() + " is already exist, enter train with another name or edit exist"));
     }
 
     @Override

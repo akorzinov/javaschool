@@ -1,7 +1,7 @@
 package com.korzinov.beans;
 
-import com.korzinov.entities.FindTrain;
-import com.korzinov.entities.TicketTableModel;
+import com.korzinov.models.FindTrain;
+import com.korzinov.models.TicketTableModel;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;

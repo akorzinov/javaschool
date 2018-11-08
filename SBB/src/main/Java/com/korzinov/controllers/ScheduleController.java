@@ -1,6 +1,6 @@
 package com.korzinov.controllers;
 
-import com.korzinov.entities.RouteModel;
+import com.korzinov.models.RouteModel;
 import com.korzinov.entities.TrainEntity;
 import com.korzinov.services.ScheduleService;
 import com.korzinov.services.StationService;
@@ -9,8 +9,6 @@ import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 

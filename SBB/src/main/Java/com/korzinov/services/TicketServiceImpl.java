@@ -3,6 +3,7 @@ package com.korzinov.services;
 import com.korzinov.beans.TicketBean;
 import com.korzinov.dao.*;
 import com.korzinov.entities.*;
+import com.korzinov.models.TicketTableModel;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
