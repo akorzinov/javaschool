@@ -1,6 +1,7 @@
 package com.korzinov.controllers;
 
-import com.korzinov.entities.TicketTableModel;
+import com.korzinov.beans.TicketBean;
+import com.korzinov.models.TicketTableModel;
 import com.korzinov.services.TicketService;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,12 @@ public class TicketController  implements Serializable{
     @Autowired
     private TicketService ticketService;
 
+    @Autowired
+    private TicketBean ticketBean;
+
     public List<TicketTableModel> load() {
-        return ticketService.listTickets();
+        ticketBean.setListBoughtTicket(ticketService.listTickets());
+        return ticketBean.getListBoughtTicket();
     }
 
     public void buyTickets() {
@@ -51,4 +56,11 @@ public class TicketController  implements Serializable{
         this.ticketService = ticketService;
     }
 
+    public TicketBean getTicketBean() {
+        return ticketBean;
+    }
+
+    public void setTicketBean(TicketBean ticketBean) {
+        this.ticketBean = ticketBean;
+    }
 }

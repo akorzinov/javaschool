@@ -1,15 +1,14 @@
 package com.korzinov.services;
 
-import com.korzinov.beans.UserBean;
 import com.korzinov.dao.RoleDao;
 import com.korzinov.dao.UserDao;
 import com.korzinov.entities.RoleEntity;
 import com.korzinov.entities.UserEntity;
+import com.korzinov.models.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -23,19 +22,16 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Autowired
     private RoleDao roleDao;
 
-    @Autowired
-    private UserBean userBean;
-
     @Override
-    public void createUser() {
+    public void createUser(UserModel user) {
         UserEntity newUser = new UserEntity();
-        String cryptedPassword = new BCryptPasswordEncoder().encode(userBean.getUser().getPassword());
-        newUser.setFirstName(userBean.getUser().getFirstName());
-        newUser.setLastName(userBean.getUser().getLastName());
-        newUser.setEmail(userBean.getUser().getEmail());
-        newUser.setUserName(userBean.getUser().getUserName());
+        String cryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setUserName(user.getUserName());
         newUser.setPassword(cryptedPassword);
-        newUser.setBirthday(userBean.getUser().getBirthday());
+        newUser.setBirthday(user.getBirthday());
         newUser.setEnabled(true);
         userDao.createUser(newUser);
 
@@ -49,8 +45,8 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     }
 
     @Override
-    public boolean validateUser() {
-        if (!(userBean.getUser().getPassword().equals(userBean.getConfirmPassword()))) {
+    public boolean validateUser(String password, String confirmPassword) {
+        if (!(password.equals(confirmPassword))) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("User password do not equals confirm password"));
             return false;
@@ -72,13 +68,5 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     public void setRoleDao(RoleDao roleDao) {
         this.roleDao = roleDao;
-    }
-
-    public UserBean getUserBean() {
-        return userBean;
-    }
-
-    public void setUserBean(UserBean userBean) {
-        this.userBean = userBean;
     }
 }

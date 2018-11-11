@@ -1,21 +1,18 @@
 package com.korzinov.dao;
 
 import com.korzinov.entities.*;
+import com.korzinov.models.FindTrain;
+import com.korzinov.models.RouteModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
-import org.hibernate.Metamodel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import javax.persistence.metamodel.EntityType;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Repository
@@ -29,38 +26,53 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date) {
-
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
-        Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
-        Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
-        Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
-        Predicate predicate = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
-        Predicate predicate2 = cb.or(cb.like(st.<String>get("stationName"),"%" + depStation + "%"),
-                cb.like(st.<String>get("stationName"),"%" + destStation + "%"));
-        query.multiselect(tr.get("trainName"),st.get("stationName"),sc.get("departureTime"),
-                sc.get("arrivalTime"), sc.get("freeSeats"), sc.get("orderStation"));
-        query.where(
-                cb.and(predicate2, predicate))
-                .orderBy(cb.asc(tr.get("trainId")));
-        TypedQuery<FindTrain> q = getSession().createQuery(query);
-        List<FindTrain> result = q.getResultList();
-        return result;
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            Predicate predicate = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
+            Predicate predicate2 = cb.or(cb.like(st.<String>get("stationName"), "%" + depStation + "%"),
+                    cb.like(st.<String>get("stationName"), "%" + destStation + "%"));
+            query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("departureTime"),
+                    sc.get("arrivalTime"), sc.get("freeSeats"), sc.get("orderStation"));
+            query.where(
+                    cb.and(predicate2, predicate))
+                    .orderBy(cb.asc(tr.get("trainId")));
+            TypedQuery<FindTrain> q = getSession().createQuery(query);
+            List<FindTrain> result = q.getResultList();
+            for (FindTrain r : result) {
+                logger.info("FindTrain: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public List<FindTrain> findScheduleByStation(String station) {
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
-        Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
-        Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
-        Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
-        query.multiselect(tr.get("trainName"), sc.get("arrivalTime"), sc.get("departureTime"));
-        Predicate predicate = cb.like(st.<String>get("stationName"), "%" + station + "%");
-        query.where(predicate);
-        TypedQuery<FindTrain> q = getSession().createQuery(query);
-        List<FindTrain> result = q.getResultList();
-        return result;
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            query.multiselect(tr.get("trainName"), sc.get("arrivalTime"), sc.get("departureTime"));
+            Predicate predicate = cb.like(st.<String>get("stationName"), "%" + station + "%");
+            query.where(predicate);
+            TypedQuery<FindTrain> q = getSession().createQuery(query);
+            List<FindTrain> result = q.getResultList();
+            for (FindTrain r : result) {
+                logger.info("FindTrain: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
     }
 
     @Override

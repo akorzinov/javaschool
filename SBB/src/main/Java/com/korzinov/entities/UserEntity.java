@@ -143,7 +143,7 @@ public class UserEntity {
         return "UserEntity{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
+                ", password='*******'" + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

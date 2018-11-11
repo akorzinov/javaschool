@@ -1,4 +1,4 @@
-package com.korzinov.entities;
+package com.korzinov.models;
 
 import java.util.Date;
 

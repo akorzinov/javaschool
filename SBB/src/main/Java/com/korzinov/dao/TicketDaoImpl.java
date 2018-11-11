@@ -5,6 +5,7 @@ import com.korzinov.entities.TrainEntity;
 import com.korzinov.entities.UserEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -26,24 +27,33 @@ public class TicketDaoImpl implements TicketDao{
 
     @Override
     public List<TicketEntity> listTickets(UserEntity user) {
-
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<TicketEntity> query = cb.createQuery(TicketEntity.class);
-        Root<TicketEntity> t = query.from(TicketEntity.class);
-        query.select(t).where(cb.equal(t.get("userByUserId"), user));
-        Query<TicketEntity> q = getSession().createQuery(query);
-        List<TicketEntity> listTickets = q.getResultList();
-        for (TicketEntity r : listTickets) {
-            logger.info("Tickets: " + r);
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<TicketEntity> query = cb.createQuery(TicketEntity.class);
+            Root<TicketEntity> t = query.from(TicketEntity.class);
+            query.select(t).where(cb.equal(t.get("userByUserId"), user));
+            Query<TicketEntity> q = getSession().createQuery(query);
+            List<TicketEntity> listTickets = q.getResultList();
+            for (TicketEntity r : listTickets) {
+                logger.info("Tickets: " + r);
+            }
+            return listTickets;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
         }
-        return listTickets;
     }
 
     @Override
     public void buyTickets(List<TicketEntity> tickets) {
-        for (TicketEntity t : tickets) {
-            getSession().save(t);
-            logger.info("Ticket successfully saved, Ticket: " + t);
+        try {
+            for (TicketEntity t : tickets) {
+                getSession().save(t);
+                logger.info("Ticket successfully saved, Ticket: " + t);
+            }
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return;
         }
     }
 

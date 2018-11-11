@@ -1,8 +1,8 @@
 package com.korzinov.services;
 
-import com.korzinov.beans.TicketBean;
 import com.korzinov.dao.*;
 import com.korzinov.entities.*;
+import com.korzinov.models.TicketTableModel;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,9 +18,6 @@ import java.util.List;
 @Service
 @Transactional
 public class TicketServiceImpl implements TicketService {
-
-    @Autowired
-    private TicketBean ticketBean;
 
     @Autowired
     private TicketDao ticketDao;
@@ -53,9 +50,7 @@ public class TicketServiceImpl implements TicketService {
             ticket.setBirthday(listTickets.get(i).getBirthday());
             listBoughtTickets.add(ticket);
         }
-        ticketBean.setListBoughtTicket(listBoughtTickets);
-
-        return ticketBean.getListBoughtTicket();
+        return listBoughtTickets;
     }
 
     @Override
@@ -99,9 +94,9 @@ public class TicketServiceImpl implements TicketService {
         for (int i = 0; i < list.size(); i++) {
             TicketEntity ticket = new TicketEntity();
             ticket.setUserByUserId(getUser());
-            ticket.setTrainByTrainId(trainDao.findByNameTrain(list.get(i).getTrainName()).get(0));
-            ticket.setDepartureStationId(stationDao.findByNameStation(list.get(i).getDepartureStationName()).get(0).getStationId());
-            ticket.setDestinationStationId(stationDao.findByNameStation(list.get(i).getDestinationStationName()).get(0).getStationId());
+            ticket.setTrainByTrainId(trainDao.findByNameTrainUnique(list.get(i).getTrainName()));
+            ticket.setDepartureStationId(stationDao.findByNameStationUnique(list.get(i).getDepartureStationName()).getStationId());
+            ticket.setDestinationStationId(stationDao.findByNameStationUnique(list.get(i).getDestinationStationName()).getStationId());
             ticket.setDepartureTime(list.get(i).getDepartureTime());
             ticket.setArrivalTime(list.get(i).getArrivalTime());
             ticket.setFirstName(list.get(i).getFirstName());
@@ -115,7 +110,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void addPassenger() {
 
-        if (checkSamePassenger(trainDao.findByNameTrain(ticketBean.getFindTrain().getTrainName()).get(0),
+        if (checkSamePassenger(trainDao.findByNameTrainUnique(ticketBean.getFindTrain().getTrainName()),
             ticketBean.getTicketForTable().getFirstName(), ticketBean.getTicketForTable().getLastName(),
             ticketBean.getTicketForTable().getBirthday())) {
             FacesContext.getCurrentInstance().addMessage(null,
@@ -153,7 +148,7 @@ public class TicketServiceImpl implements TicketService {
                     new FacesMessage("Specified passenger already exist in your list"));
             int i = ticketBean.getListTicket().indexOf(ticket);
             ticketBean.getListTicket().set(i, ticketBean.getOldValue());
-        } else if (checkSamePassenger(trainDao.findByNameTrain(ticket.getTrainName()).get(0), ticket.getFirstName(),
+        } else if (checkSamePassenger(trainDao.findByNameTrainUnique(ticket.getTrainName()), ticket.getFirstName(),
                 ticket.getLastName(), ticket.getBirthday())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already registered to this train"));
@@ -247,11 +242,4 @@ public class TicketServiceImpl implements TicketService {
         this.trainDao = trainDao;
     }
 
-    public TicketBean getTicketBean() {
-        return ticketBean;
-    }
-
-    public void setTicketBean(TicketBean ticketBean) {
-        this.ticketBean = ticketBean;
-    }
 }

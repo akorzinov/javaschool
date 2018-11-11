@@ -1,8 +1,6 @@
 package com.korzinov.beans;
 
-
-import com.korzinov.entities.StationEntity;
-
+import com.korzinov.models.StationModel;
 import javax.inject.Named;
 import java.util.List;
 
@@ -10,8 +8,8 @@ import java.util.List;
 public class StationBean {
 
     private String stationNameForSearch;
-    private List<StationEntity> listStation;
-    private StationEntity station = new StationEntity();
+    private List<StationModel> listStation;
+    private StationModel station = new StationModel();
 
     public String getStationNameForSearch() {
         return stationNameForSearch;
@@ -21,19 +19,19 @@ public class StationBean {
         this.stationNameForSearch = stationNameForSearch;
     }
 
-    public List<StationEntity> getListStation() {
+    public List<StationModel> getListStation() {
         return listStation;
     }
 
-    public void setListStation(List<StationEntity> listStation) {
+    public void setListStation(List<StationModel> listStation) {
         this.listStation = listStation;
     }
 
-    public StationEntity getStation() {
+    public StationModel getStation() {
         return station;
     }
 
-    public void setStation(StationEntity station) {
+    public void setStation(StationModel station) {
         this.station = station;
     }
 }

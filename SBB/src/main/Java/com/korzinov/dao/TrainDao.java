@@ -8,6 +8,8 @@ public interface TrainDao {
 
     List<TrainEntity> findByNameTrain(String nameTrain);
 
+    TrainEntity findByNameTrainUnique(String nameTrain);
+
     void addTrain(TrainEntity tr);
 
     void updateTrain(TrainEntity tr);

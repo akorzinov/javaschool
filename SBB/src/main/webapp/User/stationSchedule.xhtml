@@ -32,13 +32,13 @@
             <h:panelGrid columns="2">
                 <h:outputText value="Enter name station"/>
                 <h:outputText/>
-                <p:inputText value="#{scheduleController.station}"/>
+                <p:inputText value="#{scheduleBean.station}"/>
                 <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="formStation:foundStationTable"/>
             </h:panelGrid>
         </h:form>
 
         <h:form id="formStation">
-            <p:dataTable id="foundStationTable" value="#{scheduleController.listSchedule}" var="st" paginator="true"
+            <p:dataTable id="foundStationTable" value="#{scheduleBean.listSchedule}" var="st" paginator="true"
                          paginatorPosition="bottom" rows="10">
                 <p:column headerText="Train name">
                     <h:outputText value="#{st.trainName}"/>

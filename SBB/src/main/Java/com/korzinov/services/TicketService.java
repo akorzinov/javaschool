@@ -1,7 +1,7 @@
 package com.korzinov.services;
 
 import com.korzinov.entities.TicketEntity;
-import com.korzinov.entities.TicketTableModel;
+import com.korzinov.models.TicketTableModel;
 import com.korzinov.entities.TrainEntity;
 import com.korzinov.entities.UserEntity;
 import org.primefaces.event.RowEditEvent;

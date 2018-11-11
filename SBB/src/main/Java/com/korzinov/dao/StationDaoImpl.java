@@ -9,7 +9,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -45,15 +44,37 @@ public class StationDaoImpl implements StationDao {
     }
 
     @Override
+    public StationEntity findByNameStationUnique(String nameStation) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+            Root<StationEntity> st = query.from(StationEntity.class);
+            query.select(st).where(cb.like(st.<String>get("stationName"),"%" + nameStation + "%"));
+            Query<StationEntity> q = getSession().createQuery(query);
+            StationEntity station = q.uniqueResult();
+                logger.info("Station: " + station);
+            return station;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public int findIdByStationName(String stName) {
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
-        Root<StationEntity> st = query.from(StationEntity.class);
-        query.select(st).where(cb.equal(st.<String>get("stationName"),stName));
-        Query<StationEntity> q = getSession().createQuery(query);
-        StationEntity result = q.getSingleResult();
-        logger.info("Station ID: " + result.getStationId());
-        return result.getStationId();
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+            Root<StationEntity> st = query.from(StationEntity.class);
+            query.select(st).where(cb.equal(st.<String>get("stationName"), stName));
+            Query<StationEntity> q = getSession().createQuery(query);
+            StationEntity result = q.getSingleResult();
+            logger.info("Station ID: " + result.getStationId());
+            return result.getStationId();
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return 0;
+        }
     }
 
     @Override
@@ -88,14 +109,19 @@ public class StationDaoImpl implements StationDao {
 
     @Override
     public String findStationNameById(int id) {
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
-        Root<StationEntity> st = query.from(StationEntity.class);
-        query.select(st).where(cb.equal(st.get("stationId"),id));
-        Query<StationEntity> q = getSession().createQuery(query);
-        StationEntity result = q.getSingleResult();
-        logger.info("Station name: " + result.getStationName());
-        return result.getStationName();
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+            Root<StationEntity> st = query.from(StationEntity.class);
+            query.select(st).where(cb.equal(st.get("stationId"), id));
+            Query<StationEntity> q = getSession().createQuery(query);
+            StationEntity result = q.getSingleResult();
+            logger.info("Station name: " + result.getStationName());
+            return result.getStationName();
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
     }
 
     public Session getSession() {

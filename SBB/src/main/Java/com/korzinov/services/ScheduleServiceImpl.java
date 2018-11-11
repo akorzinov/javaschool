@@ -2,20 +2,29 @@ package com.korzinov.services;
 
 import com.korzinov.dao.ScheduleDao;
 import com.korzinov.dao.StationDao;
-import com.korzinov.entities.FindTrain;
-import com.korzinov.entities.RouteModel;
+import com.korzinov.dao.TrainDao;
+import com.korzinov.entities.StationEntity;
+import com.korzinov.entities.TrainEntity;
+import com.korzinov.models.*;
 import com.korzinov.entities.ScheduleEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.SimpleDateFormat;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 @Transactional
+
 public class ScheduleServiceImpl implements ScheduleService{
+
+    static final Logger logger = LogManager.getLogger(ScheduleServiceImpl.class);
 
     @Autowired
     private ScheduleDao scheduleDao;
@@ -23,12 +32,13 @@ public class ScheduleServiceImpl implements ScheduleService{
     @Autowired
     private StationDao stationDao;
 
+    @Autowired
+    private TrainDao trainDao;
+
     @Override
     public List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date) {
 
-        List<FindTrain> result = scheduleDao.findTrainsForUser(depStation,destStation,date);
-
-        if (result.isEmpty()) return result;
+        List<FindTrain> result = scheduleDao.findTrainsForUser(depStation, destStation, date);
 
                     /*удаление одиночных записей*/
         for (int i = 0; i < result.size(); i++) {
@@ -60,8 +70,8 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
 
                 /*вытаскивание актуальных названий станций*/
-        String depSt = stationDao.findByNameStation(depStation).get(0).getStationName();
-        String destSt = stationDao.findByNameStation(destStation).get(0).getStationName();
+        String depSt = stationDao.findByNameStationUnique(depStation).getStationName();
+        String destSt = stationDao.findByNameStationUnique(destStation).getStationName();
 
                     /*удаление записей неправильного направления*/
         for (int i = 0; i < result.size()-1 ; i+=2) {
@@ -109,18 +119,90 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void addRoute(ScheduleEntity schedule) {
-        scheduleDao.addRoute(schedule);
+    public List<TrainModel> findRouteTrain(String trainName) {
+        List<TrainEntity> listTrain = trainDao.findByNameTrain(trainName);
+        List<TrainModel> trains = new ArrayList<>();
+        for (int i = 0; i < listTrain.size(); i++) {
+            trains.add(i, new TrainModel(listTrain.get(i)));
+        }
+        return trains;
     }
 
     @Override
-    public void updateRoute(ScheduleEntity schedule) {
-        scheduleDao.updateRoute(schedule);
+    public void addRoute(TrainModel train, ScheduleModel schedule, String stationName) {
+        trainDao.addTrain(convertTrainModel(train));
+        schedule.setFreeSeats(trainDao.findByNameTrainUnique(train.getTrainName()).getQuantitySeats());
+        StationEntity st = stationDao.findByNameStationUnique(stationName);
+        if (st != null) {
+            scheduleDao.addRoute(convertScheduleModel(schedule, train.getTrainName(), st));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Route Successfully added"));
+        } else {
+            logger.error("Entered stationName " + stationName + " doesn't exist, need enter exist stationName");
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station name " + stationName + " doesn't exist, need enter existed station name"));
+        }
     }
 
     @Override
-    public void deleteRoute(ScheduleEntity schedule) {
-        scheduleDao.deleteRoute(schedule);
+    public void updateRoute(RowEditEvent event) {
+        RouteModel rm = (RouteModel)event.getObject();
+        ScheduleEntity sc = new ScheduleEntity();
+        sc.setRecordId(rm.getRecordId());
+        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
+        StationEntity st = stationDao.findByNameStationUnique(rm.getStationName());
+        if (st != null) {
+            sc.setStationByStationId(st);
+        } else {
+            logger.error("Entered stationName " + rm.getStationName() + " doesn't exist, need enter exist stationName");
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station name " + rm.getStationName() + " doesn't exist, need enter existed station name"));
+            return;
+        }
+        sc.setOrderStation(rm.getOrderStation());
+        sc.setFreeSeats(rm.getFreeSeats());
+        sc.setArrivalTime(rm.getArrivalTime());
+        sc.setDepartureTime(rm.getDepartureTime());
+        scheduleDao.updateRoute(sc);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Route Updated"));
+    }
+
+    @Override
+    public void deleteRoute(RouteModel rm) {
+        ScheduleEntity sc = new ScheduleEntity();
+        sc.setRecordId(rm.getRecordId());
+        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
+        sc.setStationByStationId(stationDao.findByNameStationUnique(rm.getStationName()));
+        sc.setOrderStation(rm.getOrderStation());
+        sc.setFreeSeats(rm.getFreeSeats());
+        sc.setArrivalTime(rm.getArrivalTime());
+        sc.setDepartureTime(rm.getDepartureTime());
+        scheduleDao.deleteRoute(sc);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Route Deleted"));
+    }
+
+    @Override
+    public TrainEntity convertTrainModel(TrainModel train) {
+        TrainEntity newTrain = new TrainEntity();
+        newTrain.setTrainName(train.getTrainName());
+        if (train.getQuantitySeats() != null) {
+            newTrain.setQuantitySeats(train.getQuantitySeats());
+        }
+        return newTrain;
+    }
+
+    @Override
+    public ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station) {
+        ScheduleEntity newSchedule = new ScheduleEntity();
+        newSchedule.setTrainByTrainId(trainDao.findByNameTrainUnique(trainName));
+        newSchedule.setStationByStationId(station);
+        newSchedule.setFreeSeats(schedule.getFreeSeats());
+        newSchedule.setOrderStation(schedule.getOrderStation());
+        newSchedule.setDepartureTime(schedule.getDepartureTime());
+        newSchedule.setArrivalTime(schedule.getArrivalTime());
+        return newSchedule;
     }
 
     public ScheduleDao getScheduleDao() {
@@ -137,5 +219,13 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     public void setStationDao(StationDao stationDao) {
         this.stationDao = stationDao;
+    }
+
+    public TrainDao getTrainDao() {
+        return trainDao;
+    }
+
+    public void setTrainDao(TrainDao trainDao) {
+        this.trainDao = trainDao;
     }
 }

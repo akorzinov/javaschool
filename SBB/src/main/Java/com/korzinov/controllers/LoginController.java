@@ -23,17 +23,7 @@ public class LoginController implements Serializable{
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/login");
         dispatcher.forward((ServletRequest) context.getRequest(), (ServletResponse) context.getResponse());
-//        FacesContext.getCurrentInstance().responseComplete();
         return null;
-    }
-
-    public String logout() throws ServletException, IOException {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "login?faces-redirect=true";
-    }
-
-    public String registration() {
-        return "registration?faces-redirect=true";
     }
 
     public String getUsername() {

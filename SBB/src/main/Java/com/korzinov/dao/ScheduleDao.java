@@ -1,8 +1,9 @@
 package com.korzinov.dao;
 
 import com.korzinov.entities.*;
+import com.korzinov.models.FindTrain;
+import com.korzinov.models.RouteModel;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 

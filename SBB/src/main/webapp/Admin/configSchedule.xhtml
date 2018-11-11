@@ -39,35 +39,35 @@
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="Enter name of train to edit"/>
                 <h:outputText/>
-                <p:inputText value="#{scheduleController.trainName}"/>
+                <p:inputText value="#{scheduleBean.trainName}"/>
                 <p:commandButton value="Search" action="#{scheduleController.findRoute}"
-                                 update="formForTable2:ScheduleTable :formForTable:trainTable"/>
+                                 update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new train route" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
                 <h:panelGrid columns="3" >
                     <h:outputText value="Train name"/>
-                    <p:inputText id="trName" value="#{scheduleController.train.trainName}"/>
+                    <p:inputText id="trName" value="#{scheduleBean.train.trainName}"/>
                     <h:outputText/>
                     <h:outputText value="Quantity of seats"/>
-                    <p:inputText id="quantity" value="#{scheduleController.train.quantitySeats}"/>
+                    <p:inputText id="quantity" value="#{scheduleBean.train.quantitySeats}"/>
                     <p:commandButton value="Add Train" action="#{scheduleController.addTrain}"
-                                     update="formForTable2:ScheduleTable :formForTable:trainTable"/>
+                                     update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
                 </h:panelGrid>
                 <h:panelGrid columns="1">
                     <p:fieldset id="addSceduleForm" collapsed="true" legend="Add new direction" toggleable="true" toggleSpeed="500">
                         <p:ajax event="toggle"/>
                         <h:panelGrid columns="2">
                             <h:outputText value="Station name"/>
-                            <p:inputText value="#{scheduleController.stationName}"/>
+                            <p:inputText value="#{scheduleBean.stationName}"/>
                             <h:outputText value="Order station"/>
-                            <p:inputText value="#{scheduleController.schedule.orderStation}"/>
+                            <p:inputText value="#{scheduleBean.schedule.orderStation}"/>
                             <h:outputText value="Arrival time"/>
-                            <p:calendar id="calendar1" value="#{scheduleController.schedule.arrivalTime}" showOn="button"
+                            <p:calendar id="calendar1" value="#{scheduleBean.schedule.arrivalTime}" showOn="button"
                                         locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow">
                             </p:calendar>
                             <h:outputText value="Departure time"/>
-                            <p:calendar id="calendar2" value="#{scheduleController.schedule.departureTime}" showOn="button"
+                            <p:calendar id="calendar2" value="#{scheduleBean.schedule.departureTime}" showOn="button"
                                         locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow">
                             </p:calendar>
                             <p:commandButton id="addButton" value="Add route" action="#{scheduleController.addRoute}"
@@ -80,7 +80,7 @@
 
         <h:form id="formForTable">
 
-            <p:dataTable id="trainTable" var="tr" value="#{scheduleController.listTrain}" editable="true">
+            <p:dataTable id="trainTable" var="tr" value="#{scheduleBean.listTrain}" editable="true">
                 <p:ajax event="rowEdit" listener="#{scheduleController.editTrain}"
                         update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
                 <p:column headerText="Train name">
@@ -117,7 +117,7 @@
 
         <h:form id="formForTable2">
 
-            <p:dataTable id="ScheduleTable" var="sc" value="#{scheduleController.listRoute}" editable="true" paginator="true"
+            <p:dataTable id="ScheduleTable" var="sc" value="#{scheduleBean.listRoute}" editable="true" paginator="true"
                          paginatorPosition="bottom" rows="10">
                 <p:ajax event="rowEdit" listener="#{scheduleController.editRoute}" update="schedule1 :formForTable2:ScheduleTable"/>
                 <f:facet name="header">

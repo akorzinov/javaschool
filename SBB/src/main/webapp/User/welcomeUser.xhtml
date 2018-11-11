@@ -41,9 +41,9 @@
                 <h:outputText value="Enter date"/>
                 <h:outputText/>
                 <h:outputText/>
-                <p:inputText id="dep" value="#{scheduleController.depStation}" required="true" requiredMessage="Station from is required"/>
-                <p:inputText id="dest" value="#{scheduleController.destStation}" required="true" requiredMessage="Station to is required"/>
-                <p:calendar id="calendar" value="#{scheduleController.date}" required="true" showOn="button"
+                <p:inputText id="dep" value="#{scheduleBean.depStation}" required="true" requiredMessage="Station from is required"/>
+                <p:inputText id="dest" value="#{scheduleBean.destStation}" required="true" requiredMessage="Station to is required"/>
+                <p:calendar id="calendar" value="#{scheduleBean.date}" required="true" showOn="button"
                             locale="en_GB" requiredMessage="Enter date" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
                 </p:calendar>
                 <p:commandButton id="submitButton" value="Search" action="#{scheduleController.findTrain}"
@@ -52,7 +52,7 @@
         </h:form>
 
         <h:form id="formFoundTrains" >
-                <p:dataTable id="foundTrainsTable" value="#{scheduleController.listFoundTrains}" paginator="true"
+                <p:dataTable id="foundTrainsTable" value="#{scheduleBean.listFoundTrains}" paginator="true"
                              paginatorPosition="bottom" var="tr" rows="10">
                 <p:column headerText="Train name">
                     <h:outputText value="#{tr.trainName}"/>
