@@ -1,6 +1,6 @@
 package com.korzinov.beans;
 
-import com.korzinov.entities.TrainEntity;
+import com.korzinov.models.FindTrain;
 import javax.inject.Named;
 import java.util.List;
 
@@ -8,8 +8,7 @@ import java.util.List;
 public class TrainBean {
 
     private String trainName;
-    private TrainEntity train;
-    private List<TrainEntity> listTrains;
+    private List<FindTrain> listTrains;
 
     public String getTrainName() {
         return trainName;
@@ -19,19 +18,11 @@ public class TrainBean {
         this.trainName = trainName;
     }
 
-    public TrainEntity getTrain() {
-        return train;
-    }
-
-    public void setTrain(TrainEntity train) {
-        this.train = train;
-    }
-
-    public List<TrainEntity> getListTrains() {
+    public List<FindTrain> getListTrains() {
         return listTrains;
     }
 
-    public void setListTrains(List<TrainEntity> listTrains) {
+    public void setListTrains(List<FindTrain> listTrains) {
         this.listTrains = listTrains;
     }
 }

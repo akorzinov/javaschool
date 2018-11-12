@@ -33,6 +33,15 @@ public class StationEntity {
         this.stationName = stationName;
     }
 
+    @OneToMany(mappedBy = "stationByStationId", fetch = FetchType.LAZY)
+    public Set<ScheduleEntity> getSchedulesByStationId() {
+        return schedulesByStationId;
+    }
+
+    public void setSchedulesByStationId(Set<ScheduleEntity> schedulesByStationId) {
+        this.schedulesByStationId = schedulesByStationId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,14 +68,5 @@ public class StationEntity {
                 "stationId=" + stationId +
                 ", stationName='" + stationName + '\'' +
                 '}';
-    }
-
-    @OneToMany(mappedBy = "stationByStationId", fetch = FetchType.LAZY)
-    public Set<ScheduleEntity> getSchedulesByStationId() {
-        return schedulesByStationId;
-    }
-
-    public void setSchedulesByStationId(Set<ScheduleEntity> schedulesByStationId) {
-        this.schedulesByStationId = schedulesByStationId;
     }
 }

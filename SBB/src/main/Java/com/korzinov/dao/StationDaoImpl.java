@@ -44,6 +44,23 @@ public class StationDaoImpl implements StationDao {
     }
 
     @Override
+    public StationEntity findByNameStationUnique(String nameStation) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<StationEntity> query = cb.createQuery(StationEntity.class);
+            Root<StationEntity> st = query.from(StationEntity.class);
+            query.select(st).where(cb.like(st.<String>get("stationName"),"%" + nameStation + "%"));
+            Query<StationEntity> q = getSession().createQuery(query);
+            StationEntity station = q.uniqueResult();
+                logger.info("Station: " + station);
+            return station;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public int findIdByStationName(String stName) {
         try {
             CriteriaBuilder cb = getSession().getCriteriaBuilder();

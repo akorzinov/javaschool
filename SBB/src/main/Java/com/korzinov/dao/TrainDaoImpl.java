@@ -47,6 +47,23 @@ public class TrainDaoImpl implements TrainDao {
     }
 
     @Override
+    public TrainEntity findByNameTrainUnique(String nameTrain) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<TrainEntity> query = cb.createQuery(TrainEntity.class);
+            Root<TrainEntity> root = query.from(TrainEntity.class);
+            query.select(root).where(cb.like(root.<String>get("trainName"), "%" + nameTrain + "%"));
+            Query<TrainEntity> q = getSession().createQuery(query);
+            TrainEntity train = q.uniqueResult();
+                logger.info("Train: " + train);
+            return train;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public void addTrain(TrainEntity tr) {
         if (findByNameTrain(tr.getTrainName()).isEmpty()) {
             try {

@@ -1,10 +1,9 @@
 package com.korzinov.services;
 
-import com.korzinov.beans.TicketBean;
 import com.korzinov.dao.*;
 import com.korzinov.entities.*;
+import com.korzinov.models.FindTrain;
 import com.korzinov.models.TicketTableModel;
-import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +18,6 @@ import java.util.List;
 @Service
 @Transactional
 public class TicketServiceImpl implements TicketService {
-
-    @Autowired
-    private TicketBean ticketBean;
 
     @Autowired
     private TicketDao ticketDao;
@@ -54,17 +50,13 @@ public class TicketServiceImpl implements TicketService {
             ticket.setBirthday(listTickets.get(i).getBirthday());
             listBoughtTickets.add(ticket);
         }
-        ticketBean.setListBoughtTicket(listBoughtTickets);
-
-        return ticketBean.getListBoughtTicket();
+        return listBoughtTickets;
     }
 
     @Override
-    public void buyTickets() {
+    public List<TicketTableModel> buyTickets(List<TicketTableModel> listTicket) {
 
-        List<TicketTableModel> listTicket = ticketBean.getListTicket();
         List<TicketEntity> tickets = listTicketsDb(listTicket);
-
         TrainEntity train = new TrainEntity();
         int freeSeats = 0;
         if (!tickets.isEmpty()) {
@@ -84,14 +76,13 @@ public class TicketServiceImpl implements TicketService {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Tickets has been booked successfully"));
             listTicket.clear();
-            ticketBean.setListTicket(listTicket);
+            return listTicket;
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Sorry, there are only " + freeSeats + " free seats and you want to book " +
-                     tickets.size() + " tickets, you can find other train"));
-            ticketBean.setListTicket(listTicket);
+                            tickets.size() + " tickets, you can find other train"));
+            return listTicket;
         }
-
     }
 
     @Override
@@ -100,9 +91,9 @@ public class TicketServiceImpl implements TicketService {
         for (int i = 0; i < list.size(); i++) {
             TicketEntity ticket = new TicketEntity();
             ticket.setUserByUserId(getUser());
-            ticket.setTrainByTrainId(trainDao.findByNameTrain(list.get(i).getTrainName()).get(0));
-            ticket.setDepartureStationId(stationDao.findByNameStation(list.get(i).getDepartureStationName()).get(0).getStationId());
-            ticket.setDestinationStationId(stationDao.findByNameStation(list.get(i).getDestinationStationName()).get(0).getStationId());
+            ticket.setTrainByTrainId(trainDao.findByNameTrainUnique(list.get(i).getTrainName()));
+            ticket.setDepartureStationId(stationDao.findByNameStationUnique(list.get(i).getDepartureStationName()).getStationId());
+            ticket.setDestinationStationId(stationDao.findByNameStationUnique(list.get(i).getDestinationStationName()).getStationId());
             ticket.setDepartureTime(list.get(i).getDepartureTime());
             ticket.setArrivalTime(list.get(i).getArrivalTime());
             ticket.setFirstName(list.get(i).getFirstName());
@@ -114,74 +105,70 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void addPassenger() {
+    public List<TicketTableModel> addPassenger(List<TicketTableModel> listTicket, FindTrain findTrain, TicketTableModel ticketForTable) {
 
-        if (checkSamePassenger(trainDao.findByNameTrain(ticketBean.getFindTrain().getTrainName()).get(0),
-            ticketBean.getTicketForTable().getFirstName(), ticketBean.getTicketForTable().getLastName(),
-            ticketBean.getTicketForTable().getBirthday())) {
+        if (checkSamePassenger(trainDao.findByNameTrainUnique(findTrain.getTrainName()), ticketForTable.getFirstName(),
+                ticketForTable.getLastName(), ticketForTable.getBirthday())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already registered to this train"));
         } else {
-            if (checkSamePassList(ticketBean.getListTicket(),ticketBean.getTicketForTable().getFirstName(),
-                    ticketBean.getTicketForTable().getLastName(), ticketBean.getTicketForTable().getBirthday())) {
+            if (checkSamePassList(listTicket,ticketForTable.getFirstName(), ticketForTable.getLastName(),
+                    ticketForTable.getBirthday())) {
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage("Specified passenger already exist in your list"));
             } else {
                 TicketTableModel newPass = new TicketTableModel();
-                newPass.setTrainName(ticketBean.getFindTrain().getTrainName());
-                newPass.setDepartureStationName(ticketBean.getFindTrain().getStationName());
-                newPass.setDestinationStationName(ticketBean.getFindTrain().getStationDest());
-                newPass.setDepartureTime(ticketBean.getFindTrain().getDepartureTime());
-                newPass.setArrivalTime(ticketBean.getFindTrain().getArrivalTime());
-                newPass.setFirstName(ticketBean.getTicketForTable().getFirstName());
-                newPass.setLastName(ticketBean.getTicketForTable().getLastName());
-                newPass.setBirthday(ticketBean.getTicketForTable().getBirthday());
-                newPass.setId(ticketBean.getListTicket().size());
+                newPass.setTrainName(findTrain.getTrainName());
+                newPass.setDepartureStationName(findTrain.getStationName());
+                newPass.setDestinationStationName(findTrain.getStationDest());
+                newPass.setDepartureTime(findTrain.getDepartureTime());
+                newPass.setArrivalTime(findTrain.getArrivalTime());
+                newPass.setFirstName(ticketForTable.getFirstName());
+                newPass.setLastName(ticketForTable.getLastName());
+                newPass.setBirthday(ticketForTable.getBirthday());
+                newPass.setId(listTicket.size());
 
-                ticketBean.getListTicket().add(newPass);
+                listTicket.add(newPass);
+                return listTicket;
             }
         }
+        return listTicket;
     }
 
     @Override
-    public void editTicket(RowEditEvent event) {
-        TicketTableModel ticket = (TicketTableModel)event.getObject();
-        int index = ticketBean.getListTicket().indexOf(ticket);
-        ticketBean.getListTicket().set(index, ticketBean.getOldValue());
-        if (checkSamePassList(ticketBean.getListTicket(), ticket.getFirstName(), ticket.getLastName(), ticket.getBirthday())) {
+    public List<TicketTableModel> editTicket(List<TicketTableModel> listTicket, TicketTableModel ticket, TicketTableModel oldValue) {
+        int index = listTicket.indexOf(ticket);
+        listTicket.set(index, oldValue);
+        if (checkSamePassList(listTicket, ticket.getFirstName(), ticket.getLastName(), ticket.getBirthday())) {
 
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already exist in your list"));
-            int i = ticketBean.getListTicket().indexOf(ticket);
-            ticketBean.getListTicket().set(i, ticketBean.getOldValue());
-        } else if (checkSamePassenger(trainDao.findByNameTrain(ticket.getTrainName()).get(0), ticket.getFirstName(),
+            int i = listTicket.indexOf(ticket);
+            listTicket.set(i, oldValue);
+        } else if (checkSamePassenger(trainDao.findByNameTrainUnique(ticket.getTrainName()), ticket.getFirstName(),
                 ticket.getLastName(), ticket.getBirthday())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already registered to this train"));
         } else {
-            int i = ticketBean.getListTicket().indexOf(ticket);
-            ticketBean.getListTicket().set(i, ticket);
+            int i = listTicket.indexOf(ticket);
+            listTicket.set(i, ticket);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Ticket Updated"));
+            return listTicket;
         }
+        return listTicket;
     }
 
     @Override
-    public void editInit(RowEditEvent event) {
-        TicketTableModel oldTicket = new TicketTableModel((TicketTableModel)event.getObject());
-        ticketBean.setOldValue(oldTicket);
-    }
-
-    @Override
-    public String deleteTicket(TicketTableModel ticket) {
-        int i = ticketBean.getListTicket().indexOf(ticket);
-        ticketBean.getListTicket().remove(i);
-        for (int j = i; j < ticketBean.getListTicket().size(); j++) {
-            ticketBean.getListTicket().get(j).setId(ticketBean.getListTicket().get(j).getId() - 1);
+    public List<TicketTableModel> deleteTicket(List<TicketTableModel> listTicket, TicketTableModel ticket) {
+        int i = listTicket.indexOf(ticket);
+        listTicket.remove(i);
+        for (int j = i; j < listTicket.size(); j++) {
+            listTicket.get(j).setId(listTicket.get(j).getId() - 1);
         }
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Ticket Deleted"));
-        return null;
+        return listTicket;
     }
 
     @Override
@@ -202,9 +189,9 @@ public class TicketServiceImpl implements TicketService {
         for (TicketTableModel t: listTicket) {
             if ((t.getFirstName().equals(firstName)) & (t.getLastName().equals(lastName))
                     & (t.getBirthday().equals(birthday))) {
-                        return true;
-                    }
-                }
+                return true;
+            }
+        }
         return false;
     }
 
@@ -248,11 +235,4 @@ public class TicketServiceImpl implements TicketService {
         this.trainDao = trainDao;
     }
 
-    public TicketBean getTicketBean() {
-        return ticketBean;
-    }
-
-    public void setTicketBean(TicketBean ticketBean) {
-        this.ticketBean = ticketBean;
-    }
 }

@@ -1,5 +1,6 @@
 package com.korzinov.controllers;
 
+import com.korzinov.beans.StationBean;
 import com.korzinov.entities.StationEntity;
 import com.korzinov.services.StationService;
 import org.primefaces.event.RowEditEvent;
@@ -17,13 +18,16 @@ public class StationController implements Serializable{
     @Autowired
     private StationService stationService;
 
+    @Autowired
+    private StationBean stationBean;
+
     public String FindStation() {
-        stationService.findByNameStation();
+        stationBean.setListStation(stationService.findByNameStation(stationBean.getStationNameForSearch()));
         return null;
     }
 
     public String addStation() {
-        stationService.addStation();
+        stationService.addStation(stationBean.getStation());
         return null;
     }
 
@@ -33,6 +37,7 @@ public class StationController implements Serializable{
 
     public String deleteStation(StationEntity st) {
         stationService.deleteStation(st);
+        stationBean.setListStation(stationService.findByNameStation(stationBean.getStationNameForSearch())); /*может будет работать и без этого*/
         return null;
     }
 
@@ -44,4 +49,11 @@ public class StationController implements Serializable{
         this.stationService = stationService;
     }
 
+    public StationBean getStationBean() {
+        return stationBean;
+    }
+
+    public void setStationBean(StationBean stationBean) {
+        this.stationBean = stationBean;
+    }
 }

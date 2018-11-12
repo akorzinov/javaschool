@@ -1,14 +1,16 @@
 package com.korzinov.services;
 
-import com.korzinov.beans.StationBean;
 import com.korzinov.dao.StationDao;
 import com.korzinov.entities.StationEntity;
+import com.korzinov.models.StationModel;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -17,24 +19,31 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private StationDao stationDao;
 
-    @Autowired
-    private StationBean stationBean;
-
     @Override
-    public void findByNameStation() {
-        stationBean.setListStation(stationDao.findByNameStation(stationBean.getStationNameForSearch()));
+    public List<StationModel> findByNameStation(String stationName) {
+        List<StationEntity> listStation = stationDao.findByNameStation(stationName);
+        List<StationModel> stations = new ArrayList<>();
+        for (int i = 0; i < listStation.size(); i++) {
+            stations.add(i, new StationModel(listStation.get(i)));
+        }
+        return stations;
     }
 
     @Override
-    public void addStation() {
-        stationDao.addStation(stationBean.getStation());
+    public void addStation(StationModel station) {
+        StationEntity newStation = new StationEntity();
+        newStation.setStationName(station.getStationName());
+        stationDao.addStation(newStation);
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Station " + stationBean.getStation().getStationName() + " Successfully added"));
+                new FacesMessage("Station " + station.getStationName() + " Successfully added"));
     }
 
     @Override
     public void updateStation(RowEditEvent event) {
-        StationEntity st = (StationEntity)event.getObject();
+        StationModel station = (StationModel)event.getObject();
+        StationEntity st = new StationEntity();
+        st.setStationName(station.getStationName());
+        st.setStationId(station.getStationId());
         stationDao.updateStation(st);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Station " + st.getStationName() + " Updated"));
@@ -43,7 +52,6 @@ public class StationServiceImpl implements StationService {
     @Override
     public void deleteStation(StationEntity st) {
         stationDao.deleteStation(st);
-        stationBean.setListStation(stationDao.findByNameStation(stationBean.getStationNameForSearch()));
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Station " + st.getStationName() + " Deleted"));
     }
@@ -61,11 +69,4 @@ public class StationServiceImpl implements StationService {
         this.stationDao = stationDao;
     }
 
-    public StationBean getStationBean() {
-        return stationBean;
-    }
-
-    public void setStationBean(StationBean stationBean) {
-        this.stationBean = stationBean;
-    }
 }

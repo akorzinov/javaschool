@@ -24,4 +24,6 @@ public interface ScheduleDao {
     void deleteRoute(ScheduleEntity schedule);
 
     void updateFreeSeats(List<ScheduleEntity> listSchedule);
+
+    List<FindTrain> findTrainDetails(String trainName);
 }

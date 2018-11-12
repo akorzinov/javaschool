@@ -1,5 +1,6 @@
 package com.korzinov.controllers;
 
+import com.korzinov.beans.ScheduleBean;
 import com.korzinov.models.RouteModel;
 import com.korzinov.entities.TrainEntity;
 import com.korzinov.services.ScheduleService;
@@ -26,23 +27,29 @@ public class ScheduleController implements Serializable{
     @Autowired
     private StationService stationService;
 
+    @Autowired
+    private ScheduleBean scheduleBean;
+
     public void findTrain() {
-        scheduleService.findTrainsForUser();
+        scheduleBean.setListFoundTrains(scheduleService.findTrainsForUser(scheduleBean.getDepStation(), scheduleBean.getDestStation(), scheduleBean.getDate()));
     }
 
     public void ScheduleByStation() {
-        scheduleService.findScheduleByStation();
+        scheduleBean.setListSchedule(scheduleService.findScheduleByStation(scheduleBean.getStation()));
 
     }
 
     public String findRoute() {
-        scheduleService.findRoute();
-        trainService.findByNameTrain();
+        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName()));
+        scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrainName()));
+//        trainService.findByNameTrain();
         return null;
     }
 
     public String addRoute() {
-        scheduleService.addRoute();
+        scheduleService.addRoute(scheduleBean.getTrain(), scheduleBean.getSchedule(), scheduleBean.getStationName());
+        scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrain().getTrainName()));
+        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrain().getTrainName()));
         return null;
     }
 
@@ -52,11 +59,12 @@ public class ScheduleController implements Serializable{
 
     public String deleteRoute(RouteModel rm) {
         scheduleService.deleteRoute(rm);
+        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName())); /*может будет работать и без этого*/
         return null;
     }
 
     public String addTrain() {
-        trainService.addTrain();
+        trainService.addTrain(scheduleBean.getTrain());
         return null;
     }
 
@@ -66,6 +74,7 @@ public class ScheduleController implements Serializable{
 
     public String deleteTrain(TrainEntity tr) {
         trainService.deleteTrain(tr);
+        scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrainName())); /*может будет работать и без этого*/
         return null;
     }
 
@@ -95,5 +104,13 @@ public class ScheduleController implements Serializable{
 
     public void setStationService(StationService stationService) {
         this.stationService = stationService;
+    }
+
+    public ScheduleBean getScheduleBean() {
+        return scheduleBean;
+    }
+
+    public void setScheduleBean(ScheduleBean scheduleBean) {
+        this.scheduleBean = scheduleBean;
     }
 }

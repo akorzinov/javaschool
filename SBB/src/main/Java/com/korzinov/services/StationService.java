@@ -1,17 +1,21 @@
 package com.korzinov.services;
 
 import com.korzinov.entities.StationEntity;
+import com.korzinov.models.StationModel;
 import org.primefaces.event.RowEditEvent;
+
+import java.util.List;
 
 public interface StationService {
 
-    void findByNameStation();
+    List<StationModel> findByNameStation(String stationName);
 
-    void addStation();
+    void addStation(StationModel station);
 
     void updateStation(RowEditEvent event);
 
     void deleteStation(StationEntity st);
 
     int findIdByStationName(String stName);
+
 }

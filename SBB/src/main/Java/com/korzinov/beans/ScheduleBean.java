@@ -2,9 +2,13 @@ package com.korzinov.beans;
 
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
-import com.korzinov.entities.ScheduleEntity;
-import com.korzinov.entities.TrainEntity;
+import com.korzinov.models.ScheduleModel;
+import com.korzinov.models.TrainModel;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,10 +25,10 @@ public class ScheduleBean {
     private List<FindTrain> listSchedule = new ArrayList<>();
     private String trainName;
     private List<RouteModel> listRoute = new ArrayList<>();
-    private ScheduleEntity schedule = new ScheduleEntity();
-    private TrainEntity train = new TrainEntity();
+    private ScheduleModel schedule = new ScheduleModel();
+    private TrainModel train = new TrainModel();
     private String stationName;
-    private List<TrainEntity> listTrain = new ArrayList<>();
+    private List<TrainModel> listTrain  = new ArrayList<>();
 
     public String getDepStation() {
         return depStation;
@@ -90,19 +94,19 @@ public class ScheduleBean {
         this.listRoute = listRoute;
     }
 
-    public ScheduleEntity getSchedule() {
+    public ScheduleModel getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(ScheduleEntity schedule) {
+    public void setSchedule(ScheduleModel schedule) {
         this.schedule = schedule;
     }
 
-    public TrainEntity getTrain() {
+    public TrainModel getTrain() {
         return train;
     }
 
-    public void setTrain(TrainEntity train) {
+    public void setTrain(TrainModel train) {
         this.train = train;
     }
 
@@ -114,11 +118,11 @@ public class ScheduleBean {
         this.stationName = stationName;
     }
 
-    public List<TrainEntity> getListTrain() {
+    public List<TrainModel> getListTrain() {
         return listTrain;
     }
 
-    public void setListTrain(List<TrainEntity> listTrain) {
+    public void setListTrain(List<TrainModel> listTrain) {
         this.listTrain = listTrain;
     }
 }

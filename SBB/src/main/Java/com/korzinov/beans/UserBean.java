@@ -1,8 +1,6 @@
 package com.korzinov.beans;
 
-
-import com.korzinov.entities.UserEntity;
-
+import com.korzinov.models.UserModel;
 import javax.inject.Named;
 
 
@@ -10,7 +8,7 @@ import javax.inject.Named;
 public class UserBean {
 
     private String confirmPassword;
-    private UserEntity user = new UserEntity();
+    private UserModel user = new UserModel();
 
     public String getConfirmPassword() {
         return confirmPassword;
@@ -20,11 +18,11 @@ public class UserBean {
         this.confirmPassword = confirmPassword;
     }
 
-    public UserEntity getUser() {
+    public UserModel getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
 }
