@@ -26,4 +26,8 @@ public interface ScheduleDao {
     void updateFreeSeats(List<ScheduleEntity> listSchedule);
 
     List<FindTrain> findTrainDetails(String trainName);
+
+    List<FindTrain> findTrainDetailsUnique(String trainName);
+
+    List<FindTrain> findTrainDetailsAll();
 }

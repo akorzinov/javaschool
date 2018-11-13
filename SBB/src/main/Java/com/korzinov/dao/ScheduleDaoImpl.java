@@ -172,7 +172,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Root<ScheduleEntity> sc1 = subQuery.from(ScheduleEntity.class);
             Join<ScheduleEntity, TrainEntity> tr1 = sc1.join("trainByTrainId");
             subQuery.select(cb.max(sc1.<Integer>get("orderStation")));
-            subQuery.where(cb.equal(tr1.get("trainName"),trainName));
+            subQuery.where(cb.like(tr1.<String>get("trainName"),"%" + trainName + "%"));
             TypedQuery<Integer> q1 = getSession().createQuery(subQuery);
             Integer maxOrderStation = q1.getSingleResult();
 
@@ -181,9 +181,58 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
             Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
             query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("orderStation"));
-            Predicate predicate1 = cb.equal(tr.get("trainName"), trainName);
-            Predicate predicate2 = sc.get("orderStation").in(new Integer[] {1, maxOrderStation});
+            Predicate predicate1 = cb.like(tr.<String>get("trainName"), "%" + trainName + "%");
+            Predicate predicate2 = sc.get("orderStation").in(Arrays.asList(1, maxOrderStation));
             query.where(cb.and(predicate1, predicate2));
+            TypedQuery<FindTrain> q = getSession().createQuery(query);
+            List<FindTrain> result = q.getResultList();
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<FindTrain> findTrainDetailsUnique(String trainName) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+
+            CriteriaQuery<Integer> subQuery = cb.createQuery(Integer.class);
+            Root<ScheduleEntity> sc1 = subQuery.from(ScheduleEntity.class);
+            Join<ScheduleEntity, TrainEntity> tr1 = sc1.join("trainByTrainId");
+            subQuery.select(cb.max(sc1.<Integer>get("orderStation")));
+            subQuery.where(cb.equal(tr1.<String>get("trainName"),trainName));
+            TypedQuery<Integer> q1 = getSession().createQuery(subQuery);
+            Integer maxOrderStation = q1.getSingleResult();
+
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("orderStation"));
+            Predicate predicate1 = cb.equal(tr.<String>get("trainName"), trainName);
+            Predicate predicate2 = sc.get("orderStation").in(Arrays.asList(1, maxOrderStation));
+            query.where(cb.and(predicate1, predicate2));
+            TypedQuery<FindTrain> q = getSession().createQuery(query);
+            List<FindTrain> result = q.getResultList();
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<FindTrain> findTrainDetailsAll() {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("orderStation"));
+            query.where(cb.equal(sc.get("orderStation"), "1"));
             TypedQuery<FindTrain> q = getSession().createQuery(query);
             List<FindTrain> result = q.getResultList();
             return result;

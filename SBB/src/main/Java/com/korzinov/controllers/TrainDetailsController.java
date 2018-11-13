@@ -1,7 +1,7 @@
 package com.korzinov.controllers;
 
 import com.korzinov.beans.TrainBean;
-import com.korzinov.services.ScheduleService;
+import com.korzinov.services.TrainDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
@@ -14,19 +14,25 @@ import java.io.Serializable;
 public class TrainDetailsController implements Serializable{
 
     @Autowired
-    private ScheduleService scheduleService;
+    private TrainDetailsService trainDetailsService;
 
     @Autowired
     private TrainBean trainBean;
 
-
-
-    public ScheduleService getScheduleService() {
-        return scheduleService;
+    public void findTrainDetails() {
+        trainBean.setListTrains(trainDetailsService.findTrainDetails(trainBean.getTrainName()));
     }
 
-    public void setScheduleService(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
+    public void findTrainsDetailsAll() {
+        trainBean.setListTrains(trainDetailsService.findTrainDetailsAll());
+    }
+
+    public TrainDetailsService getTrainDetailsService() {
+        return trainDetailsService;
+    }
+
+    public void setTrainDetailsService(TrainDetailsService trainDetailsService) {
+        this.trainDetailsService = trainDetailsService;
     }
 
     public TrainBean getTrainBean() {
@@ -37,3 +43,4 @@ public class TrainDetailsController implements Serializable{
         this.trainBean = trainBean;
     }
 }
+

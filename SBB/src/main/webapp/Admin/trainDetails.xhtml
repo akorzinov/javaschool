@@ -28,17 +28,34 @@
     </h:form>
 
     <p:panel>
-    <h:form>
-        <h:panelGrid columns="2" border="0">
-            <h:outputText value="Enter name of train to see details"/>
-            <h:outputText/>
-            <p:inputText required="true"/>
-            <p:commandButton value="Search"/>
-            <h:outputText/>
-            <p:commandButton value="See all list"/>
-        </h:panelGrid>
-    </h:form>
-</p:panel>
+        <h:form id="formInput">
+            <p:growl/>
+            <h:panelGrid columns="2" border="0">
+                <h:outputText value="Enter name of train to see details"/>
+                <h:outputText/>
+                <p:inputText value="#{trainBean.trainName}"/>
+                <p:commandButton value="Search" action="#{trainDetailsController.findTrainDetails}"
+                                 update="formInput :formForTable:trainDetails"/>
+                <h:outputText/>
+                <p:commandButton value="See all list" action="#{trainDetailsController.findTrainsDetailsAll}"
+                                 update="formInput :formForTable:trainDetails"/>
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="formForTable">
+            <p:dataTable id="trainDetails" var="tr" value="#{trainBean.listTrains}">
+                <p:column headerText="Train name">
+                    <h:outputText value="#{tr.trainName}"/>
+                </p:column>
+                <p:column headerText="Departure station">
+                    <h:outputText value="#{tr.stationName}"/>
+                </p:column>
+                <p:column headerText="Destination station">
+                    <h:outputText value="#{tr.stationDest}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </p:panel>
 
 </h:body>
 </html>
