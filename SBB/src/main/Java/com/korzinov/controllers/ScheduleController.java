@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 @Named(value = "scheduleController")
 @SessionScoped
@@ -80,6 +81,14 @@ public class ScheduleController implements Serializable{
 
     public String buyTicket() {
         return "buyTickets";
+    }
+
+    public List<String> nameStationSuggestions(String stationName){
+        return scheduleService.nameStationSuggestions(stationName);
+    }
+
+    public List<String> nameTrainSuggestions(String trainName) {
+        return scheduleService.nameTrainSuggestions(trainName);
     }
 
     public ScheduleService getScheduleService() {

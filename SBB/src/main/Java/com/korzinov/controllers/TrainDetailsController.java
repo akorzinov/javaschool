@@ -1,7 +1,9 @@
 package com.korzinov.controllers;
 
 import com.korzinov.beans.TrainBean;
+import com.korzinov.models.FindTrain;
 import com.korzinov.services.TrainDetailsService;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
@@ -21,10 +23,21 @@ public class TrainDetailsController implements Serializable{
 
     public void findTrainDetails() {
         trainBean.setListTrains(trainDetailsService.findTrainDetails(trainBean.getTrainName()));
+        trainBean.setRenderTickets(false);
+        trainBean.setRenderTrains(true);
     }
 
     public void findTrainsDetailsAll() {
         trainBean.setListTrains(trainDetailsService.findTrainDetailsAll());
+        trainBean.setRenderTickets(false);
+        trainBean.setRenderTrains(true);
+    }
+
+    public void onDblClickRowSelect(SelectEvent event) {
+        FindTrain train = (FindTrain)event.getObject();
+        trainBean.setListPassengers(trainDetailsService.findPassengersByTrain(train.getTrainName()));
+        trainBean.setRenderTickets(true);
+        trainBean.setRenderTrains(false);
     }
 
     public TrainDetailsService getTrainDetailsService() {

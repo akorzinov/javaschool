@@ -30,4 +30,5 @@ public interface ScheduleDao {
     List<FindTrain> findTrainDetailsUnique(String trainName);
 
     List<FindTrain> findTrainDetailsAll();
+
 }

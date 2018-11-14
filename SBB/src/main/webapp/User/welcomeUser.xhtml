@@ -41,8 +41,10 @@
                 <h:outputText value="Enter date"/>
                 <h:outputText/>
                 <h:outputText/>
-                <p:inputText id="dep" value="#{scheduleBean.depStation}" required="true" requiredMessage="Station from is required"/>
-                <p:inputText id="dest" value="#{scheduleBean.destStation}" required="true" requiredMessage="Station to is required"/>
+                <p:autoComplete id="dep" value="#{scheduleBean.depStation}" required="true" requiredMessage="Station from is required"
+                                maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
+                <p:autoComplete id="dest" value="#{scheduleBean.destStation}" required="true" requiredMessage="Station to is required"
+                                maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
                 <p:calendar id="calendar" value="#{scheduleBean.date}" required="true" showOn="button"
                             locale="en_GB" requiredMessage="Enter date" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
                 </p:calendar>

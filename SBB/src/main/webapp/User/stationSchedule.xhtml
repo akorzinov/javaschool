@@ -27,13 +27,15 @@
         </p:menubar>
     </h:form>
 
-    <p:panel>
+    <p:panel id="panel">
         <h:form>
+            <p:growl/>
             <h:panelGrid columns="2">
                 <h:outputText value="Enter name station"/>
                 <h:outputText/>
-                <p:inputText value="#{scheduleBean.station}"/>
-                <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="formStation:foundStationTable"/>
+                <p:autoComplete value="#{scheduleBean.station}" required="true" requiredMessage="Station name is required"
+                                maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
+                <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="panel"/>
             </h:panelGrid>
         </h:form>
 

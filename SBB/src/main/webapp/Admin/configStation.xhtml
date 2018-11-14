@@ -34,7 +34,8 @@
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="Enter name of station to edit"/>
                 <h:outputText/>
-                <p:inputText value="#{stationBean.stationNameForSearch}"/>
+                <p:autoComplete value="#{stationBean.stationNameForSearch}" maxResults="10"
+                                completeMethod="#{scheduleController.nameStationSuggestions}"/>
                 <p:commandButton value="Search" action="#{stationController.FindStation}" update="formForTable:stationsTable"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new station" toggleable="true" toggleSpeed="500">

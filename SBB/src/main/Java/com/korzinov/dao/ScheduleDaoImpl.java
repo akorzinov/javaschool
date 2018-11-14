@@ -186,6 +186,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
             query.where(cb.and(predicate1, predicate2));
             TypedQuery<FindTrain> q = getSession().createQuery(query);
             List<FindTrain> result = q.getResultList();
+            for (FindTrain f : result) {
+                logger.info("Train list: " + f);
+            }
             return result;
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
@@ -216,6 +219,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
             query.where(cb.and(predicate1, predicate2));
             TypedQuery<FindTrain> q = getSession().createQuery(query);
             List<FindTrain> result = q.getResultList();
+            logger.info("Train : " + result);
             return result;
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
@@ -235,6 +239,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
             query.where(cb.equal(sc.get("orderStation"), "1"));
             TypedQuery<FindTrain> q = getSession().createQuery(query);
             List<FindTrain> result = q.getResultList();
+            for (FindTrain f : result) {
+                logger.info("Train list: " + f);
+            }
             return result;
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());

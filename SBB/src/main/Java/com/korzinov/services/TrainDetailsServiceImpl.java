@@ -1,7 +1,9 @@
 package com.korzinov.services;
 
 import com.korzinov.dao.ScheduleDao;
+import com.korzinov.dao.TicketDao;
 import com.korzinov.models.FindTrain;
+import com.korzinov.models.TicketTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,9 @@ public class TrainDetailsServiceImpl implements TrainDetailsService {
 
     @Autowired
     private ScheduleDao scheduleDao;
+
+    @Autowired
+    private TicketDao ticketDao;
 
     @Override
     public List<FindTrain> findTrainDetails(String trainName) {
@@ -52,12 +57,25 @@ public class TrainDetailsServiceImpl implements TrainDetailsService {
         return result;
     }
 
+    @Override
+    public List<TicketTableModel> findPassengersByTrain(String trainName) {
+        return ticketDao.findPassengersByTrain(trainName);
+    }
+
     public ScheduleDao getScheduleDao() {
         return scheduleDao;
     }
 
     public void setScheduleDao(ScheduleDao scheduleDao) {
         this.scheduleDao = scheduleDao;
+    }
+
+    public TicketDao getTicketDao() {
+        return ticketDao;
+    }
+
+    public void setTicketDao(TicketDao ticketDao) {
+        this.ticketDao = ticketDao;
     }
 }
 

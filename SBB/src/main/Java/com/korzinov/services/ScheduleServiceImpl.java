@@ -205,6 +205,16 @@ public class ScheduleServiceImpl implements ScheduleService{
         return newSchedule;
     }
 
+    @Override
+    public List<String> nameStationSuggestions(String stationName) {
+        return stationDao.findSuggestionsStation(stationName);
+    }
+
+    @Override
+    public List<String> nameTrainSuggestions(String trainName) {
+        return trainDao.findSuggestionsTrain(trainName);
+    }
+
     public ScheduleDao getScheduleDao() {
         return scheduleDao;
     }

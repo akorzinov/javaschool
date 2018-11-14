@@ -110,6 +110,23 @@ public class TrainDaoImpl implements TrainDao {
         }
     }
 
+    @Override
+    public List<String> findSuggestionsTrain(String trainName) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<String> query = cb.createQuery(String.class);
+            Root<TrainEntity> tr = query.from(TrainEntity.class);
+            query.multiselect(tr.get("trainName")).where(cb.like(tr.<String>get("trainName"), "%" + trainName + "%"));
+            Query<String> q = getSession().createQuery(query);
+            List<String> trains = q.getResultList();
+            logger.info("Trains: " + trains);
+            return trains;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }

@@ -27,23 +27,28 @@
         </p:menubar>
     </h:form>
 
-    <p:panel>
+    <p:panel id="panel">
         <h:form id="formInput">
             <p:growl/>
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="Enter name of train to see details"/>
                 <h:outputText/>
-                <p:inputText value="#{trainBean.trainName}"/>
+                <p:autoComplete value="#{trainBean.trainName}" maxResults="10"
+                                completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                 <p:commandButton value="Search" action="#{trainDetailsController.findTrainDetails}"
-                                 update="formInput :formForTable:trainDetails"/>
+                                 update="panel"/>
                 <h:outputText/>
                 <p:commandButton value="See all list" action="#{trainDetailsController.findTrainsDetailsAll}"
-                                 update="formInput :formForTable:trainDetails"/>
+                                 update="panel"/>
             </h:panelGrid>
         </h:form>
 
         <h:form id="formForTable">
-            <p:dataTable id="trainDetails" var="tr" value="#{trainBean.listTrains}">
+            <p:dataTable id="trainDetails" var="tr" value="#{trainBean.listTrains}" paginator="true" paginatorPosition="bottom"
+                         rows="10" selectionMode="single" rowKey="#{tr.trainName}"
+                         dblClickSelect="true" rendered="#{trainBean.renderTrains}">
+                <p:ajax event="rowDblselect" listener="#{trainDetailsController.onDblClickRowSelect}"
+                        update="panel"/>
                 <p:column headerText="Train name">
                     <h:outputText value="#{tr.trainName}"/>
                 </p:column>
@@ -52,6 +57,24 @@
                 </p:column>
                 <p:column headerText="Destination station">
                     <h:outputText value="#{tr.stationDest}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dataTable id="trainPassengersDetails" var="tk" value="#{trainBean.listPassengers}" paginator="true"
+                         paginatorPosition="bottom" rows="10" rendered="#{trainBean.renderTickets}">
+                <p:column headerText="Ticket number">
+                    <h:outputText value="#{tk.id}"/>
+                </p:column>
+                <p:column headerText="First name">
+                    <h:outputText value="#{tk.firstName}"/>
+                </p:column>
+                <p:column headerText="Last name">
+                    <h:outputText value="#{tk.lastName}"/>
+                </p:column>
+                <p:column headerText="Birthday">
+                    <h:outputText value="#{tk.birthday}">
+                        <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
+                    </h:outputText>
                 </p:column>
             </p:dataTable>
         </h:form>
