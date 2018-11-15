@@ -29,6 +29,9 @@ public class ScheduleBean {
     private TrainModel train = new TrainModel();
     private String stationName;
     private List<TrainModel> listTrain  = new ArrayList<>();
+    private List<RouteModel> listScheduleTrain;
+    private boolean renderFoundStationTable = true;
+    private boolean renderTrainDetails;
 
     public String getDepStation() {
         return depStation;
@@ -124,5 +127,29 @@ public class ScheduleBean {
 
     public void setListTrain(List<TrainModel> listTrain) {
         this.listTrain = listTrain;
+    }
+
+    public List<RouteModel> getListScheduleTrain() {
+        return listScheduleTrain;
+    }
+
+    public void setListScheduleTrain(List<RouteModel> listScheduleTrain) {
+        this.listScheduleTrain = listScheduleTrain;
+    }
+
+    public boolean isRenderFoundStationTable() {
+        return renderFoundStationTable;
+    }
+
+    public void setRenderFoundStationTable(boolean renderFoundStationTable) {
+        this.renderFoundStationTable = renderFoundStationTable;
+    }
+
+    public boolean isRenderTrainDetails() {
+        return renderTrainDetails;
+    }
+
+    public void setRenderTrainDetails(boolean renderTrainDetails) {
+        this.renderTrainDetails = renderTrainDetails;
     }
 }

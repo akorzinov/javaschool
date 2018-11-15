@@ -40,6 +40,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         List<FindTrain> result = scheduleDao.findTrainsForUser(depStation, destStation, date);
 
+        if (result.isEmpty()) return null;
+
                     /*удаление одиночных записей*/
         for (int i = 0; i < result.size(); i++) {
             if (result.size()==1) {
@@ -70,12 +72,14 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
 
                 /*вытаскивание актуальных названий станций*/
-        String depSt = stationDao.findByNameStationUnique(depStation).getStationName();
-        String destSt = stationDao.findByNameStationUnique(destStation).getStationName();
-
+        StationEntity stationDeparture = stationDao.findByNameStationUnique(depStation);
+        StationEntity stationDestination = stationDao.findByNameStationUnique(destStation);
+        if (stationDeparture.getStationName() == null || stationDestination.getStationName() == null) {
+            return null;
+        }
                     /*удаление записей неправильного направления*/
         for (int i = 0; i < result.size()-1 ; i+=2) {
-            if (result.get(i).getStationName().equals(depSt)) {
+            if (result.get(i).getStationName().equals(stationDeparture.getStationName())) {
                 if (result.get(i).getOrderStation() > result.get(i + 1).getOrderStation()) {
                     result.remove(i);
                     result.remove(i);
@@ -92,13 +96,13 @@ public class ScheduleServiceImpl implements ScheduleService{
 
                     /*переправка списка в 1 строку на 1 поезд*/
         for (int i = 0; i < result.size() - 1; i++) {
-            if (result.get(i).getStationName().equals(depSt)) {
-                result.get(i).setStationDest(destSt);
+            if (result.get(i).getStationName().equals(stationDeparture.getStationName())) {
+                result.get(i).setStationDest(stationDestination.getStationName());
                 result.get(i).setArrivalTime(result.get(i + 1).getArrivalTime());
                 result.remove(i + 1);
             } else {
-                result.get(i).setStationName(depSt);
-                result.get(i).setStationDest(destSt);
+                result.get(i).setStationName(stationDeparture.getStationName());
+                result.get(i).setStationDest(stationDestination.getStationName());
                 result.get(i).setDepartureTime(result.get(i + 1).getDepartureTime());
                 result.get(i).setFreeSeats(result.get(i + 1).getFreeSeats());
                 result.remove(i + 1);
