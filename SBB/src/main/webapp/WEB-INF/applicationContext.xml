@@ -15,6 +15,7 @@
     <!--@Transaction annotation support -->
     <tx:annotation-driven/>
     <!--Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired and so on-->
+    <context:component-scan base-package="com.korzinov.beans" scoped-proxy="targetClass"/>
     <context:component-scan base-package="com.korzinov"/>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

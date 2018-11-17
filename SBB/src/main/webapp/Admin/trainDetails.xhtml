@@ -30,21 +30,21 @@
     <p:panel id="panel">
         <h:form id="formInput">
             <p:growl/>
-            <h:panelGrid columns="2" border="0">
+            <h:panelGrid columns="3" border="0">
                 <h:outputText value="Enter name of train to see details"/>
+                <h:outputText/>
                 <h:outputText/>
                 <p:autoComplete value="#{trainBean.trainName}" maxResults="10"
                                 completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                 <p:commandButton value="Search" action="#{trainDetailsController.findTrainDetails}"
                                  update="panel"/>
-                <h:outputText/>
-                <p:commandButton value="See all list" action="#{trainDetailsController.findTrainsDetailsAll}"
-                                 update="panel"/>
+                <p:commandButton value="Back" action="#{trainDetailsController.back}" update="panel" immediate="true"
+                                 rendered="#{trainBean.renderBackButton}"/>
             </h:panelGrid>
         </h:form>
 
         <h:form id="formForTable">
-            <p:dataTable id="trainDetails" var="tr" value="#{trainBean.listTrains}" paginator="true" paginatorPosition="bottom"
+            <p:dataTable id="trainDetails" var="tr" value="#{trainDetailsController.listTrains}" paginator="true" paginatorPosition="bottom"
                          rows="10" selectionMode="single" rowKey="#{tr.trainName}"
                          dblClickSelect="true" rendered="#{trainBean.renderTrains}">
                 <p:ajax event="rowDblselect" listener="#{trainDetailsController.onDblClickRowSelect}"

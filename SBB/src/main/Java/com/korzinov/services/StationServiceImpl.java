@@ -50,7 +50,10 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public void deleteStation(StationEntity st) {
+    public void deleteStation(StationModel station) {
+        StationEntity st = new StationEntity();
+        st.setStationName(station.getStationName());
+        st.setStationId(station.getStationId());
         stationDao.deleteStation(st);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Station " + st.getStationName() + " Deleted"));

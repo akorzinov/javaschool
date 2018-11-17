@@ -32,13 +32,12 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
             Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
             Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
-            Predicate predicate = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
-            Predicate predicate2 = cb.or(cb.like(st.<String>get("stationName"), "%" + depStation + "%"),
-                    cb.like(st.<String>get("stationName"), "%" + destStation + "%"));
+            Predicate predicate1 = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
+            Predicate predicate2 = cb.like(st.<String>get("stationName"), "%" + depStation + "%");
+            Predicate predicate3 = cb.like(st.<String>get("stationName"), "%" + destStation + "%");
             query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("departureTime"),
                     sc.get("arrivalTime"), sc.get("freeSeats"), sc.get("orderStation"));
-            query.where(
-                    cb.and(predicate2, predicate))
+            query.where(cb.or(cb.and(predicate1, predicate2),predicate3))
                     .orderBy(cb.asc(tr.get("trainId")));
             TypedQuery<FindTrain> q = getSession().createQuery(query);
             List<FindTrain> result = q.getResultList();

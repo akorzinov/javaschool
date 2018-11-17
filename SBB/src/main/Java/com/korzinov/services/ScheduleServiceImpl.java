@@ -39,61 +39,40 @@ public class ScheduleServiceImpl implements ScheduleService{
     public List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date) {
 
         List<FindTrain> result = scheduleDao.findTrainsForUser(depStation, destStation, date);
-
         if (result.isEmpty()) return null;
-
-                    /*удаление одиночных записей*/
-        for (int i = 0; i < result.size(); i++) {
-            if (result.size()==1) {
-                result.remove(0);
-                continue;
-            }
-            if (i == 2 & result.size()==3) {
-                result.remove(2);
-                continue;
-            }
-            if (!(i + 2 == result.size())) {
-                if (!(result.get(i).getTrainName().equals(result.get(i + 1).getTrainName()))) {
-                    result.remove(i);
-                    i = i - 2;
-                } else if (i + 3 == result.size()) {
-                    i--;
-                }
-                i++;
-            } else if (!(result.get(i+1).getTrainName().equals(result.get(i).getTrainName()))) {
-                result.remove(i + 1);
-                if (i + 1 == result.size()) {
-                    result.remove(i);
-                }
-                if (!(i==1)){
-                    i--;
-                }
-            } else i++;
-        }
-
-                /*вытаскивание актуальных названий станций*/
+                        /*вытаскивание актуальных названий станций*/
         StationEntity stationDeparture = stationDao.findByNameStationUnique(depStation);
         StationEntity stationDestination = stationDao.findByNameStationUnique(destStation);
         if (stationDeparture.getStationName() == null || stationDestination.getStationName() == null) {
             return null;
         }
-                    /*удаление записей неправильного направления*/
-        for (int i = 0; i < result.size()-1 ; i+=2) {
-            if (result.get(i).getStationName().equals(stationDeparture.getStationName())) {
-                if (result.get(i).getOrderStation() > result.get(i + 1).getOrderStation()) {
+                    /*удаление одиночных записей и удаление записей неправильного направления*/
+        for (int i = 0; i < result.size(); i++) {
+            if (result.size() == 1) {
+                result.clear();
+                return null;
+            }
+            if (i == result.size() - 1) {
+                result.remove(i);
+                continue;
+            }
+            if (result.get(i).getTrainName().equals(result.get(i + 1).getTrainName())) {
+                if (result.get(i).getStationName().equals(stationDeparture.getStationName()) &
+                        result.get(i).getOrderStation() < result.get(i+1).getOrderStation()) {
+                    i++;
+                } else if (result.get(i).getStationName().equals(stationDestination.getStationName()) &
+                        result.get(i).getOrderStation() > result.get(i+1).getOrderStation()) {
+                    i++;
+                } else {
                     result.remove(i);
                     result.remove(i);
-                    i-=2;
+                    i--;
                 }
             } else {
-                if (result.get(i).getOrderStation() < result.get(i + 1).getOrderStation()) {
-                    result.remove(i);
-                    result.remove(i);
-                    i-=2;
-                }
+                result.remove(i);
+                i--;
             }
         }
-
                     /*переправка списка в 1 строку на 1 поезд*/
         for (int i = 0; i < result.size() - 1; i++) {
             if (result.get(i).getStationName().equals(stationDeparture.getStationName())) {

@@ -4,6 +4,7 @@ import com.korzinov.beans.ScheduleBean;
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
 import com.korzinov.entities.TrainEntity;
+import com.korzinov.models.TrainModel;
 import com.korzinov.services.ScheduleService;
 import com.korzinov.services.StationService;
 import com.korzinov.services.TrainService;
@@ -41,6 +42,7 @@ public class ScheduleController implements Serializable{
         scheduleBean.setListSchedule(scheduleService.findScheduleByStation(scheduleBean.getStation()));
         scheduleBean.setRenderFoundStationTable(true);
         scheduleBean.setRenderTrainDetails(false);
+        scheduleBean.setRenderBackButton(false);
     }
 
     public String findRoute() {
@@ -76,8 +78,8 @@ public class ScheduleController implements Serializable{
         trainService.updateTrain(event);
     }
 
-    public String deleteTrain(TrainEntity tr) {
-        trainService.deleteTrain(tr);
+    public String deleteTrain(TrainModel train) {
+        trainService.deleteTrain(train);
         scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrainName())); /*может будет работать и без этого*/
         return null;
     }
@@ -99,11 +101,13 @@ public class ScheduleController implements Serializable{
         scheduleBean.setListScheduleTrain(scheduleService.findRoute(train.getTrainName()));
         scheduleBean.setRenderFoundStationTable(false);
         scheduleBean.setRenderTrainDetails(true);
+        scheduleBean.setRenderBackButton(true);
     }
 
     public void back() {
         scheduleBean.setRenderFoundStationTable(true);
         scheduleBean.setRenderTrainDetails(false);
+        scheduleBean.setRenderBackButton(false);
     }
 
     public ScheduleService getScheduleService() {

@@ -2,6 +2,7 @@ package com.korzinov.controllers;
 
 import com.korzinov.beans.StationBean;
 import com.korzinov.entities.StationEntity;
+import com.korzinov.models.StationModel;
 import com.korzinov.services.StationService;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class StationController implements Serializable{
 
     public String addStation() {
         stationService.addStation(stationBean.getStation());
+        stationBean.setListStation(stationService.findByNameStation(stationBean.getStation().getStationName()));
         return null;
     }
 
@@ -35,8 +37,8 @@ public class StationController implements Serializable{
         stationService.updateStation(event);
     }
 
-    public String deleteStation(StationEntity st) {
-        stationService.deleteStation(st);
+    public String deleteStation(StationModel station) {
+        stationService.deleteStation(station);
         stationBean.setListStation(stationService.findByNameStation(stationBean.getStationNameForSearch())); /*может будет работать и без этого*/
         return null;
     }

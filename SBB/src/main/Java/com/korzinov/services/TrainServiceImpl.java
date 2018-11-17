@@ -29,11 +29,16 @@ public class TrainServiceImpl implements TrainService {
         TrainEntity tr = new TrainEntity();
         tr.setTrainName(train.getTrainName());
         tr.setQuantitySeats(train.getQuantitySeats());
+        tr.setTrainId(train.getTrainId());
         trainDao.updateTrain(tr);
     }
 
     @Override
-    public void deleteTrain(TrainEntity tr) {
+    public void deleteTrain(TrainModel train) {
+        TrainEntity tr = new TrainEntity();
+        tr.setTrainName(train.getTrainName());
+        tr.setQuantitySeats(train.getQuantitySeats());
+        tr.setTrainId(train.getTrainId());
         trainDao.deleteTrain(tr);
     }
 

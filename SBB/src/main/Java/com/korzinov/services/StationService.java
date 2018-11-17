@@ -14,7 +14,7 @@ public interface StationService {
 
     void updateStation(RowEditEvent event);
 
-    void deleteStation(StationEntity st);
+    void deleteStation(StationModel station);
 
     int findIdByStationName(String stName);
 

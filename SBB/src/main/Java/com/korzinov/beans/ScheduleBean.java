@@ -4,17 +4,15 @@ import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
 import com.korzinov.models.ScheduleModel;
 import com.korzinov.models.TrainModel;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.SessionScoped;
+import org.springframework.context.annotation.Scope;
 import javax.inject.Named;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Named(value = "scheduleBean")
+@Scope("session")
 public class ScheduleBean {
 
     private String depStation;
@@ -32,6 +30,7 @@ public class ScheduleBean {
     private List<RouteModel> listScheduleTrain;
     private boolean renderFoundStationTable = true;
     private boolean renderTrainDetails;
+    private boolean renderBackButton;
 
     public String getDepStation() {
         return depStation;
@@ -151,5 +150,13 @@ public class ScheduleBean {
 
     public void setRenderTrainDetails(boolean renderTrainDetails) {
         this.renderTrainDetails = renderTrainDetails;
+    }
+
+    public boolean isRenderBackButton() {
+        return renderBackButton;
+    }
+
+    public void setRenderBackButton(boolean renderBackButton) {
+        this.renderBackButton = renderBackButton;
     }
 }

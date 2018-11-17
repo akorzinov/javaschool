@@ -37,7 +37,8 @@
                 <p:autoComplete value="#{scheduleBean.station}" required="true" requiredMessage="Station name is required"
                                 maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
                 <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="panel"/>
-                <p:commandButton value="Back" action="#{scheduleController.back}" update="panel" immediate="true"/>
+                <p:commandButton value="Back" action="#{scheduleController.back}" update="panel" immediate="true"
+                                 rendered="#{scheduleBean.renderBackButton}"/>
             </h:panelGrid>
         </h:form>
 

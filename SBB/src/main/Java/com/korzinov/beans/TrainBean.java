@@ -2,12 +2,12 @@ package com.korzinov.beans;
 
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.TicketTableModel;
-
+import org.springframework.context.annotation.Scope;
 import javax.inject.Named;
-import java.util.Date;
 import java.util.List;
 
 @Named(value = "trainBean")
+@Scope("session")
 public class TrainBean {
 
     private String trainName;
@@ -15,6 +15,7 @@ public class TrainBean {
     private List<TicketTableModel> listPassengers;
     private boolean renderTickets;
     private boolean renderTrains = true;
+    private boolean renderBackButton;
 
     public String getTrainName() {
         return trainName;
@@ -54,5 +55,13 @@ public class TrainBean {
 
     public void setRenderTrains(boolean renderTrains) {
         this.renderTrains = renderTrains;
+    }
+
+    public boolean isRenderBackButton() {
+        return renderBackButton;
+    }
+
+    public void setRenderBackButton(boolean renderBackButton) {
+        this.renderBackButton = renderBackButton;
     }
 }

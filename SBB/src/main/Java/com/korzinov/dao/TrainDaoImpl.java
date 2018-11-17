@@ -81,18 +81,13 @@ public class TrainDaoImpl implements TrainDao {
 
     @Override
     public void updateTrain(TrainEntity tr) {
-        if (findByNameTrain(tr.getTrainName()).isEmpty()){
-            try {
-                getSession().update(tr);
-                logger.info("Train successfully update, Train: " + tr);
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage("Train " + tr.getTrainName() + " Updated"));
-            } catch (HibernateException e) {
-                logger.error("Hibernate exception " + e.getMessage());
-            }
-        }   else {
-                    FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Train " + tr.getTrainName() + " is already exist, enter train with another name or edit exist"));
+        try {
+            getSession().update(tr);
+            logger.info("Train successfully update, Train: " + tr);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Train " + tr.getTrainName() + " Updated"));
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
         }
     }
 
