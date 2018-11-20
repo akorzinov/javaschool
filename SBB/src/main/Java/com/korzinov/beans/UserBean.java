@@ -1,10 +1,12 @@
 package com.korzinov.beans;
 
 import com.korzinov.models.UserModel;
+import org.springframework.context.annotation.Scope;
 import javax.inject.Named;
 
 
 @Named(value = "userBean")
+@Scope("session")
 public class UserBean {
 
     private String confirmPassword;

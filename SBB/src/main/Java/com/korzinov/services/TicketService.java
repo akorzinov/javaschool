@@ -1,11 +1,10 @@
 package com.korzinov.services;
 
 import com.korzinov.entities.TicketEntity;
+import com.korzinov.models.FindTrain;
 import com.korzinov.models.TicketTableModel;
 import com.korzinov.entities.TrainEntity;
 import com.korzinov.entities.UserEntity;
-import org.primefaces.event.RowEditEvent;
-
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface TicketService {
 
     List<TicketTableModel> listTickets();
 
-    void buyTickets();
+    List<TicketTableModel> buyTickets(List<TicketTableModel> listTicket);
 
     UserEntity getUser();
 
@@ -23,11 +22,9 @@ public interface TicketService {
 
     List<TicketEntity> listTicketsDb(List<TicketTableModel> list);
 
-    void addPassenger();
+    List<TicketTableModel> addPassenger(List<TicketTableModel> listTicket, FindTrain findTrain, TicketTableModel ticketForTable);
 
-    void editTicket(RowEditEvent event);
+    List<TicketTableModel> editTicket(List<TicketTableModel> listTicket, TicketTableModel ticket, TicketTableModel oldValue);
 
-    void editInit(RowEditEvent event);
-
-    String deleteTicket(TicketTableModel ticket);
+    List<TicketTableModel> deleteTicket(List<TicketTableModel> listTicket, TicketTableModel ticket);
 }

@@ -4,6 +4,7 @@ import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
 import com.korzinov.models.ScheduleModel;
 import com.korzinov.models.TrainModel;
+import org.springframework.context.annotation.Scope;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Named(value = "scheduleBean")
+@Scope("session")
 public class ScheduleBean {
 
     private String depStation;
@@ -25,6 +27,10 @@ public class ScheduleBean {
     private TrainModel train = new TrainModel();
     private String stationName;
     private List<TrainModel> listTrain  = new ArrayList<>();
+    private List<RouteModel> listScheduleTrain;
+    private boolean renderFoundStationTable = true;
+    private boolean renderTrainDetails;
+    private boolean renderBackButton;
 
     public String getDepStation() {
         return depStation;
@@ -120,5 +126,37 @@ public class ScheduleBean {
 
     public void setListTrain(List<TrainModel> listTrain) {
         this.listTrain = listTrain;
+    }
+
+    public List<RouteModel> getListScheduleTrain() {
+        return listScheduleTrain;
+    }
+
+    public void setListScheduleTrain(List<RouteModel> listScheduleTrain) {
+        this.listScheduleTrain = listScheduleTrain;
+    }
+
+    public boolean isRenderFoundStationTable() {
+        return renderFoundStationTable;
+    }
+
+    public void setRenderFoundStationTable(boolean renderFoundStationTable) {
+        this.renderFoundStationTable = renderFoundStationTable;
+    }
+
+    public boolean isRenderTrainDetails() {
+        return renderTrainDetails;
+    }
+
+    public void setRenderTrainDetails(boolean renderTrainDetails) {
+        this.renderTrainDetails = renderTrainDetails;
+    }
+
+    public boolean isRenderBackButton() {
+        return renderBackButton;
+    }
+
+    public void setRenderBackButton(boolean renderBackButton) {
+        this.renderBackButton = renderBackButton;
     }
 }

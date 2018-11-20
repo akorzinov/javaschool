@@ -12,6 +12,7 @@
         <intercept-url pattern="/User/**" access="hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')"/>
         <intercept-url pattern="/Admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/javax.faces.resource/**" access="permitAll()"/>
+        <intercept-url pattern="/api/table/**" access="permitAll()"/>
         <form-login login-page="/View/login.xhtml"
                     authentication-failure-url="/View/login.xhtml?auth=fail"
                     username-parameter="username"

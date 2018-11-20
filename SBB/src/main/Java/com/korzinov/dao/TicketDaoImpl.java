@@ -3,6 +3,7 @@ package com.korzinov.dao;
 import com.korzinov.entities.TicketEntity;
 import com.korzinov.entities.TrainEntity;
 import com.korzinov.entities.UserEntity;
+import com.korzinov.models.TicketTableModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +74,19 @@ public class TicketDaoImpl implements TicketDao{
         if (result.isEmpty()) {
             return false;
         } else return true;
+    }
+
+    @Override
+    public List<TicketTableModel> findPassengersByTrain(String trainName) {
+        CriteriaBuilder cb = getSession().getCriteriaBuilder();
+        CriteriaQuery<TicketTableModel> query = cb.createQuery(TicketTableModel.class);
+        Root<TicketEntity> tk = query.from(TicketEntity.class);
+        Join<TrainEntity, TrainEntity> tr = tk.join("trainByTrainId");
+        query.multiselect(tk.get("ticketId"), tk.get("firstName"), tk.get("lastName"), tk.get("birthday")).
+                where(cb.equal(tr.get("trainName"), trainName));
+        Query<TicketTableModel> q = getSession().createQuery(query);
+        List<TicketTableModel> result = q.getResultList();
+        return result;
     }
 
     public Session getSession() {

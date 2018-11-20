@@ -25,7 +25,7 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
@@ -39,7 +39,7 @@
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="Enter name of train to edit"/>
                 <h:outputText/>
-                <p:inputText value="#{scheduleBean.trainName}"/>
+                <p:autoComplete value="#{scheduleBean.trainName}" maxResults="10" completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                 <p:commandButton value="Search" action="#{scheduleController.findRoute}"
                                  update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
             </h:panelGrid>
@@ -47,7 +47,8 @@
                 <p:ajax event="toggle"/>
                 <h:panelGrid columns="3" >
                     <h:outputText value="Train name"/>
-                    <p:inputText id="trName" value="#{scheduleBean.train.trainName}"/>
+                    <p:autoComplete id="trName" value="#{scheduleBean.train.trainName}" maxResults="10"
+                                    completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                     <h:outputText/>
                     <h:outputText value="Quantity of seats"/>
                     <p:inputText id="quantity" value="#{scheduleBean.train.quantitySeats}"/>
@@ -59,7 +60,7 @@
                         <p:ajax event="toggle"/>
                         <h:panelGrid columns="2">
                             <h:outputText value="Station name"/>
-                            <p:inputText value="#{scheduleBean.stationName}"/>
+                            <p:autoComplete value="#{scheduleBean.stationName}" maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
                             <h:outputText value="Order station"/>
                             <p:inputText value="#{scheduleBean.schedule.orderStation}"/>
                             <h:outputText value="Arrival time"/>

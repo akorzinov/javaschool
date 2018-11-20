@@ -15,4 +15,6 @@ public interface TrainDao {
     void updateTrain(TrainEntity tr);
 
     void deleteTrain(TrainEntity tr);
+
+    List<String> findSuggestionsTrain(String trainName);
 }

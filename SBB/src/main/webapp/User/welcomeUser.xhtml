@@ -25,7 +25,7 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
@@ -41,8 +41,10 @@
                 <h:outputText value="Enter date"/>
                 <h:outputText/>
                 <h:outputText/>
-                <p:inputText id="dep" value="#{scheduleBean.depStation}" required="true" requiredMessage="Station from is required"/>
-                <p:inputText id="dest" value="#{scheduleBean.destStation}" required="true" requiredMessage="Station to is required"/>
+                <p:autoComplete id="dep" value="#{scheduleBean.depStation}" required="true" requiredMessage="Station from is required"
+                                maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
+                <p:autoComplete id="dest" value="#{scheduleBean.destStation}" required="true" requiredMessage="Station to is required"
+                                maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
                 <p:calendar id="calendar" value="#{scheduleBean.date}" required="true" showOn="button"
                             locale="en_GB" requiredMessage="Enter date" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
                 </p:calendar>

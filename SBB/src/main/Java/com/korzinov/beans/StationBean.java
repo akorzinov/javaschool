@@ -1,10 +1,12 @@
 package com.korzinov.beans;
 
 import com.korzinov.models.StationModel;
+import org.springframework.context.annotation.Scope;
 import javax.inject.Named;
 import java.util.List;
 
 @Named(value = "stationBean")
+@Scope("session")
 public class StationBean {
 
     private String stationNameForSearch;

@@ -2,11 +2,13 @@ package com.korzinov.beans;
 
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.TicketTableModel;
+import org.springframework.context.annotation.Scope;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
 @Named(value = "ticketBean")
+@Scope("session")
 public class TicketBean {
 
     private List<TicketTableModel> listTicket = new ArrayList<>();

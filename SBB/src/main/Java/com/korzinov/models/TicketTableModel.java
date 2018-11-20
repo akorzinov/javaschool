@@ -40,6 +40,13 @@ public class TicketTableModel {
         this.birthday = birthday;
     }
 
+    public TicketTableModel(int id, String firstName, String lastName, Date birthday) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = birthday;
+    }
+
     public String getTrainName() {
         return trainName;
     }

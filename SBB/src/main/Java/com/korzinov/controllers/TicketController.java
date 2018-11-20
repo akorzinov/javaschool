@@ -6,6 +6,8 @@ import com.korzinov.services.TicketService;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -29,23 +31,25 @@ public class TicketController  implements Serializable{
     }
 
     public void buyTickets() {
-        ticketService.buyTickets();
+        ticketBean.setListTicket(ticketService.buyTickets(ticketBean.getListTicket()));
     }
 
     public void addPassenger() {
-        ticketService.addPassenger();
+        ticketBean.setListTicket(ticketService.addPassenger(ticketBean.getListTicket(), ticketBean.getFindTrain(), ticketBean.getTicketForTable()));
     }
 
     public void editTicket(RowEditEvent event) {
-        ticketService.editTicket(event);
+        TicketTableModel ticket = (TicketTableModel)event.getObject();
+        ticketBean.setListTicket(ticketService.editTicket(ticketBean.getListTicket(), ticket, ticketBean.getOldValue()));
     }
 
     public void editInit(RowEditEvent event) {
-        ticketService.editInit(event);
+        TicketTableModel oldTicket = new TicketTableModel((TicketTableModel)event.getObject());
+        ticketBean.setOldValue(oldTicket);
     }
 
     public void deleteTicket(TicketTableModel ticket) {
-        ticketService.deleteTicket(ticket);
+        ticketBean.setListTicket(ticketService.deleteTicket(ticketBean.getListTicket(), ticket));
     }
 
     public TicketService getTicketService() {

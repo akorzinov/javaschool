@@ -20,4 +20,6 @@ public interface StationDao {
 
     String findStationNameById(int id);
 
+    List<String> findSuggestionsStation(String stationName);
+
 }

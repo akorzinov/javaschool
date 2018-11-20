@@ -10,5 +10,5 @@ public interface TrainService {
 
     void updateTrain(RowEditEvent event);
 
-    void deleteTrain(TrainEntity tr);
+    void deleteTrain(TrainModel train);
 }

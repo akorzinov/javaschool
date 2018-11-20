@@ -20,7 +20,7 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
@@ -34,7 +34,8 @@
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="Enter name of station to edit"/>
                 <h:outputText/>
-                <p:inputText value="#{stationBean.stationNameForSearch}"/>
+                <p:autoComplete value="#{stationBean.stationNameForSearch}" maxResults="10"
+                                completeMethod="#{scheduleController.nameStationSuggestions}"/>
                 <p:commandButton value="Search" action="#{stationController.FindStation}" update="formForTable:stationsTable"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new station" toggleable="true" toggleSpeed="500">

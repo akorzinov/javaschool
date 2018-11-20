@@ -20,36 +20,64 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
         </p:menubar>
     </h:form>
 
-    <p:panel>
-        <h:form>
-            <h:panelGrid columns="2">
+    <p:panel id="panel">
+        <h:form id="formSearch">
+            <p:growl/>
+            <h:panelGrid columns="3">
                 <h:outputText value="Enter name station"/>
                 <h:outputText/>
-                <p:inputText value="#{scheduleBean.station}"/>
-                <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="formStation:foundStationTable"/>
+                <h:outputText/>
+                <p:autoComplete value="#{scheduleBean.station}" required="true" requiredMessage="Station name is required"
+                                maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
+                <p:commandButton value="Search" action="#{scheduleController.ScheduleByStation}" update="panel"/>
+                <p:commandButton value="Back" action="#{scheduleController.back}" update="panel" immediate="true"
+                                 rendered="#{scheduleBean.renderBackButton}"/>
             </h:panelGrid>
         </h:form>
 
         <h:form id="formStation">
             <p:dataTable id="foundStationTable" value="#{scheduleBean.listSchedule}" var="st" paginator="true"
-                         paginatorPosition="bottom" rows="10">
+                         paginatorPosition="bottom" rows="10" selectionMode="single" rowKey="#{st.trainName}"
+                         dblClickSelect="true" rendered="#{scheduleBean.renderFoundStationTable}">
+                <p:ajax event="rowDblselect" listener="#{scheduleController.onDblClickRowSelect}"
+                        update="panel"/>
                 <p:column headerText="Train name">
                     <h:outputText value="#{st.trainName}"/>
                 </p:column>
-                <p:column headerText="Arrival time">
+                <p:column headerText="Arrival to station">
                     <h:outputText value="#{st.arrivalTime}">
                         <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Departure time">
+                <p:column headerText="Departure from station">
                     <h:outputText value="#{st.departureTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+
+            <p:dataTable id="trainDetails" var="tr" value="#{scheduleBean.listScheduleTrain}" paginator="true"
+                         paginatorPosition="bottom" rows="10" rendered="#{scheduleBean.renderTrainDetails}">
+                <p:column headerText="Order">
+                    <h:outputText value="#{tr.orderStation}"/>
+                </p:column>
+                <p:column headerText="Station name">
+                    <h:outputText value="#{tr.stationName}"/>
+                </p:column>
+                <p:column headerText="Arrival time">
+                    <h:outputText value="#{tr.arrivalTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Departure time">
+                    <h:outputText value="#{tr.departureTime}">
                         <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
                     </h:outputText>
                 </p:column>

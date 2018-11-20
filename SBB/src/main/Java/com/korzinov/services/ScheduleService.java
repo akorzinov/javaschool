@@ -29,4 +29,8 @@ public interface ScheduleService {
     TrainEntity convertTrainModel(TrainModel train);
 
     ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station);
+
+    List<String> nameStationSuggestions(String stationName);
+
+    List<String> nameTrainSuggestions(String trainName);
 }

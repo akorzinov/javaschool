@@ -1,17 +1,21 @@
 package com.korzinov.controllers;
 
 import com.korzinov.beans.ScheduleBean;
+import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
 import com.korzinov.entities.TrainEntity;
+import com.korzinov.models.TrainModel;
 import com.korzinov.services.ScheduleService;
 import com.korzinov.services.StationService;
 import com.korzinov.services.TrainService;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 @Named(value = "scheduleController")
 @SessionScoped
@@ -36,7 +40,9 @@ public class ScheduleController implements Serializable{
 
     public void ScheduleByStation() {
         scheduleBean.setListSchedule(scheduleService.findScheduleByStation(scheduleBean.getStation()));
-
+        scheduleBean.setRenderFoundStationTable(true);
+        scheduleBean.setRenderTrainDetails(false);
+        scheduleBean.setRenderBackButton(false);
     }
 
     public String findRoute() {
@@ -72,14 +78,36 @@ public class ScheduleController implements Serializable{
         trainService.updateTrain(event);
     }
 
-    public String deleteTrain(TrainEntity tr) {
-        trainService.deleteTrain(tr);
+    public String deleteTrain(TrainModel train) {
+        trainService.deleteTrain(train);
         scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrainName())); /*может будет работать и без этого*/
         return null;
     }
 
     public String buyTicket() {
         return "buyTickets";
+    }
+
+    public List<String> nameStationSuggestions(String stationName){
+        return scheduleService.nameStationSuggestions(stationName);
+    }
+
+    public List<String> nameTrainSuggestions(String trainName) {
+        return scheduleService.nameTrainSuggestions(trainName);
+    }
+
+    public void onDblClickRowSelect(SelectEvent event) {
+        FindTrain train = (FindTrain)event.getObject();
+        scheduleBean.setListScheduleTrain(scheduleService.findRoute(train.getTrainName()));
+        scheduleBean.setRenderFoundStationTable(false);
+        scheduleBean.setRenderTrainDetails(true);
+        scheduleBean.setRenderBackButton(true);
+    }
+
+    public void back() {
+        scheduleBean.setRenderFoundStationTable(true);
+        scheduleBean.setRenderTrainDetails(false);
+        scheduleBean.setRenderBackButton(false);
     }
 
     public ScheduleService getScheduleService() {
