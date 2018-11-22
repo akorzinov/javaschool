@@ -3,25 +3,23 @@ package com.korzinov.controllers;
 import com.korzinov.models.FindTrain;
 import com.korzinov.services.BoardStationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Date;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import java.util.List;
+import javax.ws.rs.core.MediaType;
 
-@Controller
-@RequestMapping("/api/table")
+@Path("/trains")
 public class RestTableController {
 
     @Autowired
     private BoardStationService boardStationService;
 
-    @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
+    @GET
+//    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_JSON)
     public List<FindTrain> getListTrains() {
-        return boardStationService.listTrainsToBoard("Voronezh", new Date(System.currentTimeMillis()));
+        return boardStationService.listTrainsToBoard();
     }
 
     public BoardStationService getBoardStationService() {

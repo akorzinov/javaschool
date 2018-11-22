@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface BoardStationService {
 
-    List<FindTrain> listTrainsToBoard(String stationName, Date date);
+    List<FindTrain> listTrainsToBoard();
+//    List<FindTrain> listTrainsToBoard(String stationName, Date date);
 
     FindTrain findTrainDetailsUnique(String trainName);
 }

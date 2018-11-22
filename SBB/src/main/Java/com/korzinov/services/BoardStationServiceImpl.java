@@ -5,7 +5,6 @@ import com.korzinov.models.FindTrain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +16,8 @@ public class BoardStationServiceImpl implements BoardStationService {
     private ScheduleDao scheduleDao;
 
     @Override
-    public List<FindTrain> listTrainsToBoard(String stationName, Date date) {
-        List<FindTrain> listSchedule = scheduleDao.findScheduleByStationAndDate(stationName, date);
+    public List<FindTrain> listTrainsToBoard() {
+        List<FindTrain> listSchedule = scheduleDao.findScheduleByStationAndDate("Voronezh", new Date(System.currentTimeMillis()));
         for (int i = 0; i < listSchedule.size(); i++) {
             FindTrain trainDetails = findTrainDetailsUnique(listSchedule.get(i).getTrainName());
             listSchedule.get(i).setStationName(trainDetails.getStationName());
