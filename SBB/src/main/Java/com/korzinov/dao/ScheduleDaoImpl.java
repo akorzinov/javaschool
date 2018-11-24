@@ -75,6 +75,30 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
+    public List<FindTrain> findScheduleByStationAndDate(String station, Date date) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            query.multiselect(tr.get("trainName"), sc.get("arrivalTime"), sc.get("departureTime"));
+            Predicate predicate = cb.and(cb.equal(st.get("stationName"), station),
+                                    cb.greaterThanOrEqualTo(sc.<Date>get("arrivalTime"), date));
+            query.where(predicate);
+            TypedQuery<FindTrain> q = getSession().createQuery(query);
+            List<FindTrain> result = q.getResultList();
+            for (FindTrain r : result) {
+                logger.info("FindTrain: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
     public List<RouteModel> findRoute(String trainName) {
 
         try {
