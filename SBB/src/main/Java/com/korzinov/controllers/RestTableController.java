@@ -1,6 +1,6 @@
 package com.korzinov.controllers;
 
-import com.korzinov.models.FindTrain;
+import com.korzinov.models.TrainInfoModel;
 import com.korzinov.services.BoardStationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class RestTableController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<FindTrain> getListTrains() {
+    public List<TrainInfoModel> getListTrains() {
         return boardStationService.listTrainsToBoard();
     }
 

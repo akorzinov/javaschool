@@ -67,7 +67,13 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{stationController.deleteStation(st)}"
-                                     update="station1 :formForTable:stationsTable" icon="ui-icon-close"/>
+                                     update="station1 :formForTable:stationsTable" icon="ui-icon-close">
+                        <p:confirm header="Confirm delete" message="Are you sure?"/>
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
         </h:form>

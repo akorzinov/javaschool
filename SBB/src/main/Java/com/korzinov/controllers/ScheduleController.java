@@ -3,8 +3,8 @@ package com.korzinov.controllers;
 import com.korzinov.beans.ScheduleBean;
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
-import com.korzinov.entities.TrainEntity;
 import com.korzinov.models.TrainModel;
+import com.korzinov.services.MQService;
 import com.korzinov.services.ScheduleService;
 import com.korzinov.services.StationService;
 import com.korzinov.services.TrainService;
@@ -34,6 +34,9 @@ public class ScheduleController implements Serializable{
     @Autowired
     private ScheduleBean scheduleBean;
 
+    @Autowired
+    private MQService mqService;
+
     public void findTrain() {
         scheduleBean.setListFoundTrains(scheduleService.findTrainsForUser(scheduleBean.getDepStation(), scheduleBean.getDestStation(), scheduleBean.getDate()));
     }
@@ -61,6 +64,7 @@ public class ScheduleController implements Serializable{
 
     public void editRoute(RowEditEvent event) {
         scheduleService.updateRoute(event);
+        mqService.send(event);
     }
 
     public String deleteRoute(RouteModel rm) {
@@ -140,5 +144,13 @@ public class ScheduleController implements Serializable{
 
     public void setScheduleBean(ScheduleBean scheduleBean) {
         this.scheduleBean = scheduleBean;
+    }
+
+    public MQService getMqService() {
+        return mqService;
+    }
+
+    public void setMqService(MQService mqService) {
+        this.mqService = mqService;
     }
 }

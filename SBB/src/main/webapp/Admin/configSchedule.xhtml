@@ -110,7 +110,13 @@
                 <p:column headerText="Delete">
                     <p:commandButton action="#{scheduleController.deleteTrain(tr)}"
                                      update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"
-                                     icon="ui-icon-close"/>
+                                     icon="ui-icon-close">
+                        <p:confirm header="Confirm delete" message="Are you sure?"/>
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
 
@@ -152,9 +158,9 @@
                             </h:outputText>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{sc.arrivalTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
-                            </p:inputText>
+                            <p:calendar id="calendar3" value="#{sc.arrivalTime}" showOn="button"
+                                        locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow">
+                            </p:calendar>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
@@ -166,9 +172,9 @@
                             </h:outputText>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{sc.departureTime}">
-                                <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow"/>
-                            </p:inputText>
+                            <p:calendar id="calendar4" value="#{sc.departureTime}" showOn="button"
+                                        locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow">
+                            </p:calendar>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
@@ -177,7 +183,13 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{scheduleController.deleteRoute(sc)}"
-                                     update="schedule1 :formForTable2:ScheduleTable" icon="ui-icon-close"/>
+                                     update="schedule1 :formForTable2:ScheduleTable" icon="ui-icon-close">
+                        <p:confirm header="Confirm delete" message="Are you sure?"/>
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
 
