@@ -1,9 +1,7 @@
 package com.korzinov.models;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@XmlRootElement(name = "findTrain")
 public class FindTrain {
 
     private String trainName;

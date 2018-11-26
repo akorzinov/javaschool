@@ -1,8 +1,6 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,7 +8,7 @@ import java.util.Set;
 public class StationEntity {
     private int stationId;
     private String stationName;
-    private Set<ScheduleEntity> schedulesByStationId;
+    private Set<RouteEntity> routesByStationId;
 
     @Id
     @Column(name = "station_id", nullable = false)
@@ -33,15 +31,6 @@ public class StationEntity {
         this.stationName = stationName;
     }
 
-    @OneToMany(mappedBy = "stationByStationId", fetch = FetchType.LAZY)
-    public Set<ScheduleEntity> getSchedulesByStationId() {
-        return schedulesByStationId;
-    }
-
-    public void setSchedulesByStationId(Set<ScheduleEntity> schedulesByStationId) {
-        this.schedulesByStationId = schedulesByStationId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,11 +51,21 @@ public class StationEntity {
         return result;
     }
 
+    @OneToMany(mappedBy = "stationByStationId", fetch = FetchType.LAZY)
+    public Set<RouteEntity> getRoutesByStationId() {
+        return routesByStationId;
+    }
+
+    public void setRoutesByStationId(Set<RouteEntity> routesByStationId) {
+        this.routesByStationId = routesByStationId;
+    }
+
     @Override
     public String toString() {
         return "StationEntity{" +
                 "stationId=" + stationId +
                 ", stationName='" + stationName + '\'' +
+                ", routesByStationId=" + routesByStationId +
                 '}';
     }
 }

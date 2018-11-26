@@ -1,7 +1,7 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "ticket")
@@ -9,13 +9,13 @@ public class TicketEntity {
     private int ticketId;
     private int departureStationId;
     private int destinationStationId;
-    private UserEntity userByUserId;
-    private TrainEntity trainByTrainId;
     private Date departureTime;
     private Date arrivalTime;
     private String firstName;
     private String lastName;
     private Date birthday;
+    private UserEntity userByUserId;
+    private TrainEntity trainByTrainId;
 
     @Id
     @Column(name = "ticket_id", nullable = false)
@@ -46,26 +46,6 @@ public class TicketEntity {
 
     public void setDestinationStationId(int destinationStationId) {
         this.destinationStationId = destinationStationId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
-    public UserEntity getUserByUserId() {
-        return userByUserId;
-    }
-
-    public void setUserByUserId(UserEntity userByUserId) {
-        this.userByUserId = userByUserId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "train_id", referencedColumnName = "train_id", nullable = false)
-    public TrainEntity getTrainByTrainId() {
-        return trainByTrainId;
-    }
-
-    public void setTrainByTrainId(TrainEntity trainByTrainId) {
-        this.trainByTrainId = trainByTrainId;
     }
 
     @Basic
@@ -128,6 +108,12 @@ public class TicketEntity {
         if (ticketId != that.ticketId) return false;
         if (departureStationId != that.departureStationId) return false;
         if (destinationStationId != that.destinationStationId) return false;
+        if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
+            return false;
+        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null) return false;
 
         return true;
     }
@@ -137,7 +123,32 @@ public class TicketEntity {
         int result = ticketId;
         result = 31 * result + departureStationId;
         result = 31 * result + destinationStationId;
+        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    public UserEntity getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(UserEntity userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "train_id", referencedColumnName = "train_id", nullable = false)
+    public TrainEntity getTrainByTrainId() {
+        return trainByTrainId;
+    }
+
+    public void setTrainByTrainId(TrainEntity trainByTrainId) {
+        this.trainByTrainId = trainByTrainId;
     }
 
     @Override
@@ -146,14 +157,13 @@ public class TicketEntity {
                 "ticketId=" + ticketId +
                 ", departureStationId=" + departureStationId +
                 ", destinationStationId=" + destinationStationId +
-                ", userByUserId=" + userByUserId +
-                ", trainByTrainId=" + trainByTrainId +
                 ", departureTime=" + departureTime +
                 ", arrivalTime=" + arrivalTime +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
+                ", userByUserId=" + userByUserId +
+                ", trainByTrainId=" + trainByTrainId +
                 '}';
     }
-
 }

@@ -1,9 +1,8 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.Date;
+import java.util.Collection;
 
 @Entity
 @Table(name = "user")
@@ -15,13 +14,12 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private Date birthday;
-    private Boolean enabled;
-    private Set<RoleEntity> roles = new HashSet<>();
-    private Set<TicketEntity> ticketsByUserId;
+    private Byte enabled;
+    private Collection<RoleEntity> rolesByUserId;
+    private Collection<TicketEntity> ticketsByUserId;
 
     @Id
     @Column(name = "user_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getUserId() {
         return userId;
     }
@@ -30,6 +28,7 @@ public class UserEntity {
         this.userId = userId;
     }
 
+    @Basic
     @Column(name = "user_name", nullable = false, length = 50)
     public String getUserName() {
         return userName;
@@ -39,6 +38,7 @@ public class UserEntity {
         this.userName = userName;
     }
 
+    @Basic
     @Column(name = "password", nullable = false, length = 100)
     public String getPassword() {
         return password;
@@ -48,6 +48,7 @@ public class UserEntity {
         this.password = password;
     }
 
+    @Basic
     @Column(name = "email", nullable = false, length = 50)
     public String getEmail() {
         return email;
@@ -57,6 +58,7 @@ public class UserEntity {
         this.email = email;
     }
 
+    @Basic
     @Column(name = "first_name", nullable = false, length = 50)
     public String getFirstName() {
         return firstName;
@@ -66,6 +68,7 @@ public class UserEntity {
         this.firstName = firstName;
     }
 
+    @Basic
     @Column(name = "last_name", nullable = false, length = 50)
     public String getLastName() {
         return lastName;
@@ -75,8 +78,8 @@ public class UserEntity {
         this.lastName = lastName;
     }
 
-    @Column(name = "birthday", nullable = false, length = 10)
-    @Temporal(TemporalType.DATE)
+    @Basic
+    @Column(name = "birthday", nullable = false)
     public Date getBirthday() {
         return birthday;
     }
@@ -85,27 +88,14 @@ public class UserEntity {
         this.birthday = birthday;
     }
 
-    @Column(name = "enabled", nullable = false)
-    public Boolean getEnabled() {
+    @Basic
+    @Column(name = "enabled", nullable = true)
+    public Byte getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(Byte enabled) {
         this.enabled = enabled;
-    }
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true , fetch = FetchType.EAGER)
-    public Set<RoleEntity> getRoles() { return roles; }
-
-    public void setRoles(Set<RoleEntity> roles) { this.roles = roles; }
-
-    @OneToMany(mappedBy = "userByUserId")
-    public Set<TicketEntity> getTicketsByUserId() {
-        return ticketsByUserId;
-    }
-
-    public void setTicketsByUserId(Set<TicketEntity> ticketsByUserId) {
-        this.ticketsByUserId = ticketsByUserId;
     }
 
     @Override
@@ -116,11 +106,12 @@ public class UserEntity {
         UserEntity that = (UserEntity) o;
 
         if (userId != that.userId) return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null) return false;
         if (enabled != null ? !enabled.equals(that.enabled) : that.enabled != null) return false;
 
         return true;
@@ -129,13 +120,32 @@ public class UserEntity {
     @Override
     public int hashCode() {
         int result = userId;
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
         return result;
+    }
+
+    @OneToMany(mappedBy = "userByUserId")
+    public Collection<RoleEntity> getRolesByUserId() {
+        return rolesByUserId;
+    }
+
+    public void setRolesByUserId(Collection<RoleEntity> rolesByUserId) {
+        this.rolesByUserId = rolesByUserId;
+    }
+
+    @OneToMany(mappedBy = "userByUserId")
+    public Collection<TicketEntity> getTicketsByUserId() {
+        return ticketsByUserId;
+    }
+
+    public void setTicketsByUserId(Collection<TicketEntity> ticketsByUserId) {
+        this.ticketsByUserId = ticketsByUserId;
     }
 
     @Override
@@ -143,13 +153,14 @@ public class UserEntity {
         return "UserEntity{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", password='*******'" + '\'' +
+                ", password=' ******" + '\'' +
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", enabled=" + enabled +
-                ", roles=" + this.getRoles() +
+                ", rolesByUserId=" + rolesByUserId +
+                ", ticketsByUserId=" + ticketsByUserId +
                 '}';
     }
 }

@@ -1,38 +1,35 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "schedule")
 public class ScheduleEntity {
-    private int recordId;
-    private int orderStation;
+    private int scheduleId;
+    private Date date;
     private int freeSeats;
-    private Date arrivalTime;
-    private Date departureTime;
     private TrainEntity trainByTrainId;
-    private StationEntity stationByStationId;
 
     @Id
-    @Column(name = "record_id", nullable = false)
+    @Column(name = "schedule_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getRecordId() {
-        return recordId;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setRecordId(int recordId) {
-        this.recordId = recordId;
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     @Basic
-    @Column(name = "order_station", nullable = false)
-    public int getOrderStation() {
-        return orderStation;
+    @Column(name = "date", nullable = false)
+    public Date getDate() {
+        return date;
     }
 
-    public void setOrderStation(int orderStation) {
-        this.orderStation = orderStation;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Basic
@@ -45,28 +42,6 @@ public class ScheduleEntity {
         this.freeSeats = freeSeats;
     }
 
-    @Basic
-    @Column(name = "arrival_time", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    public Date getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(Date arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    @Basic
-    @Column(name = "departure_time", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    public Date getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(Date departureTime) {
-        this.departureTime = departureTime;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,37 +49,19 @@ public class ScheduleEntity {
 
         ScheduleEntity that = (ScheduleEntity) o;
 
-        if (recordId != that.recordId) return false;
-        if (orderStation != that.orderStation) return false;
+        if (scheduleId != that.scheduleId) return false;
         if (freeSeats != that.freeSeats) return false;
-        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
-        if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
-            return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = recordId;
-        result = 31 * result + orderStation;
+        int result = scheduleId;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + freeSeats;
-        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
-        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "ScheduleEntity{" +
-                "recordId=" + recordId +
-                ", orderStation=" + orderStation +
-                ", freeSeats=" + freeSeats +
-                ", arrivalTime=" + arrivalTime +
-                ", departureTime=" + departureTime +
-                ", trainByTrainId=" + trainByTrainId +
-                ", stationByStationId=" + stationByStationId +
-                '}';
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -117,14 +74,13 @@ public class ScheduleEntity {
         this.trainByTrainId = trainByTrainId;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id", referencedColumnName = "station_id", nullable = false)
-    public StationEntity getStationByStationId() {
-        return stationByStationId;
+    @Override
+    public String toString() {
+        return "ScheduleEntity{" +
+                "scheduleId=" + scheduleId +
+                ", date=" + date +
+                ", freeSeats=" + freeSeats +
+                ", trainByTrainId=" + trainByTrainId +
+                '}';
     }
-
-    public void setStationByStationId(StationEntity stationByStationId) {
-        this.stationByStationId = stationByStationId;
-    }
-
 }
