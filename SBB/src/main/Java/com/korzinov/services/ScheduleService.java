@@ -20,15 +20,15 @@ public interface ScheduleService {
 
     List<TrainModel> findRouteTrain(String trainName);
 
-    void addRoute(TrainModel train, ScheduleModel schedule, String stationName);
+//    void addRoute(TrainModel train, ScheduleModel schedule, String stationName);
 
-    void updateRoute(RowEditEvent event);
-
-    void deleteRoute(RouteModel rm);
+//    void updateRoute(RowEditEvent event);
+//
+//    void deleteRoute(RouteModel rm);
 
     TrainEntity convertTrainModel(TrainModel train);
 
-    ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station);
+//    ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station);
 
     List<String> nameStationSuggestions(String stationName);
 

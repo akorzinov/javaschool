@@ -10,7 +10,6 @@ public class TrainEntity {
     private String trainName;
     private int quantitySeats;
     private Set<RouteEntity> routesByTrainId;
-    private Set<ScheduleEntity> schedulesByTrainId;
     private Set<TicketEntity> ticketsByTrainId;
 
     @Id
@@ -76,15 +75,6 @@ public class TrainEntity {
     }
 
     @OneToMany(mappedBy = "trainByTrainId", fetch = FetchType.LAZY)
-    public Set<ScheduleEntity> getSchedulesByTrainId() {
-        return schedulesByTrainId;
-    }
-
-    public void setSchedulesByTrainId(Set<ScheduleEntity> schedulesByTrainId) {
-        this.schedulesByTrainId = schedulesByTrainId;
-    }
-
-    @OneToMany(mappedBy = "trainByTrainId", fetch = FetchType.LAZY)
     public Set<TicketEntity> getTicketsByTrainId() {
         return ticketsByTrainId;
     }
@@ -99,9 +89,6 @@ public class TrainEntity {
                 "trainId=" + trainId +
                 ", trainName='" + trainName + '\'' +
                 ", quantitySeats=" + quantitySeats +
-                ", routesByTrainId=" + routesByTrainId +
-                ", schedulesByTrainId=" + schedulesByTrainId +
-                ", ticketsByTrainId=" + ticketsByTrainId +
                 '}';
     }
 }

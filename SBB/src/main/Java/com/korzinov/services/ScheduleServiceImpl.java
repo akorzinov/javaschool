@@ -57,10 +57,10 @@ public class ScheduleServiceImpl implements ScheduleService{
                 continue;
             }
             if (result.get(i).getTrainName().equals(result.get(i + 1).getTrainName())) {
-                if (result.get(i).getStationName().equals(stationDeparture.getStationName()) &
+                if (result.get(i).getStationName().equals(stationDeparture.getStationName()) &&
                         result.get(i).getOrderStation() < result.get(i+1).getOrderStation()) {
                     i++;
-                } else if (result.get(i).getStationName().equals(stationDestination.getStationName()) &
+                } else if (result.get(i).getStationName().equals(stationDestination.getStationName()) &&
                         result.get(i).getOrderStation() > result.get(i+1).getOrderStation()) {
                     i++;
                 } else {
@@ -111,60 +111,60 @@ public class ScheduleServiceImpl implements ScheduleService{
         return trains;
     }
 
-    @Override
-    public void addRoute(TrainModel train, ScheduleModel schedule, String stationName) {
-        trainDao.addTrain(convertTrainModel(train));
-        schedule.setFreeSeats(trainDao.findByNameTrainUnique(train.getTrainName()).getQuantitySeats());
-        StationEntity st = stationDao.findByNameStationUnique(stationName);
-        if (st != null) {
-            scheduleDao.addRoute(convertScheduleModel(schedule, train.getTrainName(), st));
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage("Route Successfully added"));
-        } else {
-            logger.error("Entered stationName " + stationName + " doesn't exist, need enter exist stationName");
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage("Station name " + stationName + " doesn't exist, need enter existed station name"));
-        }
-    }
+//    @Override
+//    public void addRoute(TrainModel train, ScheduleModel schedule, String stationName) {
+//        trainDao.addTrain(convertTrainModel(train));
+//        schedule.setFreeSeats(trainDao.findByNameTrainUnique(train.getTrainName()).getQuantitySeats());
+//        StationEntity st = stationDao.findByNameStationUnique(stationName);
+//        if (st != null) {
+//            scheduleDao.addRoute(convertScheduleModel(schedule, train.getTrainName(), st));
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage("Route Successfully added"));
+//        } else {
+//            logger.error("Entered stationName " + stationName + " doesn't exist, need enter exist stationName");
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage("Station name " + stationName + " doesn't exist, need enter existed station name"));
+//        }
+//    }
 
-    @Override
-    public void updateRoute(RowEditEvent event) {
-        RouteModel rm = (RouteModel)event.getObject();
-        ScheduleEntity sc = new ScheduleEntity();
-        sc.setRecordId(rm.getRecordId());
-        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
-        StationEntity st = stationDao.findByNameStationUnique(rm.getStationName());
-        if (st != null) {
-            sc.setStationByStationId(st);
-        } else {
-            logger.error("Entered stationName " + rm.getStationName() + " doesn't exist, need enter exist stationName");
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage("Station name " + rm.getStationName() + " doesn't exist, need enter existed station name"));
-            return;
-        }
-        sc.setOrderStation(rm.getOrderStation());
-        sc.setFreeSeats(rm.getFreeSeats());
-        sc.setArrivalTime(rm.getArrivalTime());
-        sc.setDepartureTime(rm.getDepartureTime());
-        scheduleDao.updateRoute(sc);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Route Updated"));
-    }
+//    @Override
+//    public void updateRoute(RowEditEvent event) {
+//        RouteModel rm = (RouteModel)event.getObject();
+//        ScheduleEntity sc = new ScheduleEntity();
+//        sc.setRecordId(rm.getRecordId());
+//        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
+//        StationEntity st = stationDao.findByNameStationUnique(rm.getStationName());
+//        if (st != null) {
+//            sc.setStationByStationId(st);
+//        } else {
+//            logger.error("Entered stationName " + rm.getStationName() + " doesn't exist, need enter exist stationName");
+//            FacesContext.getCurrentInstance().addMessage(null,
+//                    new FacesMessage("Station name " + rm.getStationName() + " doesn't exist, need enter existed station name"));
+//            return;
+//        }
+//        sc.setOrderStation(rm.getOrderStation());
+//        sc.setFreeSeats(rm.getFreeSeats());
+//        sc.setArrivalTime(rm.getArrivalTime());
+//        sc.setDepartureTime(rm.getDepartureTime());
+//        scheduleDao.updateRoute(sc);
+//        FacesContext.getCurrentInstance().addMessage(null,
+//                new FacesMessage("Route Updated"));
+//    }
 
-    @Override
-    public void deleteRoute(RouteModel rm) {
-        ScheduleEntity sc = new ScheduleEntity();
-        sc.setRecordId(rm.getRecordId());
-        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
-        sc.setStationByStationId(stationDao.findByNameStationUnique(rm.getStationName()));
-        sc.setOrderStation(rm.getOrderStation());
-        sc.setFreeSeats(rm.getFreeSeats());
-        sc.setArrivalTime(rm.getArrivalTime());
-        sc.setDepartureTime(rm.getDepartureTime());
-        scheduleDao.deleteRoute(sc);
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Route Deleted"));
-    }
+//    @Override
+//    public void deleteRoute(RouteModel rm) {
+//        ScheduleEntity sc = new ScheduleEntity();
+//        sc.setRecordId(rm.getRecordId());
+//        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
+//        sc.setStationByStationId(stationDao.findByNameStationUnique(rm.getStationName()));
+//        sc.setOrderStation(rm.getOrderStation());
+//        sc.setFreeSeats(rm.getFreeSeats());
+//        sc.setArrivalTime(rm.getArrivalTime());
+//        sc.setDepartureTime(rm.getDepartureTime());
+//        scheduleDao.deleteRoute(sc);
+//        FacesContext.getCurrentInstance().addMessage(null,
+//                new FacesMessage("Route Deleted"));
+//    }
 
     @Override
     public TrainEntity convertTrainModel(TrainModel train) {
@@ -176,17 +176,17 @@ public class ScheduleServiceImpl implements ScheduleService{
         return newTrain;
     }
 
-    @Override
-    public ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station) {
-        ScheduleEntity newSchedule = new ScheduleEntity();
-        newSchedule.setTrainByTrainId(trainDao.findByNameTrainUnique(trainName));
-        newSchedule.setStationByStationId(station);
-        newSchedule.setFreeSeats(schedule.getFreeSeats());
-        newSchedule.setOrderStation(schedule.getOrderStation());
-        newSchedule.setDepartureTime(schedule.getDepartureTime());
-        newSchedule.setArrivalTime(schedule.getArrivalTime());
-        return newSchedule;
-    }
+//    @Override
+//    public ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station) {
+//        ScheduleEntity newSchedule = new ScheduleEntity();
+//        newSchedule.setTrainByTrainId(trainDao.findByNameTrainUnique(trainName));
+//        newSchedule.setStationByStationId(station);
+//        newSchedule.setFreeSeats(schedule.getFreeSeats());
+//        newSchedule.setOrderStation(schedule.getOrderStation());
+//        newSchedule.setDepartureTime(schedule.getDepartureTime());
+//        newSchedule.setArrivalTime(schedule.getArrivalTime());
+//        return newSchedule;
+//    }
 
     @Override
     public List<String> nameStationSuggestions(String stationName) {

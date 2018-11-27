@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userDao.findByUserName(username);
-        List<GrantedAuthority> authorities = buildUserAuthority(user.getRoles());
+        List<GrantedAuthority> authorities = buildUserAuthority(user.getRolesByUserId());
         return buildUserForAuthentication(user, authorities);
     }
 

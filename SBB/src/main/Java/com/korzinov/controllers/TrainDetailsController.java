@@ -37,7 +37,7 @@ public class TrainDetailsController implements Serializable{
         trainBean.setRenderBackButton(false);
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         listTrains = trainDetailsService.findTrainDetailsAll();
     }

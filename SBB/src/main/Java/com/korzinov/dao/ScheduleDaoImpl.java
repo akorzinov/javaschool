@@ -30,15 +30,16 @@ public class ScheduleDaoImpl implements ScheduleDao {
             CriteriaBuilder cb = getSession().getCriteriaBuilder();
             CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
             Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
-            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
-            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            Join<ScheduleEntity, RouteEntity> rt = sc.join("routeByRouteId");
+            Join<RouteEntity, StationEntity> st = rt.join("stationByStationId");
+            Join<RouteEntity, TrainEntity> tr = rt.join("trainByTrainId");
             Predicate predicate1 = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
-            Predicate predicate2 = cb.like(st.<String>get("stationName"), "%" + depStation + "%");
-            Predicate predicate3 = cb.like(st.<String>get("stationName"), "%" + destStation + "%");
+            Predicate predicate2 = cb.equal(st.get("stationName"), depStation);
+            Predicate predicate3 = cb.equal(st.get("stationName"), destStation);
             query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("departureTime"),
-                    sc.get("arrivalTime"), sc.get("freeSeats"), sc.get("orderStation"));
-            query.where(cb.or(cb.and(predicate1, predicate2),predicate3))
-                    .orderBy(cb.asc(tr.get("trainId")));
+                    sc.get("arrivalTime"), sc.get("freeSeats"), rt.get("orderStation"));
+            query.where(cb.or(cb.and(predicate1, predicate2),cb.and(predicate1, predicate3)))
+                    .orderBy(cb.asc(sc.get("scheduleId")));
             TypedQuery<FindTrain> q = getSession().createQuery(query);
             List<FindTrain> result = q.getResultList();
             for (FindTrain r : result) {
@@ -178,8 +179,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
         for (ScheduleEntity s : listSchedule) {
             try {
                 getSession().update(s);
-                logger.info("Free seats successfully update, Train: " + s.getTrainByTrainId().getTrainName() +
-                        " FreeSeats: " + s.getFreeSeats());
+//                logger.info("Free seats successfully update, Train: " + s.getTrainByTrainId().getTrainName() +
+//                        " FreeSeats: " + s.getFreeSeats());
             } catch (HibernateException e) {
                 logger.error("Hibernate exception " + e.getMessage());
             }

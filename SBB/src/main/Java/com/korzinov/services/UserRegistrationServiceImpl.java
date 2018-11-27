@@ -37,7 +37,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         RoleEntity newRole = new RoleEntity();
         newRole.setRole("ROLE_USER");
-        newRole.setUser(newUser);
+        newRole.setUserByUserId(newUser);
         roleDao.createRole(newRole);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("User successfully created"));

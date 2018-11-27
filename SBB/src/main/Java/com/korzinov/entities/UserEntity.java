@@ -1,8 +1,8 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -14,9 +14,9 @@ public class UserEntity {
     private String firstName;
     private String lastName;
     private Date birthday;
-    private Byte enabled;
-    private Collection<RoleEntity> rolesByUserId;
-    private Collection<TicketEntity> ticketsByUserId;
+    private Boolean enabled;
+    private Set<RoleEntity> rolesByUserId;
+    private Set<TicketEntity> ticketsByUserId;
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -90,11 +90,11 @@ public class UserEntity {
 
     @Basic
     @Column(name = "enabled", nullable = true)
-    public Byte getEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Byte enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -130,21 +130,21 @@ public class UserEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "userByUserId")
-    public Collection<RoleEntity> getRolesByUserId() {
+    @OneToMany(mappedBy = "userByUserId", fetch = FetchType.LAZY)
+    public Set<RoleEntity> getRolesByUserId() {
         return rolesByUserId;
     }
 
-    public void setRolesByUserId(Collection<RoleEntity> rolesByUserId) {
+    public void setRolesByUserId(Set<RoleEntity> rolesByUserId) {
         this.rolesByUserId = rolesByUserId;
     }
 
-    @OneToMany(mappedBy = "userByUserId")
-    public Collection<TicketEntity> getTicketsByUserId() {
+    @OneToMany(mappedBy = "userByUserId", fetch = FetchType.LAZY)
+    public Set<TicketEntity> getTicketsByUserId() {
         return ticketsByUserId;
     }
 
-    public void setTicketsByUserId(Collection<TicketEntity> ticketsByUserId) {
+    public void setTicketsByUserId(Set<TicketEntity> ticketsByUserId) {
         this.ticketsByUserId = ticketsByUserId;
     }
 
@@ -159,8 +159,7 @@ public class UserEntity {
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
                 ", enabled=" + enabled +
-                ", rolesByUserId=" + rolesByUserId +
-                ", ticketsByUserId=" + ticketsByUserId +
+                ", rolesByUserId=" + this.getRolesByUserId() +
                 '}';
     }
 }

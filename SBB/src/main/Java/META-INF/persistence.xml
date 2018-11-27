@@ -9,15 +9,5 @@
         <class>com.korzinov.entities.TrainEntity</class>
         <class>com.korzinov.entities.ScheduleEntity</class>
         <class>com.korzinov.entities.RouteEntity</class>
-        <properties>
-            <property name="toplink.jdbc.url" value="jdbc:mysql://localhost:3307/sbb2"/>
-            <property name="toplink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3307/sbb2"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3307/sbb2"/>
-            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
-            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3307/sbb2"/>
-            <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-        </properties>
     </persistence-unit>
 </persistence>

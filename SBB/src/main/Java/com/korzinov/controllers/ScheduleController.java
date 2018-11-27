@@ -56,19 +56,19 @@ public class ScheduleController implements Serializable{
     }
 
     public String addRoute() {
-        scheduleService.addRoute(scheduleBean.getTrain(), scheduleBean.getSchedule(), scheduleBean.getStationName());
+//        scheduleService.addRoute(scheduleBean.getTrain(), scheduleBean.getSchedule(), scheduleBean.getStationName());
         scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrain().getTrainName()));
         scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrain().getTrainName()));
         return null;
     }
 
     public void editRoute(RowEditEvent event) {
-        scheduleService.updateRoute(event);
+//        scheduleService.updateRoute(event);
         mqService.send(event);
     }
 
     public String deleteRoute(RouteModel rm) {
-        scheduleService.deleteRoute(rm);
+//        scheduleService.deleteRoute(rm);
         scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName())); /*может будет работать и без этого*/
         return null;
     }

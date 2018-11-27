@@ -2,7 +2,7 @@
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
 -- Schema mydb
@@ -90,8 +90,6 @@ CREATE TABLE IF NOT EXISTS `sbb2`.`route` (
   `train_id` INT(10) UNSIGNED NOT NULL,
   `station_id` INT(10) UNSIGNED NOT NULL,
   `order_station` INT(10) UNSIGNED NOT NULL,
-  `arrival_time` DATETIME NOT NULL,
-  `departure_time` DATETIME NOT NULL,
   PRIMARY KEY (`route_id`),
   INDEX `fk_train_id_idx` (`train_id` ASC),
   INDEX `fk_station_id_idx` (`station_id` ASC),
@@ -115,18 +113,19 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `sbb2`.`schedule` (
   `schedule_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `train_id` INT(10) UNSIGNED NOT NULL,
-  `date` DATE NOT NULL,
+  `route_id` INT(10) UNSIGNED NOT NULL,
   `free_seats` INT(10) UNSIGNED NOT NULL,
+  `arrival_time` DATETIME NOT NULL,
+  `departure_time` DATETIME NOT NULL,
   PRIMARY KEY (`schedule_id`),
-  INDEX `fk_train_id_schedule_idx` (`train_id` ASC),
-  CONSTRAINT `fk_train_id_schedule`
-    FOREIGN KEY (`train_id`)
-    REFERENCES `sbb2`.`train` (`train_id`)
+  INDEX `fk_route_id_schedule_idx` (`route_id` ASC),
+  CONSTRAINT `fk_route_id_schedule`
+    FOREIGN KEY (`route_id`)
+    REFERENCES `sbb2`.`route` (`route_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 17
 DEFAULT CHARACTER SET = utf8;
 
 

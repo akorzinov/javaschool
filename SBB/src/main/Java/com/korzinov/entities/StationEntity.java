@@ -65,7 +65,6 @@ public class StationEntity {
         return "StationEntity{" +
                 "stationId=" + stationId +
                 ", stationName='" + stationName + '\'' +
-                ", routesByStationId=" + routesByStationId +
                 '}';
     }
 }

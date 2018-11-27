@@ -1,17 +1,16 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "route")
 public class RouteEntity {
     private int routeId;
     private int orderStation;
-    private Date arrivalTime;
-    private Date departureTime;
     private TrainEntity trainByTrainId;
     private StationEntity stationByStationId;
+    private Set<ScheduleEntity> schedulesByRouteId;
 
     @Id
     @Column(name = "route_id", nullable = false)
@@ -34,26 +33,6 @@ public class RouteEntity {
         this.orderStation = orderStation;
     }
 
-    @Basic
-    @Column(name = "arrival_time", nullable = false)
-    public Date getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(Date arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    @Basic
-    @Column(name = "departure_time", nullable = false)
-    public Date getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(Date departureTime) {
-        this.departureTime = departureTime;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,9 +42,6 @@ public class RouteEntity {
 
         if (routeId != that.routeId) return false;
         if (orderStation != that.orderStation) return false;
-        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
-        if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
-            return false;
 
         return true;
     }
@@ -74,8 +50,6 @@ public class RouteEntity {
     public int hashCode() {
         int result = routeId;
         result = 31 * result + orderStation;
-        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
-        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
         return result;
     }
 
@@ -99,13 +73,20 @@ public class RouteEntity {
         this.stationByStationId = stationByStationId;
     }
 
+    @OneToMany(mappedBy = "routeByRouteId", fetch = FetchType.LAZY)
+    public Set<ScheduleEntity> getSchedulesByRouteId() {
+        return schedulesByRouteId;
+    }
+
+    public void setSchedulesByRouteId(Set<ScheduleEntity> schedulesByRouteId) {
+        this.schedulesByRouteId = schedulesByRouteId;
+    }
+
     @Override
     public String toString() {
         return "RouteEntity{" +
                 "routeId=" + routeId +
                 ", orderStation=" + orderStation +
-                ", arrivalTime=" + arrivalTime +
-                ", departureTime=" + departureTime +
                 ", trainByTrainId=" + trainByTrainId +
                 ", stationByStationId=" + stationByStationId +
                 '}';
