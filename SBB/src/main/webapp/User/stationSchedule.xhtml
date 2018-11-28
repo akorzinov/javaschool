@@ -44,10 +44,10 @@
 
         <h:form id="formStation">
             <p:dataTable id="foundStationTable" value="#{scheduleBean.listSchedule}" var="st" paginator="true"
-                         paginatorPosition="bottom" rows="10" selectionMode="single" rowKey="#{st.trainName}"
-                         dblClickSelect="true" rendered="#{scheduleBean.renderFoundStationTable}">
-                <p:ajax event="rowDblselect" listener="#{scheduleController.onDblClickRowSelect}"
-                        update="panel"/>
+                         paginatorPosition="bottom" rows="10"  rowKey="#{st.trainName}"
+                         dblClickSelect="false" rendered="#{scheduleBean.renderFoundStationTable}">
+                <!--<p:ajax event="rowDblselect" listener="#{scheduleController.onDblClickRowSelect}"-->
+                        <!--update="panel"/>-->
                 <p:column headerText="Train name">
                     <h:outputText value="#{st.trainName}"/>
                 </p:column>

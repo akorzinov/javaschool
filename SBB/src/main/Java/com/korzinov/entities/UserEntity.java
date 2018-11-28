@@ -20,6 +20,7 @@ public class UserEntity {
 
     @Id
     @Column(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getUserId() {
         return userId;
     }

@@ -64,6 +64,7 @@ public class TicketServiceImpl implements TicketService {
         }
         List<ScheduleEntity> listSchedule = scheduleDao.findScheduleByTrain(train);
         if (!listSchedule.isEmpty()) {
+            /*need more code here to do 1 train*/
             freeSeats = listSchedule.get(0).getFreeSeats();
         }
 
