@@ -34,6 +34,9 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     private TrainDao trainDao;
 
+    @Autowired
+    private RouteDao routeDao;
+
     @Override
     public List<TicketTableModel> listTickets() {
         List<TicketEntity> listTickets = ticketDao.listTickets(getUser());
@@ -58,13 +61,15 @@ public class TicketServiceImpl implements TicketService {
 
         List<TicketEntity> tickets = listTicketsDb(listTicket);
         TrainEntity train = new TrainEntity();
+        TicketEntity ticketInfo = new TicketEntity();
         int freeSeats = 0;
         if (!tickets.isEmpty()) {
             train = tickets.get(0).getTrainByTrainId();
+            ticketInfo = tickets.get(0);
         }
         List<ScheduleEntity> listSchedule = scheduleDao.findScheduleByTrain(train);
         if (!listSchedule.isEmpty()) {
-            /*need more code here to do 1 train*/
+            listSchedule = findUniqueScheduleList(train.getTrainName(),ticketInfo.getDepartureTime(),listSchedule);
             freeSeats = listSchedule.get(0).getFreeSeats();
         }
 
@@ -84,6 +89,42 @@ public class TicketServiceImpl implements TicketService {
                             tickets.size() + " tickets, you can find other train"));
             return listTicket;
         }
+    }
+
+    @Override
+    public List<ScheduleEntity> findUniqueScheduleList(String trainName, Date depTime, List<ScheduleEntity> listSchedule) {
+        int countRoute = routeDao.findQuantityRoute(trainName);
+        int scheduleId = 0;
+        for (int i = 0; i < listSchedule.size(); i++) {
+            if (listSchedule.get(i).getDepartureTime().equals(depTime)) {
+                scheduleId = listSchedule.get(i).getScheduleId();
+                while (i < listSchedule.size()-1 &&
+                        (listSchedule.get(i).getRouteByRouteId().getOrderStation() <= listSchedule.get(i+1).getRouteByRouteId().getOrderStation())) {
+                    scheduleId++;
+                    i++;
+                }
+            }
+        }
+        scheduleId = scheduleId - countRoute+1;
+//        List<Integer> listScheduleId = new ArrayList<>();
+//        for (int i = 0; i < countRoute; i++) {
+//            listScheduleId.add(scheduleId);
+//            scheduleId++;
+//        }
+        List<ScheduleEntity> result = new ArrayList<>();
+        for (int i = 0; i < listSchedule.size(); i++) {
+            if (listSchedule.get(i).getScheduleId()==scheduleId) {
+                for (int j = 0; j < countRoute; j++) {
+                    result.add(listSchedule.get(i));
+                    i++;
+                }
+//                while (result.size() < countRoute && listSchedule.get(i).getScheduleId() == listScheduleId.get(i)) {
+//                    result.add(listSchedule.get(i));
+//                    i++;
+//                }
+            }
+        }
+        return result;
     }
 
     @Override
@@ -236,4 +277,11 @@ public class TicketServiceImpl implements TicketService {
         this.trainDao = trainDao;
     }
 
+    public RouteDao getRouteDao() {
+        return routeDao;
+    }
+
+    public void setRouteDao(RouteDao routeDao) {
+        this.routeDao = routeDao;
+    }
 }

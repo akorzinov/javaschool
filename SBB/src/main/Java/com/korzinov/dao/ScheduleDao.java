@@ -33,4 +33,6 @@ public interface ScheduleDao {
 
     List<FindTrain> findTrainDetailsAll();
 
+    List<ScheduleEntity> findScheduleByListId(List<Integer> listSchedulesId);
+
 }

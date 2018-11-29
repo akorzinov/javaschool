@@ -134,7 +134,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
             Join<ScheduleEntity, RouteEntity> rt = sc.join("routeByRouteId");
             Join<RouteEntity, TrainEntity> tr = rt.join("trainByTrainId");
-            query.select(sc).where(cb.equal(tr.get("trainName"), train.getTrainName()));
+            query.select(sc).where(cb.equal(tr.get("trainName"), train.getTrainName())).orderBy(cb.asc(sc.get("scheduleId")));
             Query<ScheduleEntity> q = getSession().createQuery(query);
             List<ScheduleEntity> result = q.getResultList();
             for (ScheduleEntity s : result) {
@@ -268,6 +268,25 @@ public class ScheduleDaoImpl implements ScheduleDao {
             List<FindTrain> result = q.getResultList();
             for (FindTrain f : result) {
                 logger.info("Train list: " + f);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<ScheduleEntity> findScheduleByListId(List<Integer> listSchedulesId) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<ScheduleEntity> query = cb.createQuery(ScheduleEntity.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            query.select(sc).where(sc.get("scheduleId").in(listSchedulesId));
+            TypedQuery<ScheduleEntity> q = getSession().createQuery(query);
+            List<ScheduleEntity> result = q.getResultList();
+            for (ScheduleEntity s : result) {
+                logger.info("Schedule list: " + s);
             }
             return result;
         } catch (HibernateException e) {
