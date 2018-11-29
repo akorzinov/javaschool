@@ -106,11 +106,6 @@ public class TicketServiceImpl implements TicketService {
             }
         }
         scheduleId = scheduleId - countRoute+1;
-//        List<Integer> listScheduleId = new ArrayList<>();
-//        for (int i = 0; i < countRoute; i++) {
-//            listScheduleId.add(scheduleId);
-//            scheduleId++;
-//        }
         List<ScheduleEntity> result = new ArrayList<>();
         for (int i = 0; i < listSchedule.size(); i++) {
             if (listSchedule.get(i).getScheduleId()==scheduleId) {
@@ -118,10 +113,6 @@ public class TicketServiceImpl implements TicketService {
                     result.add(listSchedule.get(i));
                     i++;
                 }
-//                while (result.size() < countRoute && listSchedule.get(i).getScheduleId() == listScheduleId.get(i)) {
-//                    result.add(listSchedule.get(i));
-//                    i++;
-//                }
             }
         }
         return result;
@@ -150,7 +141,7 @@ public class TicketServiceImpl implements TicketService {
     public List<TicketTableModel> addPassenger(List<TicketTableModel> listTicket, FindTrain findTrain, TicketTableModel ticketForTable) {
 
         if (checkSamePassenger(trainDao.findByNameTrainUnique(findTrain.getTrainName()), ticketForTable.getFirstName(),
-                ticketForTable.getLastName(), ticketForTable.getBirthday())) {
+                ticketForTable.getLastName(), ticketForTable.getBirthday(), findTrain.getDepartureTime())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already registered to this train"));
         } else {
@@ -188,7 +179,7 @@ public class TicketServiceImpl implements TicketService {
             int i = listTicket.indexOf(ticket);
             listTicket.set(i, oldValue);
         } else if (checkSamePassenger(trainDao.findByNameTrainUnique(ticket.getTrainName()), ticket.getFirstName(),
-                ticket.getLastName(), ticket.getBirthday())) {
+                ticket.getLastName(), ticket.getBirthday(), ticket.getDepartureTime())) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Specified passenger already registered to this train"));
         } else {
@@ -222,8 +213,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public boolean checkSamePassenger(TrainEntity train, String firstName, String lastName, Date birthday) {
-        return ticketDao.checkSamePass(train, firstName, lastName, birthday);
+    public boolean checkSamePassenger(TrainEntity train, String firstName, String lastName, Date birthday, Date depTime) {
+        return ticketDao.checkSamePass(train, firstName, lastName, birthday,depTime);
     }
 
     @Override

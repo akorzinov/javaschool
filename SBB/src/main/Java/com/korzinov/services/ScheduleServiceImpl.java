@@ -21,7 +21,6 @@ import java.util.List;
 
 @Service
 @Transactional
-
 public class ScheduleServiceImpl implements ScheduleService{
 
     static final Logger logger = LogManager.getLogger(ScheduleServiceImpl.class);
@@ -173,15 +172,6 @@ public class ScheduleServiceImpl implements ScheduleService{
 //                new FacesMessage("Route Deleted"));
 //    }
 
-    @Override
-    public TrainEntity convertTrainModel(TrainModel train) {
-        TrainEntity newTrain = new TrainEntity();
-        newTrain.setTrainName(train.getTrainName());
-        if (train.getQuantitySeats() != null) {
-            newTrain.setQuantitySeats(train.getQuantitySeats());
-        }
-        return newTrain;
-    }
 
 //    @Override
 //    public ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station) {

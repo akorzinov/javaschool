@@ -4,9 +4,10 @@ import java.util.Date;
 
 public class RouteModel {
 
+    private int routeId;
     private String trainName;
     private int quantitySeats;
-    private int orderStation;
+    private Integer orderStation;
     private String stationName;
     private Date arrivalTime;
     private Date departureTime;
@@ -18,7 +19,7 @@ public class RouteModel {
     public RouteModel() {
     }
 
-    public RouteModel(int recordId,int freeSeats, String trainName, int quantitySeats, int orderStation, String stationName, Date arrivalTime, Date departureTime) {
+    public RouteModel(int recordId,int freeSeats, String trainName, int quantitySeats, Integer orderStation, String stationName, Date arrivalTime, Date departureTime) {
         this.trainName = trainName;
         this.quantitySeats = quantitySeats;
         this.orderStation = orderStation;
@@ -27,6 +28,20 @@ public class RouteModel {
         this.departureTime = departureTime;
         this.recordId = recordId;
         this.freeSeats = freeSeats;
+    }
+
+    public RouteModel(int routeId, Integer orderStation, int stationId, int trainId) {
+        this.routeId = routeId;
+        this.orderStation = orderStation;
+        this.stationId = stationId;
+        this.trainId = trainId;
+    }
+
+    public RouteModel(int routeId, String trainName, Integer orderStation, String stationName) {
+        this.routeId = routeId;
+        this.trainName = trainName;
+        this.orderStation = orderStation;
+        this.stationName = stationName;
     }
 
     public String getTrainName() {
@@ -69,11 +84,11 @@ public class RouteModel {
         this.departureTime = departureTime;
     }
 
-    public int getOrderStation() {
+    public Integer getOrderStation() {
         return orderStation;
     }
 
-    public void setOrderStation(int orderStation) {
+    public void setOrderStation(Integer orderStation) {
         this.orderStation = orderStation;
     }
 
@@ -109,15 +124,28 @@ public class RouteModel {
         this.freeSeats = freeSeats;
     }
 
+    public int getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(int routeId) {
+        this.routeId = routeId;
+    }
+
     @Override
     public String toString() {
         return "RouteModel{" +
-                "trainName='" + trainName + '\'' +
+                "routeId=" + routeId +
+                ", trainName='" + trainName + '\'' +
                 ", quantitySeats=" + quantitySeats +
                 ", orderStation=" + orderStation +
                 ", stationName='" + stationName + '\'' +
                 ", arrivalTime=" + arrivalTime +
                 ", departureTime=" + departureTime +
+                ", stationId=" + stationId +
+                ", trainId=" + trainId +
+                ", recordId=" + recordId +
+                ", freeSeats=" + freeSeats +
                 '}';
     }
 }

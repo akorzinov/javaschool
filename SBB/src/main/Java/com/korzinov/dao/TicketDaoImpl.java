@@ -60,7 +60,7 @@ public class TicketDaoImpl implements TicketDao{
     }
 
     @Override
-    public boolean checkSamePass(TrainEntity train, String firstName, String lastName, Date birthday) {
+    public boolean checkSamePass(TrainEntity train, String firstName, String lastName, Date birthday, Date depTime) {
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
         CriteriaQuery<TicketEntity> query = cb.createQuery(TicketEntity.class);
         Root<TicketEntity> t = query.from(TicketEntity.class);
@@ -68,7 +68,8 @@ public class TicketDaoImpl implements TicketDao{
                 cb.equal(t.get("trainByTrainId"), train),
                 cb.equal(t.get("firstName"), firstName),
                 cb.equal(t.get("lastName"), lastName),
-                cb.equal(t.get("birthday"),birthday)));
+                cb.equal(t.get("birthday"),birthday),
+                cb.equal(t.get("departureTime"),depTime)));
         Query<TicketEntity> q = getSession().createQuery(query);
         List<TicketEntity> result = q.getResultList();
         if (result.isEmpty()) {

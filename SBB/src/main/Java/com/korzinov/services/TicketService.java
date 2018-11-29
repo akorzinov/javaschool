@@ -17,7 +17,7 @@ public interface TicketService {
 
     UserEntity getUser();
 
-    boolean checkSamePassenger(TrainEntity train, String firstName, String lastName, Date birthday);
+    boolean checkSamePassenger(TrainEntity train, String firstName, String lastName, Date birthday, Date depTime);
 
     boolean checkSamePassList(List<TicketTableModel> listTicket, String firstName, String lastName, Date birthday);
 

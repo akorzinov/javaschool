@@ -26,8 +26,6 @@ public interface ScheduleService {
 //
 //    void deleteRoute(RouteModel rm);
 
-    TrainEntity convertTrainModel(TrainModel train);
-
 //    ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station);
 
     List<String> nameStationSuggestions(String stationName);
