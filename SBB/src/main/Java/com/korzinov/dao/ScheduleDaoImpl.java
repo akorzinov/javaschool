@@ -101,7 +101,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override                 /*+-*/
-    public List<RouteModel> findRoute(String trainName) {
+    public List<RouteModel> findSchedule(String trainName, Date date) {
 
         try {
             CriteriaBuilder cb = getSession().getCriteriaBuilder();
@@ -110,10 +110,13 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Join<ScheduleEntity, RouteEntity> rt = sc.join("routeByRouteId");
             Join<RouteEntity, StationEntity> st = rt.join("stationByStationId");
             Join<RouteEntity, TrainEntity> tr = rt.join("trainByTrainId");
-            query.multiselect(sc.get("scheduleId"),sc.get("freeSeats"), tr.get("trainName"),
-                    tr.get("quantitySeats"),rt.get("orderStation"),st.get("stationName"),
+            Date nextDay = new Date(date.getTime() + 24*60*60*1000);
+            Predicate predicate1 = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"),date);
+            Predicate predicate2 = cb.lessThanOrEqualTo(sc.<Date>get("departureTime"),nextDay);
+            query.multiselect(sc.get("scheduleId"), tr.get("trainName"), rt.get("orderStation"),st.get("stationName"),
                     sc.get("arrivalTime"), sc.get("departureTime"));
-            query.where(cb.equal(tr.get("trainName"), trainName)).orderBy(cb.asc(rt.get("orderStation")));
+            query.where(cb.and(cb.equal(tr.get("trainName"), trainName)), predicate1, predicate2)
+                    .orderBy(cb.asc(rt.get("orderStation")));
             TypedQuery<RouteModel> q = getSession().createQuery(query);
             List<RouteModel> result = q.getResultList();
             for (RouteModel r : result) {

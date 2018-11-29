@@ -15,7 +15,7 @@ public interface ScheduleDao {
 
     List<FindTrain> findScheduleByStationAndDate(String station, Date date);
 
-    List<RouteModel> findRoute(String trainName);
+    List<RouteModel> findSchedule(String trainName, Date date);
 
     List<ScheduleEntity> findScheduleByTrain(TrainEntity train);
 

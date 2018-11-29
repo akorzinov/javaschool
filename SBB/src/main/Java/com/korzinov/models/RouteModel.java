@@ -44,6 +44,15 @@ public class RouteModel {
         this.stationName = stationName;
     }
 
+    public RouteModel(int routeId, String trainName, Integer orderStation, String stationName, Date arrivalTime, Date departureTime) {
+        this.routeId = routeId;
+        this.trainName = trainName;
+        this.orderStation = orderStation;
+        this.stationName = stationName;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
+    }
+
     public String getTrainName() {
         return trainName;
     }

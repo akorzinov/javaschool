@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Named(value = "scheduleController")
@@ -48,17 +49,18 @@ public class ScheduleController implements Serializable{
         scheduleBean.setRenderBackButton(false);
     }
 
-    public String findRoute() {
-        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName()));
-        scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrainName()));
-//        trainService.findByNameTrain();
-        return null;
+    public void findSchedule() {
+        scheduleBean.setListRoute(scheduleService.findSchedule(scheduleBean.getTrainName(), scheduleBean.getDate()));
+    }
+
+    public void loadRoutes() {
+
     }
 
     public String addRoute() {
 //        scheduleService.addRoute(scheduleBean.getTrain(), scheduleBean.getSchedule(), scheduleBean.getStationName());
         scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrain().getTrainName()));
-        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrain().getTrainName()));
+//        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrain().getTrainName()));
         return null;
     }
 
@@ -69,22 +71,7 @@ public class ScheduleController implements Serializable{
 
     public String deleteRoute(RouteModel rm) {
 //        scheduleService.deleteRoute(rm);
-        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName())); /*может будет работать и без этого*/
-        return null;
-    }
-
-    public String addTrain() {
-        trainService.addTrain(scheduleBean.getTrain());
-        return null;
-    }
-
-    public void editTrain(RowEditEvent event) {
-        trainService.updateTrain(event);
-    }
-
-    public String deleteTrain(TrainModel train) {
-        trainService.deleteTrain(train);
-        scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrainName())); /*может будет работать и без этого*/
+//        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName())); /*может будет работать и без этого*/
         return null;
     }
 
@@ -102,7 +89,7 @@ public class ScheduleController implements Serializable{
 
     public void onDblClickRowSelect(SelectEvent event) {
         FindTrain train = (FindTrain)event.getObject();
-        scheduleBean.setListScheduleTrain(scheduleService.findRoute(train.getTrainName()));
+//        scheduleBean.setListScheduleTrain(scheduleService.findRoute(train.getTrainName()));
         scheduleBean.setRenderFoundStationTable(false);
         scheduleBean.setRenderTrainDetails(true);
         scheduleBean.setRenderBackButton(true);

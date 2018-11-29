@@ -16,7 +16,7 @@ public interface ScheduleService {
 
     List<FindTrain> findScheduleByStation(String station);
 
-    List<RouteModel> findRoute(String trainName);
+    List<RouteModel> findSchedule(String trainName, Date date);
 
     List<TrainModel> findRouteTrain(String trainName);
 

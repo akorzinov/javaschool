@@ -103,8 +103,8 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<RouteModel> findRoute(String trainName) {
-        return scheduleDao.findRoute(trainName);
+    public List<RouteModel> findSchedule(String trainName, Date date) {
+        return scheduleDao.findSchedule(trainName, date);
     }
 
     @Override

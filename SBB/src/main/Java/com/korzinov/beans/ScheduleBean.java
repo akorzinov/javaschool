@@ -22,6 +22,7 @@ public class ScheduleBean {
     private String station;
     private List<FindTrain> listSchedule = new ArrayList<>();
     private String trainName;
+    private String trainNameRoute;
     private List<RouteModel> listRoute = new ArrayList<>();
     private ScheduleModel schedule = new ScheduleModel();
     private TrainModel train = new TrainModel();
@@ -158,5 +159,13 @@ public class ScheduleBean {
 
     public void setRenderBackButton(boolean renderBackButton) {
         this.renderBackButton = renderBackButton;
+    }
+
+    public String getTrainNameRoute() {
+        return trainNameRoute;
+    }
+
+    public void setTrainNameRoute(String trainNameRoute) {
+        this.trainNameRoute = trainNameRoute;
     }
 }
