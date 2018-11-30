@@ -1,5 +1,6 @@
 package com.korzinov.services;
 
+import com.korzinov.dao.RouteDao;
 import com.korzinov.dao.ScheduleDao;
 import com.korzinov.dao.StationDao;
 import com.korzinov.dao.TrainDao;
@@ -33,6 +34,9 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Autowired
     private TrainDao trainDao;
+
+    @Autowired
+    private RouteDao routeDao;
 
     @Override
     public List<FindTrain> findTrainsForUser(String depStation, String destStation, Date date) {
@@ -104,7 +108,18 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public List<RouteModel> findSchedule(String trainName, Date date) {
-        return scheduleDao.findSchedule(trainName, date);
+        Integer quantityRoutes = routeDao.findQuantityRoute(trainName);
+        List<RouteModel> result = scheduleDao.findSchedule(trainName, date, quantityRoutes);
+        if (result.isEmpty()) {
+            return null;
+        }
+        if (result.get(result.size()-1).getOrderStation() < quantityRoutes) {
+            for (int i = 0; i < result.size(); i++) {
+                /*need code here*/
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -217,5 +232,13 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     public void setTrainDao(TrainDao trainDao) {
         this.trainDao = trainDao;
+    }
+
+    public RouteDao getRouteDao() {
+        return routeDao;
+    }
+
+    public void setRouteDao(RouteDao routeDao) {
+        this.routeDao = routeDao;
     }
 }
