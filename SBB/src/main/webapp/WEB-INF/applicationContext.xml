@@ -13,19 +13,20 @@
     <!--Scanning components in base-package (look for annotations) -->
     <context:annotation-config/>
     <!--@Transaction annotation support -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:annotation-driven/>
     <!--Activates various annotations to be detected in bean classes: Spring's @Required and @Autowired and so on-->
+    <context:component-scan base-package="com.korzinov.beans" scoped-proxy="targetClass"/>
     <context:component-scan base-package="com.korzinov"/>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3307/sbb"/>
+        <property name="url" value="jdbc:mysql://localhost:3307/sbb3"/>
         <property name="username" value="root"/>
         <property name="password" value="root"/>
     </bean>
 
     <!-- for creating Hibernate sessions-->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+      <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
     </bean>
@@ -34,9 +35,11 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="userDetailsService" class="com.korzinov.services.UserDetailsServiceImpl">
-        <property name="userDao" ref="userDao"/>
+    <bean id="userDao" class="com.korzinov.dao.UserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="userDetailsServiceImpl" class="com.korzinov.services.UserDetailsServiceImpl"/>
 
     <import resource="spring-security.xml"/>
 

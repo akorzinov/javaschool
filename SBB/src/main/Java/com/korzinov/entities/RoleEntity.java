@@ -1,21 +1,17 @@
 package com.korzinov.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "role", schema = "sbb")
+@Table(name = "role")
 public class RoleEntity {
     private int roleId;
     private String role;
-    private UserEntity user;
+    private UserEntity userByUserId;
 
     @Id
     @Column(name = "role_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getRoleId() {
         return roleId;
     }
@@ -24,6 +20,7 @@ public class RoleEntity {
         this.roleId = roleId;
     }
 
+    @Basic
     @Column(name = "role", nullable = false, length = 45)
     public String getRole() {
         return role;
@@ -31,14 +28,6 @@ public class RoleEntity {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    public UserEntity getUser() { return user; }
-
-    public void setUser(UserEntity user) {
-        this.user = user;
     }
 
     @Override
@@ -59,5 +48,24 @@ public class RoleEntity {
         int result = roleId;
         result = 31 * result + (role != null ? role.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    public UserEntity getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(UserEntity userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "RoleEntity{" +
+                "roleId=" + roleId +
+                ", role='" + role + '\'' +
+                ", userByUserId=" + userByUserId.getUserName() +
+                '}';
     }
 }

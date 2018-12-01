@@ -1,8 +1,10 @@
 package com.korzinov.services;
 
-import com.korzinov.entities.UserEntity;
+import com.korzinov.models.UserModel;
 
 public interface UserRegistrationService {
 
-    void createUser(UserEntity user);
+    void createUser(UserModel user);
+
+    boolean validateUser(String password, String confirmPassword);
 }
