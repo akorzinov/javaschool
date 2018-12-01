@@ -55,26 +55,22 @@ public class TicketDaoImpl implements TicketDao{
             }
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
-            return;
         }
     }
 
     @Override
-    public boolean checkSamePass(TrainEntity train, String firstName, String lastName, Date birthday, Date depTime) {
+    public boolean checkSamePass(List<Integer> listSchedulesId, String firstName, String lastName, Date birthday) {
         CriteriaBuilder cb = getSession().getCriteriaBuilder();
         CriteriaQuery<TicketEntity> query = cb.createQuery(TicketEntity.class);
         Root<TicketEntity> t = query.from(TicketEntity.class);
         query.select(t).where(cb.and(
-                cb.equal(t.get("trainByTrainId"), train),
+                t.get("scheduleIdDep").in(listSchedulesId),
                 cb.equal(t.get("firstName"), firstName),
                 cb.equal(t.get("lastName"), lastName),
-                cb.equal(t.get("birthday"),birthday),
-                cb.equal(t.get("departureTime"),depTime)));
+                cb.equal(t.get("birthday"),birthday)));
         Query<TicketEntity> q = getSession().createQuery(query);
         List<TicketEntity> result = q.getResultList();
-        if (result.isEmpty()) {
-            return false;
-        } else return true;
+        return !result.isEmpty();
     }
 
     @Override
@@ -86,8 +82,7 @@ public class TicketDaoImpl implements TicketDao{
         query.multiselect(tk.get("ticketId"), tk.get("firstName"), tk.get("lastName"), tk.get("birthday")).
                 where(cb.equal(tr.get("trainName"), trainName));
         Query<TicketTableModel> q = getSession().createQuery(query);
-        List<TicketTableModel> result = q.getResultList();
-        return result;
+        return q.getResultList();
     }
 
     public Session getSession() {

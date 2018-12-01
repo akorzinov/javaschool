@@ -14,7 +14,7 @@ public interface TicketDao {
 
     void buyTickets(List<TicketEntity> tickets);
 
-    boolean checkSamePass(TrainEntity train, String firstName, String lastName, Date birthday, Date depTime);
+    boolean checkSamePass(List<Integer> listSchedulesId, String firstName, String lastName, Date birthday);
 
     List<TicketTableModel> findPassengersByTrain(String trainName);
 }

@@ -2,7 +2,7 @@ package com.korzinov.models;
 
 import java.util.Date;
 
-public class FindTrain {
+public class FindTrain implements Comparable<FindTrain> {
 
     private String trainName;
     private String stationName;
@@ -12,17 +12,31 @@ public class FindTrain {
     private int orderStation;
     private String stationDest;
     private Date currentTime = new Date(System.currentTimeMillis() + 600000L);
+    private int scheduleIdDep;
 
     public FindTrain() {
     }
 
-    public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation) {
+    public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation, int scheduleIdDep) {
         this.trainName = trainName;
         this.stationName = stationName;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.freeSeats = freeSeats;
         this.orderStation = orderStation;
+        this.scheduleIdDep = scheduleIdDep;
+    }
+
+    public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation, String stationDest, Date currentTime, int scheduleIdDep) {
+        this.trainName = trainName;
+        this.stationName = stationName;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.freeSeats = freeSeats;
+        this.orderStation = orderStation;
+        this.stationDest = stationDest;
+        this.currentTime = currentTime;
+        this.scheduleIdDep = scheduleIdDep;
     }
 
     public FindTrain(String trainName, Date arrivalTime, Date departureTime) {
@@ -101,6 +115,14 @@ public class FindTrain {
         this.currentTime = currentTime;
     }
 
+    public int getScheduleIdDep() {
+        return scheduleIdDep;
+    }
+
+    public void setScheduleIdDep(int scheduleIdDep) {
+        this.scheduleIdDep = scheduleIdDep;
+    }
+
     @Override
     public String toString() {
         return "FindTrain{"  +
@@ -114,4 +136,8 @@ public class FindTrain {
                 '}';
     }
 
+    @Override
+    public int compareTo(FindTrain o) {
+        return departureTime.compareTo(o.getDepartureTime());
+    }
 }

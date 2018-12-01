@@ -15,6 +15,7 @@ public class RouteModel {
     private int trainId;
     private int recordId;
     private int freeSeats;
+    private Integer scheduleIdLast;
 
     public RouteModel() {
     }
@@ -141,6 +142,14 @@ public class RouteModel {
         this.routeId = routeId;
     }
 
+    public Integer getScheduleIdLast() {
+        return scheduleIdLast;
+    }
+
+    public void setScheduleIdLast(Integer scheduleIdLast) {
+        this.scheduleIdLast = scheduleIdLast;
+    }
+
     @Override
     public String toString() {
         return "RouteModel{" +
@@ -155,6 +164,7 @@ public class RouteModel {
                 ", trainId=" + trainId +
                 ", recordId=" + recordId +
                 ", freeSeats=" + freeSeats +
+                ", scheduleIdLast=" + scheduleIdLast +
                 '}';
     }
 }

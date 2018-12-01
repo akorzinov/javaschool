@@ -35,4 +35,6 @@ public interface ScheduleDao {
 
     List<ScheduleEntity> findScheduleByListId(List<Integer> listSchedulesId);
 
+    List<Integer> findSchedulesIdByScheduleId(int scheduleId);
+
 }

@@ -11,6 +11,7 @@ public class ScheduleEntity {
     private Date arrivalTime;
     private Date departureTime;
     private RouteEntity routeByRouteId;
+    private Integer scheduleIdLast;
 
     @Id
     @Column(name = "schedule_id", nullable = false)
@@ -53,6 +54,16 @@ public class ScheduleEntity {
 
     public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
+    }
+
+    @Basic
+    @Column(name = "schedule_id_last")
+    public Integer getScheduleIdLast() {
+        return scheduleIdLast;
+    }
+
+    public void setScheduleIdLast(Integer scheduleIdLast) {
+        this.scheduleIdLast = scheduleIdLast;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -98,6 +109,7 @@ public class ScheduleEntity {
                 ", arrivalTime=" + arrivalTime +
                 ", departureTime=" + departureTime +
                 ", routeByRouteId=" + routeByRouteId +
+                ", scheduleIdLast=" + scheduleIdLast +
                 '}';
     }
 }

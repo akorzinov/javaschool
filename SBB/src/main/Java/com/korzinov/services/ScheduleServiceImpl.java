@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -95,9 +96,11 @@ public class ScheduleServiceImpl implements ScheduleService{
                 result.get(i).setStationDest(destStation);
                 result.get(i).setDepartureTime(result.get(i + 1).getDepartureTime());
                 result.get(i).setFreeSeats(result.get(i + 1).getFreeSeats());
+                result.get(i).setScheduleIdDep(result.get(i+1).getScheduleIdDep());
                 result.remove(i + 1);
             }
         }
+        Collections.sort(result);
         return result;
     }
 
