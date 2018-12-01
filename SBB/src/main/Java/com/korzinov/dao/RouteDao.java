@@ -16,4 +16,6 @@ public interface RouteDao {
     void updateRoute(RouteEntity route);
 
     void deleteRoute(RouteEntity route);
+
+    List<RouteEntity> findRouteByListId(List<Integer> listRoutesId);
 }

@@ -1,5 +1,6 @@
 package com.korzinov.services;
 
+import com.korzinov.entities.RouteEntity;
 import com.korzinov.entities.ScheduleEntity;
 import com.korzinov.entities.StationEntity;
 import com.korzinov.entities.TrainEntity;
@@ -20,13 +21,13 @@ public interface ScheduleService {
 
     List<TrainModel> findRouteTrain(String trainName);
 
-//    void addRoute(TrainModel train, ScheduleModel schedule, String stationName);
+    void addSchedule(List<RouteModel> listSchedules);
 
 //    void updateRoute(RowEditEvent event);
 //
 //    void deleteRoute(RouteModel rm);
 
-//    ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station);
+    List<ScheduleEntity> convertListSchedules(List<RouteModel> listSchedules);
 
     List<String> nameStationSuggestions(String stationName);
 

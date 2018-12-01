@@ -1,13 +1,11 @@
 package com.korzinov.controllers;
 
 import com.korzinov.beans.ScheduleBean;
+import com.korzinov.dao.RouteDao;
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.RouteModel;
 import com.korzinov.models.TrainModel;
-import com.korzinov.services.MQService;
-import com.korzinov.services.ScheduleService;
-import com.korzinov.services.StationService;
-import com.korzinov.services.TrainService;
+import com.korzinov.services.*;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +30,9 @@ public class ScheduleController implements Serializable{
 
     @Autowired
     private StationService stationService;
+
+    @Autowired
+    private RouteService routeService;
 
     @Autowired
     private ScheduleBean scheduleBean;
@@ -50,29 +52,35 @@ public class ScheduleController implements Serializable{
     }
 
     public void findSchedule() {
-        scheduleBean.setListRoute(scheduleService.findSchedule(scheduleBean.getTrainName(), scheduleBean.getDate()));
+        scheduleBean.setRenderConfigScheduleTable2(false);
+        scheduleBean.setRenderConfigScheduleTable1(true);
+        scheduleBean.setListSchedules(scheduleService.findSchedule(scheduleBean.getTrainName(), scheduleBean.getDate()));
     }
 
     public void loadRoutes() {
-
+        scheduleBean.setListSchedules(routeService.loadSchedules(scheduleBean.getTrainNameRoute()));
+        scheduleBean.setRenderConfigScheduleTable2(true);
+        scheduleBean.setRenderConfigScheduleTable1(false);
     }
 
-    public String addRoute() {
-//        scheduleService.addRoute(scheduleBean.getTrain(), scheduleBean.getSchedule(), scheduleBean.getStationName());
-        scheduleBean.setListTrain(scheduleService.findRouteTrain(scheduleBean.getTrain().getTrainName()));
-//        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrain().getTrainName()));
-        return null;
+    public void addSchedule() {
+        scheduleService.addSchedule(scheduleBean.getListSchedules());
+        scheduleBean.setRenderConfigScheduleTable2(false);
+        scheduleBean.setRenderConfigScheduleTable1(true);
     }
 
-    public void editRoute(RowEditEvent event) {
+    public void editSchedule(RowEditEvent event) {
 //        scheduleService.updateRoute(event);
         mqService.send(event);
     }
 
-    public String deleteRoute(RouteModel rm) {
+    public void deleteScheduleDb(RouteModel rm) {
 //        scheduleService.deleteRoute(rm);
 //        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName())); /*может будет работать и без этого*/
-        return null;
+    }
+
+    public void deleteScheduleInList(RouteModel rm) {
+
     }
 
     public String buyTicket() {
@@ -139,5 +147,13 @@ public class ScheduleController implements Serializable{
 
     public void setMqService(MQService mqService) {
         this.mqService = mqService;
+    }
+
+    public RouteService getRouteService() {
+        return routeService;
+    }
+
+    public void setRouteService(RouteService routeService) {
+        this.routeService = routeService;
     }
 }

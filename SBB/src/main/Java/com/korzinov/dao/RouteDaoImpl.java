@@ -100,6 +100,25 @@ public class RouteDaoImpl implements RouteDao {
         }
     }
 
+    @Override
+    public  List<RouteEntity> findRouteByListId(List<Integer> listRoutesId) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<RouteEntity> query = cb.createQuery(RouteEntity.class);
+            Root<RouteEntity> rt = query.from(RouteEntity.class);
+            query.select(rt).where(rt.get("routeId").in(listRoutesId));
+            TypedQuery<RouteEntity> q = getSession().createQuery(query);
+            List<RouteEntity> result = q.getResultList();
+            for (RouteEntity r : result) {
+                logger.info("Route: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }

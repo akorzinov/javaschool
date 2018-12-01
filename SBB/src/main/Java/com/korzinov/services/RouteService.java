@@ -24,4 +24,6 @@ public interface RouteService {
     TrainEntity convertTrainModel(TrainModel train);
 
     RouteEntity convertRouteModel(RouteModel route, String trainName, StationEntity station);
+
+    List<RouteModel> loadSchedules(String trainName);
 }

@@ -4,6 +4,7 @@ import com.korzinov.dao.RouteDao;
 import com.korzinov.dao.ScheduleDao;
 import com.korzinov.dao.StationDao;
 import com.korzinov.dao.TrainDao;
+import com.korzinov.entities.RouteEntity;
 import com.korzinov.entities.StationEntity;
 import com.korzinov.entities.TrainEntity;
 import com.korzinov.models.*;
@@ -111,18 +112,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public List<RouteModel> findSchedule(String trainName, Date date) {
-        Integer quantityRoutes = routeDao.findQuantityRoute(trainName);
-        List<RouteModel> result = scheduleDao.findSchedule(trainName, date, quantityRoutes);
-        if (result.isEmpty()) {
-            return null;
-        }
-        if (result.get(result.size()-1).getOrderStation() < quantityRoutes) {
-            for (int i = 0; i < result.size(); i++) {
-                /*need code here*/
-            }
-        }
-
-        return result;
+        return scheduleDao.findSchedule(trainName, date);
     }
 
     @Override
@@ -135,21 +125,22 @@ public class ScheduleServiceImpl implements ScheduleService{
         return trains;
     }
 
-//    @Override
-//    public void addRoute(TrainModel train, ScheduleModel schedule, String stationName) {
-//        trainDao.addTrain(convertTrainModel(train));
-//        schedule.setFreeSeats(trainDao.findByNameTrainUnique(train.getTrainName()).getQuantitySeats());
-//        StationEntity st = stationDao.findByNameStationUnique(stationName);
-//        if (st != null) {
-//            scheduleDao.addRoute(convertScheduleModel(schedule, train.getTrainName(), st));
-//            FacesContext.getCurrentInstance().addMessage(null,
-//                    new FacesMessage("Route Successfully added"));
-//        } else {
-//            logger.error("Entered stationName " + stationName + " doesn't exist, need enter exist stationName");
-//            FacesContext.getCurrentInstance().addMessage(null,
-//                    new FacesMessage("Station name " + stationName + " doesn't exist, need enter existed station name"));
-//        }
-//    }
+    @Override
+    public void addSchedule(List<RouteModel> listSchedules) {
+        List<ScheduleEntity> listScheduleEntities = convertListSchedules(listSchedules);
+        scheduleDao.addListSchedules(listScheduleEntities);
+        RouteEntity route = new RouteEntity();
+        Date date = new Date();
+        if (!listScheduleEntities.isEmpty()) {
+                route = listScheduleEntities.get(0).getRouteByRouteId();
+                date = listScheduleEntities.get(0).getDepartureTime();
+        }
+        ScheduleEntity scheduleWithScheduleIdLast = scheduleDao.findScheduleByRouteIdAndDate(route, date);
+        scheduleWithScheduleIdLast.setScheduleIdLast(scheduleWithScheduleIdLast.getScheduleId() + listScheduleEntities.size()-1);
+        scheduleDao.updateSchedule(scheduleWithScheduleIdLast);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Route Successfully added"));
+    }
 
 //    @Override
 //    public void updateRoute(RowEditEvent event) {
@@ -189,6 +180,25 @@ public class ScheduleServiceImpl implements ScheduleService{
 //        FacesContext.getCurrentInstance().addMessage(null,
 //                new FacesMessage("Route Deleted"));
 //    }
+
+    @Override
+    public List<ScheduleEntity> convertListSchedules(List<RouteModel> listSchedules) {
+        List<ScheduleEntity> listForDB = new ArrayList<>();
+        List<Integer> listId = new ArrayList<>();
+        for (RouteModel listSchedule : listSchedules) {
+            listId.add(listSchedule.getRouteId());
+        }
+        List<RouteEntity> listRoutes = routeDao.findRouteByListId(listId);
+        for (int i = 0; i < listSchedules.size(); i++) {
+            ScheduleEntity newSchedule = new ScheduleEntity();
+            newSchedule.setRouteByRouteId(listRoutes.get(i));
+            newSchedule.setDepartureTime(listSchedules.get(i).getDepartureTime());
+            newSchedule.setArrivalTime(listSchedules.get(i).getArrivalTime());
+            newSchedule.setFreeSeats(listRoutes.get(i).getTrainByTrainId().getQuantitySeats());
+            listForDB.add(newSchedule);
+        }
+        return listForDB;
+    }
 
 
 //    @Override

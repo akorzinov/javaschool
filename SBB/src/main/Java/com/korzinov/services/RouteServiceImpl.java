@@ -117,6 +117,11 @@ public class RouteServiceImpl implements RouteService {
         return newRoute;
     }
 
+    @Override
+    public List<RouteModel> loadSchedules(String trainName) {
+        return routeDao.findRoute(trainName);
+    }
+
     public RouteDao getRouteDao() {
         return routeDao;
     }
