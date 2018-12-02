@@ -64,23 +64,31 @@ public class ScheduleController implements Serializable{
     }
 
     public void addSchedule() {
-        scheduleService.addSchedule(scheduleBean.getListSchedules());
+        scheduleBean.setListSchedules(scheduleService.addSchedule(scheduleBean.getListSchedules()));
         scheduleBean.setRenderConfigScheduleTable2(false);
         scheduleBean.setRenderConfigScheduleTable1(true);
     }
 
     public void editSchedule(RowEditEvent event) {
-//        scheduleService.updateRoute(event);
-        mqService.send(event);
+        scheduleService.updateSchedule(event);
+//        mqService.send(event);
     }
 
     public void deleteScheduleDb(RouteModel rm) {
-//        scheduleService.deleteRoute(rm);
-//        scheduleBean.setListRoute(scheduleService.findRoute(scheduleBean.getTrainName())); /*может будет работать и без этого*/
+        scheduleService.deleteSchedule(rm, scheduleBean.getListSchedules());
+//        mqService.send(); need some logic for delete
     }
 
-    public void deleteScheduleInList(RouteModel rm) {
-
+    public String message(RouteModel rm) {
+        int index = scheduleBean.getListSchedules().indexOf(rm);
+        if (index == 0) {
+            return "All schedule will be deleted, continue?";
+        } else if (index == 1) {
+            return "Schedule with 1 station incorrect, that's why all schedule will be also deleted, continue?";
+        } else if (index == scheduleBean.getListSchedules().size() - 1) {
+            return "Record with " + rm.getStationName() + " station will be deleted, continue?";
+        }
+        return "The following stations behind " + rm.getStationName() +" will be also deleted, continue?";
     }
 
     public String buyTicket() {

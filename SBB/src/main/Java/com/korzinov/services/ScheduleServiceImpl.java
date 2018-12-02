@@ -126,7 +126,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public void addSchedule(List<RouteModel> listSchedules) {
+    public List<RouteModel> addSchedule(List<RouteModel> listSchedules) {
         List<ScheduleEntity> listScheduleEntities = convertListSchedules(listSchedules);
         scheduleDao.addListSchedules(listScheduleEntities);
         RouteEntity route = new RouteEntity();
@@ -140,46 +140,45 @@ public class ScheduleServiceImpl implements ScheduleService{
         scheduleDao.updateSchedule(scheduleWithScheduleIdLast);
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Route Successfully added"));
+        return scheduleDao.findSchedule(route.getTrainByTrainId().getTrainName(),date);
     }
 
-//    @Override
-//    public void updateRoute(RowEditEvent event) {
-//        RouteModel rm = (RouteModel)event.getObject();
-//        ScheduleEntity sc = new ScheduleEntity();
-//        sc.setRecordId(rm.getRecordId());
-//        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
-//        StationEntity st = stationDao.findByNameStationUnique(rm.getStationName());
-//        if (st != null) {
-//            sc.setStationByStationId(st);
-//        } else {
-//            logger.error("Entered stationName " + rm.getStationName() + " doesn't exist, need enter exist stationName");
-//            FacesContext.getCurrentInstance().addMessage(null,
-//                    new FacesMessage("Station name " + rm.getStationName() + " doesn't exist, need enter existed station name"));
-//            return;
-//        }
-//        sc.setOrderStation(rm.getOrderStation());
-//        sc.setFreeSeats(rm.getFreeSeats());
-//        sc.setArrivalTime(rm.getArrivalTime());
-//        sc.setDepartureTime(rm.getDepartureTime());
-//        scheduleDao.updateRoute(sc);
-//        FacesContext.getCurrentInstance().addMessage(null,
-//                new FacesMessage("Route Updated"));
-//    }
+    @Override
+    public void updateSchedule(RowEditEvent event) {
+        RouteModel rm = (RouteModel)event.getObject();
+        ScheduleEntity sc = convertRouteModel(rm);
+        scheduleDao.updateSchedule(sc);
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage("Schedule Updated"));
+    }
 
-//    @Override
-//    public void deleteRoute(RouteModel rm) {
-//        ScheduleEntity sc = new ScheduleEntity();
-//        sc.setRecordId(rm.getRecordId());
-//        sc.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
-//        sc.setStationByStationId(stationDao.findByNameStationUnique(rm.getStationName()));
-//        sc.setOrderStation(rm.getOrderStation());
-//        sc.setFreeSeats(rm.getFreeSeats());
-//        sc.setArrivalTime(rm.getArrivalTime());
-//        sc.setDepartureTime(rm.getDepartureTime());
-//        scheduleDao.deleteRoute(sc);
-//        FacesContext.getCurrentInstance().addMessage(null,
-//                new FacesMessage("Route Deleted"));
-//    }
+    @Override
+    public void deleteSchedule(RouteModel rm, List<RouteModel> listRm) {
+        List<ScheduleEntity> listSchedules = new ArrayList<>();
+        int removeIndex = listRm.indexOf(rm);
+        if (removeIndex == 1) {
+            removeIndex = 0;
+        }
+        for (int i = removeIndex; i < listRm.size(); i++) {
+            ScheduleEntity removeSchedule = convertRouteModel(listRm.get(i));
+            listSchedules.add(removeSchedule);
+            listRm.remove(i);
+            i--;
+        }
+        scheduleDao.deleteSchedules(listSchedules);
+        if (!listRm.isEmpty()) {
+            ScheduleEntity sc = convertRouteModel(listRm.get(0));
+            sc.setScheduleIdLast(sc.getScheduleId() + listRm.size() - 1);
+            scheduleDao.updateSchedule(sc);
+        }
+        if (listSchedules.size() > 1) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Schedules Deleted"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Schedule Deleted"));
+        }
+    }
 
     @Override
     public List<ScheduleEntity> convertListSchedules(List<RouteModel> listSchedules) {
@@ -201,17 +200,17 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
 
-//    @Override
-//    public ScheduleEntity convertScheduleModel(ScheduleModel schedule, String trainName, StationEntity station) {
-//        ScheduleEntity newSchedule = new ScheduleEntity();
-//        newSchedule.setTrainByTrainId(trainDao.findByNameTrainUnique(trainName));
-//        newSchedule.setStationByStationId(station);
-//        newSchedule.setFreeSeats(schedule.getFreeSeats());
-//        newSchedule.setOrderStation(schedule.getOrderStation());
-//        newSchedule.setDepartureTime(schedule.getDepartureTime());
-//        newSchedule.setArrivalTime(schedule.getArrivalTime());
-//        return newSchedule;
-//    }
+    @Override
+    public ScheduleEntity convertRouteModel(RouteModel route) {
+        ScheduleEntity sc = new ScheduleEntity();
+        sc.setScheduleId(route.getScheduleId());
+        sc.setFreeSeats(route.getFreeSeats());
+        sc.setArrivalTime(route.getArrivalTime());
+        sc.setDepartureTime(route.getDepartureTime());
+        sc.setRouteByRouteId(route.getRouteByRouteId());
+        sc.setScheduleIdLast(route.getScheduleIdLast());
+        return sc;
+    }
 
     @Override
     public List<String> nameStationSuggestions(String stationName) {

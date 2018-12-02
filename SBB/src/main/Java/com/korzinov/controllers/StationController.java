@@ -22,25 +22,22 @@ public class StationController implements Serializable{
     @Autowired
     private StationBean stationBean;
 
-    public String FindStation() {
+    public void FindStation() {
         stationBean.setListStation(stationService.findByNameStation(stationBean.getStationNameForSearch()));
-        return null;
     }
 
-    public String addStation() {
+    public void addStation() {
         stationService.addStation(stationBean.getStation());
         stationBean.setListStation(stationService.findByNameStation(stationBean.getStation().getStationName()));
-        return null;
     }
 
     public void editStation(RowEditEvent event) {
         stationService.updateStation(event);
     }
 
-    public String deleteStation(StationModel station) {
+    public void deleteStation(StationModel station) {
         stationService.deleteStation(station);
         stationBean.setListStation(stationService.findByNameStation(stationBean.getStationNameForSearch())); /*может будет работать и без этого*/
-        return null;
     }
 
     public StationService getStationService() {

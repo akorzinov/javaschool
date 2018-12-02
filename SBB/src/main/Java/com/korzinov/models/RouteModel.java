@@ -1,5 +1,7 @@
 package com.korzinov.models;
 
+import com.korzinov.entities.RouteEntity;
+
 import java.util.Date;
 
 public class RouteModel {
@@ -13,21 +15,22 @@ public class RouteModel {
     private Date departureTime;
     private int stationId;
     private int trainId;
-    private int recordId;
+    private int scheduleId;
     private int freeSeats;
     private Integer scheduleIdLast;
+    private RouteEntity routeByRouteId;
 
     public RouteModel() {
     }
 
-    public RouteModel(int recordId,int freeSeats, String trainName, int quantitySeats, Integer orderStation, String stationName, Date arrivalTime, Date departureTime) {
+    public RouteModel(int scheduleId, int freeSeats, String trainName, int quantitySeats, Integer orderStation, String stationName, Date arrivalTime, Date departureTime) {
         this.trainName = trainName;
         this.quantitySeats = quantitySeats;
         this.orderStation = orderStation;
         this.stationName = stationName;
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
-        this.recordId = recordId;
+        this.scheduleId = scheduleId;
         this.freeSeats = freeSeats;
     }
 
@@ -45,8 +48,11 @@ public class RouteModel {
         this.stationName = stationName;
     }
 
-    public RouteModel(int routeId, String trainName, Integer orderStation, String stationName, Date arrivalTime, Date departureTime) {
-        this.routeId = routeId;
+    public RouteModel(int scheduleId, RouteEntity routeByRouteId, Integer scheduleIdLast, int freeSeats, String trainName, Integer orderStation, String stationName, Date arrivalTime, Date departureTime) {
+        this.scheduleId = scheduleId;
+        this.routeByRouteId = routeByRouteId;
+        this.scheduleIdLast = scheduleIdLast;
+        this.freeSeats = freeSeats;
         this.trainName = trainName;
         this.orderStation = orderStation;
         this.stationName = stationName;
@@ -118,12 +124,12 @@ public class RouteModel {
         this.trainId = trainId;
     }
 
-    public int getRecordId() {
-        return recordId;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setRecordId(int recordId) {
-        this.recordId = recordId;
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     public int getFreeSeats() {
@@ -150,6 +156,14 @@ public class RouteModel {
         this.scheduleIdLast = scheduleIdLast;
     }
 
+    public RouteEntity getRouteByRouteId() {
+        return routeByRouteId;
+    }
+
+    public void setRouteByRouteId(RouteEntity routeByRouteId) {
+        this.routeByRouteId = routeByRouteId;
+    }
+
     @Override
     public String toString() {
         return "RouteModel{" +
@@ -162,9 +176,10 @@ public class RouteModel {
                 ", departureTime=" + departureTime +
                 ", stationId=" + stationId +
                 ", trainId=" + trainId +
-                ", recordId=" + recordId +
+                ", scheduleId=" + scheduleId +
                 ", freeSeats=" + freeSeats +
                 ", scheduleIdLast=" + scheduleIdLast +
+                ", routeByRouteId=" + routeByRouteId +
                 '}';
     }
 }

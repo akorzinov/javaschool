@@ -59,9 +59,9 @@
                 </h:panelGrid>
             </p:fieldset>
 
-            <p:dataTable id="ScheduleTable" var="sc" value="#{scheduleBean.listSchedules}" editable="true" paginator="true"
+            <p:dataTable id="scheduleTable" var="sc" value="#{scheduleBean.listSchedules}" editable="true" paginator="true"
                          paginatorPosition="bottom" rows="10"  rendered="#{scheduleBean.renderConfigScheduleTable1}">
-                <p:ajax event="rowEdit" listener="#{scheduleController.editSchedule}" update="panel"/>
+                <p:ajax event="rowEdit" listener="#{scheduleController.editSchedule}" update="schedule1:growl schedule1:scheduleTable"/>
                 <f:facet name="header">
                     Schedule
                 </f:facet>
@@ -104,17 +104,14 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{scheduleController.deleteScheduleDb(sc)}"
-                                     update="panel" icon="ui-icon-close">
-                        <p:confirm header="Confirm delete" message="Are you sure?"/>
+                                     update="schedule1:growl schedule1:scheduleTable" icon="ui-icon-close">
+                        <p:confirm header="Confirm delete"
+                                   message="#{scheduleController.message(sc)}"/>
                     </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
 
-            <p:dataTable id="ScheduleTable2" var="sc" value="#{scheduleBean.listSchedules}" paginator="true"
+            <p:dataTable id="scheduleTable2" var="sc" value="#{scheduleBean.listSchedules}" paginator="true"
                          paginatorPosition="bottom" rows="10" rendered="#{scheduleBean.renderConfigScheduleTable2}">
                 <f:facet name="header">
                     Schedule
@@ -133,21 +130,17 @@
                         <p:calendar id="calendar6" value="#{sc.departureTime}" showOn="button"
                                     locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow" immediate="true"/>
                 </p:column>
-                <p:column headerText="Delete">
-                    <p:commandButton action="#{scheduleController.deleteScheduleInList(sc)}"
-                                     update="panel" icon="ui-icon-close">
-                        <p:confirm header="Confirm delete" message="Are you sure?"/>
-                    </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
-                </p:column>
             </p:dataTable>
 
         </h:form>
 
     </p:panel>
+    <h:form id="confirm">
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:form>
 
 </h:body>
 </html>

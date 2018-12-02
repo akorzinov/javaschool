@@ -119,6 +119,23 @@ public class RouteDaoImpl implements RouteDao {
         }
     }
 
+    @Override
+    public RouteEntity findRouteById(int routeId) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<RouteEntity> query = cb.createQuery(RouteEntity.class);
+            Root<RouteEntity> rt = query.from(RouteEntity.class);
+            query.select(rt).where(cb.equal(rt.get("routeId"),routeId));
+            Query<RouteEntity> q = getSession().createQuery(query);
+            RouteEntity result = q.uniqueResult();
+            logger.info("Route: " + result);
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }

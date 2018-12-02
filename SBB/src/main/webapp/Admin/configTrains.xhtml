@@ -42,7 +42,7 @@
                 <h:outputText/>
                 <p:autoComplete value="#{routeBean.trainName}" maxResults="10" completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                 <p:commandButton value="Search" action="#{routeController.findRoute}"
-                                 update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
+                                 update="panel"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new train route" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
@@ -54,7 +54,7 @@
                     <h:outputText value="Quantity of seats"/>
                     <p:inputText id="quantity" value="#{routeBean.train.quantitySeats}"/>
                     <p:commandButton value="Add Train" action="#{routeController.addTrain}"
-                                     update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
+                                     update="panel"/>
                 </h:panelGrid>
                 <h:panelGrid columns="1">
                     <p:fieldset id="addSceduleForm" collapsed="true" legend="Add new direction" toggleable="true" toggleSpeed="500">
@@ -65,18 +65,14 @@
                             <h:outputText value="Order station"/>
                             <p:inputText value="#{routeBean.route.orderStation}"/>
                             <p:commandButton id="addButton" value="Add route" action="#{routeController.addRoute}"
-                                             update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
+                                             update="panel"/>
                         </h:panelGrid>
                     </p:fieldset>
                 </h:panelGrid>
             </p:fieldset>
-        </h:form>
-
-        <h:form id="formForTable">
 
             <p:dataTable id="trainTable" var="tr" value="#{routeBean.listTrain}" editable="true">
-                <p:ajax event="rowEdit" listener="#{routeController.editTrain}"
-                        update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
+                <p:ajax event="rowEdit" listener="#{routeController.editTrain}" update="panel"/>
                 <p:column headerText="Train name">
                     <p:cellEditor>
                         <f:facet name="output">
@@ -101,24 +97,16 @@
                     <p:rowEditor/>
                 </p:column>
                 <p:column headerText="Delete">
-                    <p:commandButton action="#{routeController.deleteTrain(tr)}" icon="ui-icon-close" update="panel">
+                    <p:commandButton action="#{routeController.deleteTrain(tr)}" icon="ui-icon-close"
+                                     update="panel">
                         <p:confirm header="Confirm delete" message="Are you sure?"/>
                     </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
-                                         update="schedule1 :formForTable:trainTable"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
 
-        </h:form>
-
-        <h:form id="formForTable2">
-
-            <p:dataTable id="ScheduleTable" var="rt" value="#{routeBean.listRoutes}" editable="true" paginator="true"
+            <p:dataTable id="scheduleTable" var="rt" value="#{routeBean.listRoutes}" editable="true" paginator="true"
                          paginatorPosition="bottom" rows="10">
-                <p:ajax event="rowEdit" listener="#{routeController.editRoute}" update="schedule1 :formForTable2:ScheduleTable"/>
+                <p:ajax event="rowEdit" listener="#{routeController.editRoute}" update="panel"/>
                 <f:facet name="header">
                     Routes
                 </f:facet>
@@ -146,20 +134,23 @@
                     <p:rowEditor/>
                 </p:column>
                 <p:column headerText="Delete">
-                    <p:commandButton action="#{routeController.deleteRoute(rt)}" icon="ui-icon-close" update="panel">
+                    <p:commandButton action="#{routeController.deleteRoute(rt)}" icon="ui-icon-close"
+                                     update="panel">
                         <p:confirm header="Confirm delete" message="Are you sure?"/>
                     </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
-                                         update="schedule1 :formForTable2:ScheduleTable"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
 
         </h:form>
 
     </p:panel>
+
+    <h:form id="confirm">
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:form>
 
 </h:body>
 </html>

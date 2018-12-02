@@ -129,8 +129,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Join<ScheduleEntity, RouteEntity> rt2 = sc2.join("routeByRouteId");
             Join<RouteEntity, StationEntity> st2 = rt2.join("stationByStationId");
             Join<RouteEntity, TrainEntity> tr2 = rt2.join("trainByTrainId");
-            query.multiselect(sc2.get("scheduleId"), tr2.get("trainName"), rt2.get("orderStation"),st2.get("stationName"),
-                    sc2.get("arrivalTime"), sc2.get("departureTime"));
+            query.multiselect(sc2.get("scheduleId"), sc2.get("routeByRouteId"), sc2.get("scheduleIdLast"), sc2.get("freeSeats"),
+                    tr2.get("trainName"), rt2.get("orderStation"), st2.get("stationName"), sc2.get("arrivalTime"),
+                    sc2.get("departureTime"));
             query.where(cb.between(sc2.<Integer>get("scheduleId"),scheduleIdFrom, scheduleIdTo))
                     .orderBy(cb.asc(rt2.get("orderStation")));
             TypedQuery<RouteModel> q2 = getSession().createQuery(query);
@@ -200,12 +201,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
-    public void deleteRoute(ScheduleEntity schedule) {
-        try {
-            getSession().delete(schedule);
-            logger.info("Route successfully delete, Route: " + schedule);
-        } catch (HibernateException e) {
-            logger.error("Hibernate exception " + e.getMessage());
+    public void deleteSchedules(List<ScheduleEntity> listSchedules) {
+        for (ScheduleEntity sc: listSchedules) {
+            try {
+                getSession().delete(sc);
+                logger.info("Schedule successfully delete, Schedule: " + sc);
+            } catch (HibernateException e) {
+                logger.error("Hibernate exception " + e.getMessage());
+            }
         }
     }
 

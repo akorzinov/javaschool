@@ -1,12 +1,8 @@
 package com.korzinov.services;
 
-import com.korzinov.entities.RouteEntity;
 import com.korzinov.entities.ScheduleEntity;
-import com.korzinov.entities.StationEntity;
-import com.korzinov.entities.TrainEntity;
 import com.korzinov.models.*;
 import org.primefaces.event.RowEditEvent;
-
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +17,15 @@ public interface ScheduleService {
 
     List<TrainModel> findRouteTrain(String trainName);
 
-    void addSchedule(List<RouteModel> listSchedules);
+    List<RouteModel> addSchedule(List<RouteModel> listSchedules);
 
-//    void updateRoute(RowEditEvent event);
-//
-//    void deleteRoute(RouteModel rm);
+    void updateSchedule(RowEditEvent event);
+
+    void deleteSchedule(RouteModel rm, List<RouteModel> listRm);
 
     List<ScheduleEntity> convertListSchedules(List<RouteModel> listSchedules);
+
+    ScheduleEntity convertRouteModel(RouteModel route);
 
     List<String> nameStationSuggestions(String stationName);
 

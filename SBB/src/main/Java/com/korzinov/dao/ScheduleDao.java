@@ -25,7 +25,7 @@ public interface ScheduleDao {
 
     void updateSchedule(ScheduleEntity schedule);
 
-    void deleteRoute(ScheduleEntity schedule);
+    void deleteSchedules(List<ScheduleEntity> listSchedules);
 
     void updateFreeSeats(List<ScheduleEntity> listSchedule);
 

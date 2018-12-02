@@ -28,31 +28,29 @@
         </p:menubar>
     </h:form>
 
-    <p:panel>
+    <p:panel id="panel">
 
         <h:form id="station1">
             <p:growl id="growl"/>
-            <h:panelGrid columns="2" border="0">
+            <h:panelGrid id="panelGrid1" columns="2" border="0">
                 <h:outputText value="Enter name of station to edit"/>
                 <h:outputText/>
-                <p:autoComplete value="#{stationBean.stationNameForSearch}" maxResults="10"
+                <p:autoComplete id="auto1" value="#{stationBean.stationNameForSearch}" maxResults="10"
                                 completeMethod="#{scheduleController.nameStationSuggestions}"/>
-                <p:commandButton value="Search" action="#{stationController.FindStation}" update="formForTable:stationsTable"/>
+                <p:commandButton id="searchButton" value="Search" action="#{stationController.FindStation}" update="panel"/>
             </h:panelGrid>
             <p:fieldset id="addForm" collapsed="true" legend="Add new station" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
-                <h:panelGrid columns="2">
+                <h:panelGrid id="panelGrid2" columns="2">
                     <h:outputText value="Station name"/>
                     <p:inputText id="stName" value="#{stationBean.station.stationName}"/>
                     <p:commandButton id="addButton" action="#{stationController.addStation}"
-                                     update="station1 :formForTable:stationsTable" value="Add station"/>
+                                     update="panel" value="Add station"/>
                 </h:panelGrid>
             </p:fieldset>
-        </h:form>
 
-        <h:form id="formForTable">
             <p:dataTable id="stationsTable" var="st" value="#{stationBean.listStation}" editable="true">
-                <p:ajax event="rowEdit" listener="#{stationController.editStation}" update="station1 :formForTable:stationsTable"/>
+                <p:ajax event="rowEdit" listener="#{stationController.editStation}" update="station1:growl station1:stationsTable"/>
                 <p:column headerText="Name station">
                     <p:cellEditor>
                         <f:facet name="output">
@@ -68,18 +66,20 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{stationController.deleteStation(st)}"
-                                     update="station1 :formForTable:stationsTable" icon="ui-icon-close">
+                                     update="panel" icon="ui-icon-close">
                         <p:confirm header="Confirm delete" message="Are you sure?"/>
                     </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
                 </p:column>
             </p:dataTable>
         </h:form>
 
     </p:panel>
+    <h:form id="confirm">
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:form>
 
 
 
