@@ -13,6 +13,8 @@ public class FindTrain implements Comparable<FindTrain> {
     private String stationDest;
     private Date currentTime = new Date(System.currentTimeMillis() + 600000L);
     private int scheduleIdDep;
+    private int scheduleId;
+    private Integer scheduleIdLast;
 
     public FindTrain() {
     }
@@ -49,6 +51,16 @@ public class FindTrain implements Comparable<FindTrain> {
         this.trainName = trainName;
         this.stationName = stationName;
         this.orderStation = orderStation;
+    }
+
+    public FindTrain(int scheduleId, Integer scheduleIdLast, String trainName, int orderStation, String stationName, Date arrivalTime, Date departureTime) {
+        this.scheduleId = scheduleId;
+        this.scheduleIdLast = scheduleIdLast;
+        this.trainName = trainName;
+        this.orderStation = orderStation;
+        this.stationName = stationName;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
     }
 
     public String getTrainName() {
@@ -123,16 +135,36 @@ public class FindTrain implements Comparable<FindTrain> {
         this.scheduleIdDep = scheduleIdDep;
     }
 
+    public int getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public Integer getScheduleIdLast() {
+        return scheduleIdLast;
+    }
+
+    public void setScheduleIdLast(Integer scheduleIdLast) {
+        this.scheduleIdLast = scheduleIdLast;
+    }
+
     @Override
     public String toString() {
-        return "FindTrain{"  +
-               "\n\t" + "trainName='" + trainName + '\'' +
-                "\n\t" + ", stationName='" + stationName + '\'' +
-                "\n\t" + ", departureTime=" + departureTime +
-                "\n\t" + ", arrivalTime=" + arrivalTime +
-                "\n\t" + ", freeSeats=" + freeSeats +
-                "\n\t" + ", orderStation=" + orderStation +
-                "\n\t" + ", stationDest=" + stationDest +
+        return "FindTrain{" +
+                "trainName='" + trainName + '\'' +
+                ", stationName='" + stationName + '\'' +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                ", freeSeats=" + freeSeats +
+                ", orderStation=" + orderStation +
+                ", stationDest='" + stationDest + '\'' +
+                ", currentTime=" + currentTime +
+                ", scheduleIdDep=" + scheduleIdDep +
+                ", scheduleId=" + scheduleId +
+                ", scheduleIdLast=" + scheduleIdLast +
                 '}';
     }
 

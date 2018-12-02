@@ -37,14 +37,14 @@ public class TrainDetailsController implements Serializable{
         trainBean.setRenderBackButton(false);
     }
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         listTrains = trainDetailsService.findTrainDetailsAll();
     }
 
     public void onDblClickRowSelect(SelectEvent event) {
         FindTrain train = (FindTrain)event.getObject();
-        trainBean.setListPassengers(trainDetailsService.findPassengersByTrain(train.getTrainName()));
+        trainBean.setListPassengers(trainDetailsService.findPassengersByScheduleId(train.getScheduleId(), train.getScheduleIdLast()));
         trainBean.setRenderTickets(true);
         trainBean.setRenderTrains(false);
         trainBean.setRenderBackButton(true);

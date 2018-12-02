@@ -16,5 +16,5 @@ public interface TicketDao {
 
     boolean checkSamePass(List<Integer> listSchedulesId, String firstName, String lastName, Date birthday);
 
-    List<TicketTableModel> findPassengersByTrain(String trainName);
+    List<TicketTableModel> findPassengersBySchedulesId(int scheduleId, int scheduleIdLast);
 }

@@ -21,8 +21,6 @@ public interface ScheduleDao {
 
     void addListSchedules(List<ScheduleEntity> listScedules);
 
-    void addRoute(ScheduleEntity schedule);
-
     void updateSchedule(ScheduleEntity schedule);
 
     void deleteSchedules(List<ScheduleEntity> listSchedules);
