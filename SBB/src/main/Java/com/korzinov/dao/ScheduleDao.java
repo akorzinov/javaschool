@@ -13,8 +13,6 @@ public interface ScheduleDao {
 
     List<FindTrain> findScheduleByStation(String station);
 
-    List<FindTrain> findScheduleByStationAndDate(String station, Date date);
-
     List<RouteModel> findSchedule(String trainName, Date date);
 
     List<ScheduleEntity> findScheduleByTrain(TrainEntity train);
@@ -38,5 +36,9 @@ public interface ScheduleDao {
     List<Integer> findSchedulesIdByScheduleId(int scheduleId);
 
     ScheduleEntity findScheduleByRouteIdAndDate(RouteEntity route, Date date);
+
+    List<ScheduleEntity> findScheduleByStationAndDate(String station, Date date);
+
+    List<FindTrain> findSchedulesIdBySchedule(ScheduleEntity schedule);
 
 }

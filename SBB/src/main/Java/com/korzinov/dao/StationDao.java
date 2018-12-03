@@ -22,4 +22,6 @@ public interface StationDao {
 
     List<String> findSuggestionsStation(String stationName);
 
+    List<String> listStations();
+
 }

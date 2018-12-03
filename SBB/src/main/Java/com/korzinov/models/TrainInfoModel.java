@@ -2,8 +2,9 @@ package com.korzinov.models;
 
 import java.util.Date;
 
-public class TrainInfoModel {
+public class TrainInfoModel implements Comparable<TrainInfoModel> {
 
+    private int scheduleId;
     private String trainName;
     private String stationDep;
     private String stationDest;
@@ -14,6 +15,7 @@ public class TrainInfoModel {
     }
 
     public TrainInfoModel(FindTrain train) {
+        this.scheduleId = train.getScheduleId();
         this.trainName = train.getTrainName();
         this.stationDep = train.getStationName();
         this.stationDest = train.getStationDest();
@@ -59,5 +61,30 @@ public class TrainInfoModel {
 
     public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
+    }
+
+    public int getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    @Override
+    public int compareTo(TrainInfoModel o) {
+        return arrivalTime.compareTo(o.getArrivalTime());
+    }
+
+    @Override
+    public String toString() {
+        return "TrainInfoModel{" +
+                "scheduleId=" + scheduleId +
+                ", trainName='" + trainName + '\'' +
+                ", stationDep='" + stationDep + '\'' +
+                ", stationDest='" + stationDest + '\'' +
+                ", arrivalTime=" + arrivalTime +
+                ", departureTime=" + departureTime +
+                '}';
     }
 }

@@ -141,6 +141,23 @@ public class StationDaoImpl implements StationDao {
         }
     }
 
+    @Override
+    public List<String> listStations() {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<String> query = cb.createQuery(String.class);
+            Root<StationEntity> st = query.from(StationEntity.class);
+            query.multiselect(st.get("stationName")).orderBy(cb.asc(st.get("stationName")));
+            Query<String> q = getSession().createQuery(query);
+            List<String> result = q.getResultList();
+            logger.info("Station List: " + result);
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }

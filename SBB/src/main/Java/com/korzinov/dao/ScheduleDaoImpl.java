@@ -76,30 +76,6 @@ public class ScheduleDaoImpl implements ScheduleDao {
         }
     }
 
-    @Override
-    public List<FindTrain> findScheduleByStationAndDate(String station, Date date) {
-        try {
-            CriteriaBuilder cb = getSession().getCriteriaBuilder();
-            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
-            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
-            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
-            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
-            query.multiselect(tr.get("trainName"), sc.get("arrivalTime"), sc.get("departureTime"));
-            Predicate predicate = cb.and(cb.equal(st.get("stationName"), station),
-                                    cb.greaterThanOrEqualTo(sc.<Date>get("arrivalTime"), date));
-            query.where(predicate);
-            TypedQuery<FindTrain> q = getSession().createQuery(query);
-            List<FindTrain> result = q.getResultList();
-            for (FindTrain r : result) {
-                logger.info("FindTrain: " + r);
-            }
-            return result;
-        } catch (HibernateException e) {
-            logger.error("Hibernate exception " + e.getMessage());
-            return null;
-        }
-    }
-
     @Override                 /*+*/
     public List<RouteModel> findSchedule(String trainName, Date date) {
         try {
@@ -233,7 +209,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Join<ScheduleEntity, RouteEntity> rt2 = sc2.join("routeByRouteId");
             Join<RouteEntity, StationEntity> st2 = rt2.join("stationByStationId");
             Join<RouteEntity, TrainEntity> tr2 = rt2.join("trainByTrainId");
-            Predicate predicate1 = cb.and(cb.isNotNull(sc1.get("scheduleIdLast")), cb.equal(tr2.get("trainName"),trainName));
+            Predicate predicate1 = cb.and(cb.isNotNull(sc1.get("scheduleIdLast")), cb.equal(tr2.get("trainName"), trainName));
             query.multiselect(sc2.get("scheduleId"), sc2.get("scheduleIdLast"), tr2.get("trainName"), rt2.get("orderStation"),
                     st2.get("stationName"), sc2.get("arrivalTime"), sc2.get("departureTime"));
             query.where(cb.or(predicate1, sc2.get("scheduleId").in(listScheduleIdLast)));
@@ -243,37 +219,6 @@ public class ScheduleDaoImpl implements ScheduleDao {
             for (FindTrain r : result) {
                 logger.info("Train list: " + r);
             }
-            return result;
-        } catch (HibernateException e) {
-            logger.error("Hibernate exception " + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public List<FindTrain> findTrainDetailsUnique(String trainName) {
-        try {
-            CriteriaBuilder cb = getSession().getCriteriaBuilder();
-
-            CriteriaQuery<Integer> subQuery = cb.createQuery(Integer.class);
-            Root<ScheduleEntity> sc1 = subQuery.from(ScheduleEntity.class);
-            Join<ScheduleEntity, TrainEntity> tr1 = sc1.join("trainByTrainId");
-            subQuery.select(cb.max(sc1.<Integer>get("orderStation")));
-            subQuery.where(cb.equal(tr1.<String>get("trainName"),trainName));
-            TypedQuery<Integer> q1 = getSession().createQuery(subQuery);
-            Integer maxOrderStation = q1.getSingleResult();
-
-            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
-            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
-            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
-            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
-            query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("orderStation"));
-            Predicate predicate1 = cb.equal(tr.<String>get("trainName"), trainName);
-            Predicate predicate2 = sc.get("orderStation").in(Arrays.asList(1, maxOrderStation));
-            query.where(cb.and(predicate1, predicate2));
-            TypedQuery<FindTrain> q = getSession().createQuery(query);
-            List<FindTrain> result = q.getResultList();
-            logger.info("Train : " + result);
             return result;
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
@@ -387,6 +332,105 @@ public class ScheduleDaoImpl implements ScheduleDao {
             Query<ScheduleEntity> q = getSession().createQuery(query);
             ScheduleEntity result = q.uniqueResult();
             logger.info("Schedule: " + result);
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<FindTrain> findTrainDetailsUnique(String trainName) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+
+            CriteriaQuery<Integer> subQuery = cb.createQuery(Integer.class);
+            Root<ScheduleEntity> sc1 = subQuery.from(ScheduleEntity.class);
+            Join<ScheduleEntity, TrainEntity> tr1 = sc1.join("trainByTrainId");
+            subQuery.select(cb.max(sc1.<Integer>get("orderStation")));
+            subQuery.where(cb.equal(tr1.<String>get("trainName"),trainName));
+            TypedQuery<Integer> q1 = getSession().createQuery(subQuery);
+            Integer maxOrderStation = q1.getSingleResult();
+
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, StationEntity> st = sc.join("stationByStationId");
+            Join<ScheduleEntity, TrainEntity> tr = sc.join("trainByTrainId");
+            query.multiselect(tr.get("trainName"), st.get("stationName"), sc.get("orderStation"));
+            Predicate predicate1 = cb.equal(tr.<String>get("trainName"), trainName);
+            Predicate predicate2 = sc.get("orderStation").in(Arrays.asList(1, maxOrderStation));
+            query.where(cb.and(predicate1, predicate2));
+            TypedQuery<FindTrain> q = getSession().createQuery(query);
+            List<FindTrain> result = q.getResultList();
+            logger.info("Train : " + result);
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override                               /*+*/
+    public List<ScheduleEntity> findScheduleByStationAndDate(String station, Date date) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<ScheduleEntity> query = cb.createQuery(ScheduleEntity.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, RouteEntity> rt = sc.join("routeByRouteId");
+            Join<RouteEntity, StationEntity> st = rt.join("stationByStationId");
+            Date nextDay = new Date(date.getTime() + 24*60*60*1000);
+            Predicate predicate1 = cb.equal(st.get("stationName"), station);
+            Predicate predicate2 = cb.greaterThanOrEqualTo(sc.<Date>get("departureTime"), date);
+            Predicate predicate3 = cb.lessThanOrEqualTo(sc.<Date>get("departureTime"), nextDay);
+            query.select(sc).where(cb.and(predicate1, predicate2, predicate3)).orderBy(cb.asc(sc.get("scheduleId")));
+            TypedQuery<ScheduleEntity> q = getSession().createQuery(query);
+            List<ScheduleEntity> result = q.getResultList();
+            for (ScheduleEntity r : result) {
+                logger.info("FindTrain: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override                       /*+-*/
+    public List<FindTrain> findSchedulesIdBySchedule(ScheduleEntity schedule) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            String trainName = schedule.getRouteByRouteId().getTrainByTrainId().getTrainName();
+            Date departureTime = schedule.getDepartureTime();
+
+            CriteriaQuery<ScheduleEntity> subQuery = cb.createQuery(ScheduleEntity.class);
+            Root<ScheduleEntity> sc1 = subQuery.from(ScheduleEntity.class);
+            Join<ScheduleEntity, RouteEntity> rt1 = sc1.join("routeByRouteId");
+            Join<RouteEntity, TrainEntity> tr1 = rt1.join("trainByTrainId");
+            subQuery.select(sc1).where(cb.and(
+                    cb.equal(tr1.get("trainName"), trainName),
+                    cb.equal(rt1.get("orderStation"), 1),
+                    cb.greaterThanOrEqualTo(sc1.<Integer>get("scheduleIdLast"), schedule.getScheduleId()),
+                    cb.lessThanOrEqualTo(sc1.<Date>get("departureTime"), departureTime)));
+            Query<ScheduleEntity> q1 = getSession().createQuery(subQuery);
+            ScheduleEntity scheduleWithIdLast = q1.uniqueResult();
+            if (scheduleWithIdLast == null) {
+                return null;
+            }
+            CriteriaQuery<FindTrain> query = cb.createQuery(FindTrain.class);
+            Root<ScheduleEntity> sc2 = query.from(ScheduleEntity.class);
+            Join<ScheduleEntity, RouteEntity> rt2 = sc2.join("routeByRouteId");
+            Join<RouteEntity, StationEntity> st2 = rt2.join("stationByStationId");
+            Join<RouteEntity, TrainEntity> tr2 = rt2.join("trainByTrainId");
+            Predicate predicate1 = cb.equal(sc2.get("scheduleId"), scheduleWithIdLast.getScheduleId());
+            Predicate predicate2 = cb.equal(sc2.get("scheduleId"), scheduleWithIdLast.getScheduleIdLast());
+            query.multiselect(sc2.get("scheduleId"), sc2.get("scheduleIdLast"), tr2.get("trainName"), rt2.get("orderStation"),
+                    st2.get("stationName"), sc2.get("arrivalTime"), sc2.get("departureTime"));
+            query.where(cb.or(predicate1, predicate2)).orderBy(cb.asc(sc2.get("scheduleId")));
+            TypedQuery<FindTrain> q2 = getSession().createQuery(query);
+            List<FindTrain> result = q2.getResultList();
+            for (FindTrain r : result) {
+                logger.info("Train list: " + r);
+            }
             return result;
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
