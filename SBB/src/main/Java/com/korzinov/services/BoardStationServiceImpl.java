@@ -37,6 +37,7 @@ public class BoardStationServiceImpl implements BoardStationService {
             }
             listTrains.get(i).setArrivalTime(listSchedules.get(i).getArrivalTime());
             listTrains.get(i).setDepartureTime(listSchedules.get(i).getDepartureTime());
+            listTrains.get(i).setStationName(stationName);
         }
         Collections.sort(listTrains);
         return listTrains;

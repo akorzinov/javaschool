@@ -71,12 +71,12 @@ public class ScheduleController implements Serializable{
 
     public void editSchedule(RowEditEvent event) {
         scheduleService.updateSchedule(event);
-//        mqService.send(event);
+        mqService.send(event, scheduleBean.getListSchedules());
     }
 
     public void deleteScheduleDb(RouteModel rm) {
         scheduleService.deleteSchedule(rm, scheduleBean.getListSchedules());
-//        mqService.send(); need some logic for delete
+        mqService.sendCanceled(rm, scheduleBean.getListSchedules());
     }
 
     public String message(RouteModel rm) {

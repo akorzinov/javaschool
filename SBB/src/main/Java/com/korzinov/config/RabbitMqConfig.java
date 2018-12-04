@@ -22,7 +22,7 @@ public class RabbitMqConfig {
         return connectionFactory;
     }
 
-    @Bean
+//    @Bean
     public Queue queue() {
         return new Queue(QUEUE_NAME);
     }

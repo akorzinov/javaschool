@@ -10,6 +10,8 @@ public class TrainInfoModel implements Comparable<TrainInfoModel> {
     private String stationDest;
     private Date arrivalTime;
     private Date departureTime;
+    private String status;
+    private String stationName;
 
     public TrainInfoModel() {
     }
@@ -21,6 +23,15 @@ public class TrainInfoModel implements Comparable<TrainInfoModel> {
         this.stationDest = train.getStationDest();
         this.arrivalTime = train.getArrivalTime();
         this.departureTime = train.getDepartureTime();
+        this.status = "On time";
+    }
+
+    public TrainInfoModel(RouteModel route) {
+        this.stationName = route.getStationName();
+        this.trainName = route.getTrainName();
+        this.arrivalTime = route.getArrivalTime();
+        this.departureTime = route.getDepartureTime();
+
     }
 
     public String getTrainName() {
@@ -71,6 +82,22 @@ public class TrainInfoModel implements Comparable<TrainInfoModel> {
         this.scheduleId = scheduleId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
     @Override
     public int compareTo(TrainInfoModel o) {
         return arrivalTime.compareTo(o.getArrivalTime());
@@ -85,6 +112,8 @@ public class TrainInfoModel implements Comparable<TrainInfoModel> {
                 ", stationDest='" + stationDest + '\'' +
                 ", arrivalTime=" + arrivalTime +
                 ", departureTime=" + departureTime +
+                ", status='" + status + '\'' +
+                ", stationName='" + stationName + '\'' +
                 '}';
     }
 }
