@@ -38,14 +38,30 @@ public class UserDaoImpl implements UserDao {
             Root<UserEntity> root = query.from(UserEntity.class);
             query.select(root).where(cb.equal(root.get("userName"), username));
             Query<UserEntity> q = getSession().createQuery(query);
-            UserEntity user = q.getSingleResult();
+            UserEntity user = q.uniqueResult();
             logger.info("Found user: " + user);
             return user;
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
             return null;
         }
+    }
 
+    @Override
+    public UserEntity findByEmail(String email) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<UserEntity> query = cb.createQuery(UserEntity.class);
+            Root<UserEntity> root = query.from(UserEntity.class);
+            query.select(root).where(cb.equal(root.get("email"), email));
+            Query<UserEntity> q = getSession().createQuery(query);
+            UserEntity user = q.uniqueResult();
+            logger.info("Found user: " + user);
+            return user;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
     }
 
     public Session getSession() {

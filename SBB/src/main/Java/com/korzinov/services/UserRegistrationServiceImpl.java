@@ -24,6 +24,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     @Override
     public void createUser(UserModel user) {
+
         UserEntity newUser = new UserEntity();
         String cryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
         newUser.setFirstName(user.getFirstName());
@@ -45,8 +46,13 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     }
 
     @Override
-    public boolean validateUser(String password, String confirmPassword) {
-        if (!(password.equals(confirmPassword))) {
+    public boolean validateUser(UserModel user, String confirmPassword) {
+        if (userDao.findByUserName(user.getUserName()) != null || userDao.findByEmail(user.getEmail()) != null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Entered username or email is already exist"));
+            return false;
+        }
+        if (!(user.getPassword().equals(confirmPassword))) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("User password do not equals confirm password"));
             return false;
