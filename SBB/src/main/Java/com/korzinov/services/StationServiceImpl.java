@@ -1,5 +1,6 @@
 package com.korzinov.services;
 
+import com.korzinov.dao.RouteDao;
 import com.korzinov.dao.StationDao;
 import com.korzinov.entities.StationEntity;
 import com.korzinov.models.StationModel;
@@ -19,6 +20,9 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private StationDao stationDao;
 
+    @Autowired
+    private RouteDao routeDao;
+
     @Override
     public List<StationModel> findByNameStation(String stationName) {
         List<StationEntity> listStation = stationDao.findByNameStation(stationName);
@@ -31,6 +35,11 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public void addStation(StationModel station) {
+        if (!findByNameStation(station.getStationName()).isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station " + station.getStationName() + " already exist"));
+            return;
+        }
         StationEntity newStation = new StationEntity();
         newStation.setStationName(station.getStationName());
         stationDao.addStation(newStation);
@@ -39,18 +48,31 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public void updateStation(RowEditEvent event) {
+    public List<StationModel> updateStation(List<StationModel> listStations, StationModel oldValue, RowEditEvent event) {
         StationModel station = (StationModel)event.getObject();
+        if (!findByNameStation(station.getStationName()).isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station " + station.getStationName() + " already exist"));
+            int i = listStations.indexOf(station);
+            listStations.set(i, oldValue);
+            return listStations;
+        }
         StationEntity st = new StationEntity();
         st.setStationName(station.getStationName());
         st.setStationId(station.getStationId());
         stationDao.updateStation(st);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Station " + st.getStationName() + " Updated"));
+        return listStations;
     }
 
     @Override
     public void deleteStation(StationModel station) {
+        if (!routeDao.findRouteByStationName(station.getStationName()).isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station " + station.getStationName() + " can't be delete, it has related routes"));
+            return;
+        }
         StationEntity st = new StationEntity();
         st.setStationName(station.getStationName());
         st.setStationId(station.getStationId());
@@ -72,4 +94,11 @@ public class StationServiceImpl implements StationService {
         this.stationDao = stationDao;
     }
 
+    public RouteDao getRouteDao() {
+        return routeDao;
+    }
+
+    public void setRouteDao(RouteDao routeDao) {
+        this.routeDao = routeDao;
+    }
 }

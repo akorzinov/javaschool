@@ -12,7 +12,7 @@ public interface StationService {
 
     void addStation(StationModel station);
 
-    void updateStation(RowEditEvent event);
+    List<StationModel> updateStation(List<StationModel> listStations, StationModel oldValue, RowEditEvent event);
 
     void deleteStation(StationModel station);
 

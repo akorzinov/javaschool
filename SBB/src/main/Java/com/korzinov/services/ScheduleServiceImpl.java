@@ -45,7 +45,6 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         List<FindTrain> result = scheduleDao.findTrainsForUser(depStation, destStation, date);
         if (result.isEmpty()) return null;
-                    /*удаление одиночных записей и удаление записей неправильного направления*/
         for (int i = 0; i < result.size(); i++) {
             if (result.size() == 1) {
                 result.clear();
@@ -86,7 +85,6 @@ public class ScheduleServiceImpl implements ScheduleService{
             }
             i--;
         }
-                    /*переправка списка в 1 строку на 1 поезд*/
         for (int i = 0; i < result.size() - 1; i++) {
             if (result.get(i).getStationName().equals(depStation)) {
                 result.get(i).setStationDest(destStation);

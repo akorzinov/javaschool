@@ -136,6 +136,65 @@ public class RouteDaoImpl implements RouteDao {
         }
     }
 
+    @Override
+    public List<RouteEntity> findRouteByStationName(String stationName) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<RouteEntity> query = cb.createQuery(RouteEntity.class);
+            Root<RouteEntity> rt = query.from(RouteEntity.class);
+            Join<RouteEntity, StationEntity> st = rt.join("stationByStationId");
+            query.select(rt).where(cb.equal(st.get("stationName"), stationName));
+            Query<RouteEntity> q = getSession().createQuery(query);
+            List<RouteEntity> result = q.getResultList();
+            for (RouteEntity r: result) {
+                logger.info("Route: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public RouteEntity findRouteByOrderAndTrainName(String trainName, int order) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<RouteEntity> query = cb.createQuery(RouteEntity.class);
+            Root<RouteEntity> rt = query.from(RouteEntity.class);
+            Join<RouteEntity, TrainEntity> tr = rt.join("trainByTrainId");
+            query.select(rt).where(cb.and(cb.equal(tr.get("trainName"), trainName)),
+                                            cb.equal(rt.get("orderStation"), order));
+            Query<RouteEntity> q = getSession().createQuery(query);
+            RouteEntity result = q.uniqueResult();
+            logger.info("Route: " + result);
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<RouteEntity> findRouteByTrainName(String trainName) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<RouteEntity> query = cb.createQuery(RouteEntity.class);
+            Root<RouteEntity> rt = query.from(RouteEntity.class);
+            Join<RouteEntity, TrainEntity> tr = rt.join("trainByTrainId");
+            query.select(rt).where(cb.equal(tr.get("trainName"), trainName));
+            Query<RouteEntity> q = getSession().createQuery(query);
+            List<RouteEntity> result = q.getResultList();
+            for (RouteEntity r: result) {
+                logger.info("Route: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }

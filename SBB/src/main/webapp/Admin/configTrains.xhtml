@@ -49,10 +49,14 @@
                 <h:panelGrid columns="3" >
                     <h:outputText value="Train name"/>
                     <p:autoComplete id="trName" value="#{routeBean.train.trainName}" maxResults="10"
-                                    completeMethod="#{scheduleController.nameTrainSuggestions}"/>
+                                    completeMethod="#{scheduleController.nameTrainSuggestions}">
+                        <f:validateLength maximum="50"/>
+                    </p:autoComplete>
                     <h:outputText/>
                     <h:outputText value="Quantity of seats"/>
-                    <p:inputText id="quantity" value="#{routeBean.train.quantitySeats}"/>
+                    <p:inputText id="quantity" value="#{routeBean.train.quantitySeats}">
+                        <f:validateLength maximum="3"/>
+                    </p:inputText>
                     <p:commandButton value="Add Train" action="#{routeController.addTrain}"
                                      update="panel"/>
                 </h:panelGrid>
@@ -61,9 +65,13 @@
                         <p:ajax event="toggle"/>
                         <h:panelGrid columns="2">
                             <h:outputText value="Station name"/>
-                            <p:autoComplete value="#{routeBean.stationName}" maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
+                            <p:autoComplete value="#{routeBean.stationName}" maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}">
+                                <f:validateLength maximum="50"/>
+                            </p:autoComplete>
                             <h:outputText value="Order station"/>
-                            <p:inputText value="#{routeBean.route.orderStation}"/>
+                            <p:inputText value="#{routeBean.route.orderStation}">
+                                <f:validateLength maximum="3"/>
+                            </p:inputText>
                             <p:commandButton id="addButton" value="Add route" action="#{routeController.addRoute}"
                                              update="panel"/>
                         </h:panelGrid>
@@ -72,7 +80,7 @@
             </p:fieldset>
 
             <p:dataTable id="trainTable" var="tr" value="#{routeBean.listTrain}" editable="true">
-                <p:ajax event="rowEdit" listener="#{routeController.editTrain}" update="panel"/>
+                <p:ajax event="rowEdit" listener="#{routeController.editTrain}" update="schedule1:growl schedule1:trainTable"/>
                 <p:column headerText="Train name">
                     <p:cellEditor>
                         <f:facet name="output">
@@ -106,7 +114,8 @@
 
             <p:dataTable id="scheduleTable" var="rt" value="#{routeBean.listRoutes}" editable="true" paginator="true"
                          paginatorPosition="bottom" rows="10">
-                <p:ajax event="rowEdit" listener="#{routeController.editRoute}" update="panel"/>
+                <p:ajax event="rowEdit" listener="#{routeController.editRoute}" update="schedule1:growl schedule1:scheduleTable"/>
+                <p:ajax event="rowEditInit" listener="#{routeController.editInit}"/>
                 <f:facet name="header">
                     Routes
                 </f:facet>

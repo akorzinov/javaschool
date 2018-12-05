@@ -54,7 +54,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         }
         if (!(user.getPassword().equals(confirmPassword))) {
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage("User password do not equals confirm password"));
+                    new FacesMessage("Entered password do not equals confirm password"));
             return false;
         }
         return true;

@@ -17,6 +17,7 @@ public class RouteBean {
     private RouteModel route = new RouteModel();
     private List<TrainModel> listTrain;
     private List<RouteModel> listRoutes;
+    private RouteModel oldValue = new RouteModel();
 
     public String getTrainName() {
         return trainName;
@@ -64,5 +65,13 @@ public class RouteBean {
 
     public void setStationName(String stationName) {
         this.stationName = stationName;
+    }
+
+    public RouteModel getOldValue() {
+        return oldValue;
+    }
+
+    public void setOldValue(RouteModel oldValue) {
+        this.oldValue = oldValue;
     }
 }

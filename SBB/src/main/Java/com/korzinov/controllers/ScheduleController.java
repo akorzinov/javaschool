@@ -75,8 +75,14 @@ public class ScheduleController implements Serializable{
     }
 
     public void deleteScheduleDb(RouteModel rm) {
+        List<RouteModel> listSchedules = new ArrayList<>();
+        try {
+            listSchedules.addAll(scheduleBean.getListSchedules());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         scheduleService.deleteSchedule(rm, scheduleBean.getListSchedules());
-        mqService.sendCanceled(rm, scheduleBean.getListSchedules());
+        mqService.sendCanceled(rm, listSchedules);
     }
 
     public String message(RouteModel rm) {

@@ -43,7 +43,9 @@
                 <p:ajax event="toggle"/>
                 <h:panelGrid id="panelGrid2" columns="2">
                     <h:outputText value="Station name"/>
-                    <p:inputText id="stName" value="#{stationBean.station.stationName}"/>
+                    <p:inputText id="stName" value="#{stationBean.station.stationName}">
+                        <f:validateLength maximum="50"/>
+                    </p:inputText>
                     <p:commandButton id="addButton" action="#{stationController.addStation}"
                                      update="panel" value="Add station"/>
                 </h:panelGrid>
@@ -51,6 +53,7 @@
 
             <p:dataTable id="stationsTable" var="st" value="#{stationBean.listStation}" editable="true">
                 <p:ajax event="rowEdit" listener="#{stationController.editStation}" update="station1:growl station1:stationsTable"/>
+                <p:ajax event="rowEditInit" listener="#{stationController.editInit}"/>
                 <p:column headerText="Name station">
                     <p:cellEditor>
                         <f:facet name="output">

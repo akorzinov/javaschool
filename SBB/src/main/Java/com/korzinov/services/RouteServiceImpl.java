@@ -1,6 +1,7 @@
 package com.korzinov.services;
 
 import com.korzinov.dao.RouteDao;
+import com.korzinov.dao.ScheduleDao;
 import com.korzinov.dao.StationDao;
 import com.korzinov.dao.TrainDao;
 import com.korzinov.entities.RouteEntity;
@@ -35,6 +36,9 @@ public class RouteServiceImpl implements RouteService {
     @Autowired
     private StationDao stationDao;
 
+    @Autowired
+    private ScheduleDao scheduleDao;
+
     @Override
     public List<RouteModel> findRoute(String trainName) {
         return routeDao.findRoute(trainName);
@@ -52,6 +56,11 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public void addRoute(TrainModel train, RouteModel route, String stationName) {
+        if (routeDao.findRouteByOrderAndTrainName(train.getTrainName(), route.getOrderStation()) != null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Route with order " + route.getOrderStation() + " already exist"));
+            return;
+        }
         trainDao.addTrain(convertTrainModel(train));
         StationEntity st = stationDao.findByNameStationUnique(stationName);
         if (st != null) {
@@ -66,8 +75,19 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public void updateRoute(RowEditEvent event) {
+    public List<RouteModel> updateRoute(List<RouteModel> listRoutes, RouteModel oldValue, RowEditEvent event) {
         RouteModel rm = (RouteModel)event.getObject();
+        int index = listRoutes.indexOf(rm);
+        listRoutes.set(index, oldValue);
+        for (int i = 0; i < listRoutes.size(); i++) {
+            if (listRoutes.get(i).getOrderStation() == rm.getOrderStation()) {
+                listRoutes.get(i).setOrderStation(oldValue.getOrderStation());
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage("Route with order " + rm.getOrderStation() + " already exist"));
+                return listRoutes;
+            }
+        }
+        listRoutes.set(index, rm);
         RouteEntity rt = new RouteEntity();
         rt.setRouteId(rm.getRouteId());
         rt.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
@@ -75,15 +95,18 @@ public class RouteServiceImpl implements RouteService {
         if (st != null) {
             rt.setStationByStationId(st);
         } else {
+            int i = listRoutes.indexOf(rm);
+            listRoutes.set(i, oldValue);
             logger.error("Entered stationName " + rm.getStationName() + " doesn't exist, need enter exist stationName");
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Station name " + rm.getStationName() + " doesn't exist, need enter existed station name"));
-            return;
+            return listRoutes;
         }
         rt.setOrderStation(rm.getOrderStation());
         routeDao.updateRoute(rt);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Route Updated"));
+        return listRoutes;
     }
 
     @Override
@@ -93,6 +116,11 @@ public class RouteServiceImpl implements RouteService {
         rt.setTrainByTrainId(trainDao.findByNameTrainUnique(rm.getTrainName()));
         rt.setStationByStationId(stationDao.findByNameStationUnique(rm.getStationName()));
         rt.setOrderStation(rm.getOrderStation());
+        if (!scheduleDao.findSchedulesByRoute(rt).isEmpty()) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Route with " + rm.getStationName() + " can't be deleted, it has related schedule"));
+            return;
+        }
         routeDao.deleteRoute(rt);
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Route Deleted"));
@@ -144,5 +172,13 @@ public class RouteServiceImpl implements RouteService {
 
     public void setStationDao(StationDao stationDao) {
         this.stationDao = stationDao;
+    }
+
+    public ScheduleDao getScheduleDao() {
+        return scheduleDao;
+    }
+
+    public void setScheduleDao(ScheduleDao scheduleDao) {
+        this.scheduleDao = scheduleDao;
     }
 }

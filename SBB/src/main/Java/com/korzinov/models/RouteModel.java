@@ -60,6 +60,22 @@ public class RouteModel {
         this.departureTime = departureTime;
     }
 
+    public RouteModel(RouteModel route) {
+        this.routeId = route.getRouteId();
+        this.trainName = route.getTrainName();
+        this.quantitySeats = route.getQuantitySeats();
+        this.orderStation = route.getOrderStation();
+        this.stationName = route.getStationName();
+        this.arrivalTime = route.getArrivalTime();
+        this.departureTime = route.getDepartureTime();
+        this.stationId = route.getStationId();
+        this.trainId = route.getTrainId();
+        this.scheduleId = route.getScheduleId();
+        this.freeSeats = route.getFreeSeats();
+        this.scheduleIdLast = route.getScheduleIdLast();
+        this.routeByRouteId = route.getRouteByRouteId();
+    }
+
     public String getTrainName() {
         return trainName;
     }
@@ -181,5 +197,20 @@ public class RouteModel {
                 ", scheduleIdLast=" + scheduleIdLast +
                 ", routeByRouteId=" + routeByRouteId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RouteModel that = (RouteModel) o;
+
+        return routeId == that.routeId;
+    }
+
+    @Override
+    public int hashCode() {
+        return routeId;
     }
 }

@@ -1,6 +1,7 @@
 package com.korzinov.dao;
 
 import com.korzinov.entities.RouteEntity;
+import com.korzinov.entities.TrainEntity;
 import com.korzinov.models.RouteModel;
 
 import java.util.List;
@@ -20,4 +21,10 @@ public interface RouteDao {
     List<RouteEntity> findRouteByListId(List<Integer> listRoutesId);
 
     RouteEntity findRouteById(int routeId);
+
+    List<RouteEntity> findRouteByStationName(String stationName);
+
+    RouteEntity findRouteByOrderAndTrainName(String trainName, int order);
+
+    List<RouteEntity> findRouteByTrainName(String trainName);
 }

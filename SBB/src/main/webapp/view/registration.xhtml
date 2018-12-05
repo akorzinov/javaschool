@@ -18,26 +18,38 @@
 
 <h:body>
     <p:panel style="position: absolute; left: 0; right: 0; bottom: 0; top: 0;">
-        <h:form style="position: absolute; left: 200px; right: 0; bottom: 0; top: 200px; width: 800px; height: 600px;
+        <h:form id="form" style="position: absolute; left: 200px; right: 0; bottom: 0; top: 200px; width: 800px; height: 600px;
                 max-width: 100%; max-height: 100%; margin: auto; overflow: auto;">
             <p:growl/>
             <h:panelGrid columns="2" border="0">
                 <h:outputText value="first name"/>
-                <p:inputText id="firstname" value="#{userBean.user.firstName}" required="true" requiredMessage="First name is required"/>
+                <p:inputText id="firstname" value="#{userBean.user.firstName}" required="true" requiredMessage="First name is required">
+                    <f:validateLength maximum="50"/>
+                </p:inputText>
                 <h:outputText value="last name"/>
-                <p:inputText id="lastname" value="#{userBean.user.lastName}" required="true" requiredMessage="Last name is required"/>
+                <p:inputText id="lastname" value="#{userBean.user.lastName}" required="true" requiredMessage="Last name is required">
+                    <f:validateLength maximum="50"/>
+                </p:inputText>
                 <h:outputText value="date of birth"/>
                 <p:calendar id="calendar" value="#{userBean.user.birthday}" showOn="button" required="true" requiredMessage="Birthday is required"
                             locale="en_GB" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
                 </p:calendar>
                 <h:outputText value="email"/>
-                <p:inputText id="email" value="#{userBean.user.email}" required="true" requiredMessage="Email is required"/>
+                <p:inputText id="email" value="#{userBean.user.email}" required="true" requiredMessage="Email is required">
+                    <f:validateLength maximum="50"/>
+                </p:inputText>
                 <h:outputText value="user name"/>
-                <p:inputText id="username" value="#{userBean.user.userName}" required="true" requiredMessage="Username is required"/>
+                <p:inputText id="username" value="#{userBean.user.userName}" required="true" requiredMessage="Username is required">
+                    <f:validateLength maximum="50"/>
+                </p:inputText>
                 <h:outputText value="Password"/>
-                <p:password id="password" value="#{userBean.user.password}" required="true" requiredMessage="Password is required"/>
+                <p:password id="password" value="#{userBean.user.password}" required="true" requiredMessage="Password is required">
+                    <f:validateLength maximum="100"/>
+                </p:password>
                 <h:outputText value="Password confirmation"/>
-                <p:password id="confpassword" value="#{userBean.confirmPassword}" required="true" requiredMessage="Confirm password is required"/>
+                <p:password id="confpassword" value="#{userBean.confirmPassword}" required="true" requiredMessage="Confirm password is required">
+                    <f:validateLength maximum="100"/>
+                </p:password>
             </h:panelGrid>
             <p:commandButton value="Registration" type="submit" action="#{registrationController.createUser}" ajax="false"/>
             <p:button value="Back" outcome="login"/>

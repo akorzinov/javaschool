@@ -17,7 +17,7 @@ public interface RouteService {
 
     void addRoute(TrainModel train, RouteModel route, String stationName);
 
-    void updateRoute(RowEditEvent event);
+    List<RouteModel> updateRoute(List<RouteModel> listRoutes, RouteModel oldValue, RowEditEvent event);
 
     void deleteRoute(RouteModel rm);
 

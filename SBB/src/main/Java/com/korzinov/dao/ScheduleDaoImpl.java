@@ -438,6 +438,25 @@ public class ScheduleDaoImpl implements ScheduleDao {
         }
     }
 
+    @Override
+    public List<ScheduleEntity> findSchedulesByRoute(RouteEntity route) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<ScheduleEntity> query = cb.createQuery(ScheduleEntity.class);
+            Root<ScheduleEntity> sc = query.from(ScheduleEntity.class);
+            query.select(sc).where(cb.equal(sc.get("routeByRouteId"), route));
+            TypedQuery<ScheduleEntity> q = getSession().createQuery(query);
+            List<ScheduleEntity> result = q.getResultList();
+            for (ScheduleEntity r : result) {
+                logger.info("Schedule: " + r);
+            }
+            return result;
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
+    }
+
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }

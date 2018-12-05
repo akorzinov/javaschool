@@ -39,7 +39,12 @@ public class RouteController implements Serializable{
     }
 
     public void editRoute(RowEditEvent event) {
-        routeService.updateRoute(event);
+        routeBean.setListRoutes(routeService.updateRoute(routeBean.getListRoutes(), routeBean.getOldValue(), event));
+    }
+
+    public void editInit(RowEditEvent event) {
+        RouteModel oldTicket = new RouteModel((RouteModel)event.getObject());
+        routeBean.setOldValue(oldTicket);
     }
 
     public void deleteRoute(RouteModel rm) {

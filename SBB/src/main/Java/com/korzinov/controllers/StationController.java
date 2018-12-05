@@ -7,6 +7,8 @@ import com.korzinov.services.StationService;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -32,7 +34,12 @@ public class StationController implements Serializable{
     }
 
     public void editStation(RowEditEvent event) {
-        stationService.updateStation(event);
+        stationBean.setListStation(stationService.updateStation(stationBean.getListStation(), stationBean.getOldValue(), event));
+    }
+
+    public void editInit(RowEditEvent event) {
+        StationModel oldTicket = new StationModel((StationModel)event.getObject());
+        stationBean.setOldValue(oldTicket);
     }
 
     public void deleteStation(StationModel station) {
