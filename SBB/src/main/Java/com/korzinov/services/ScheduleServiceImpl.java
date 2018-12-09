@@ -137,7 +137,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         scheduleWithScheduleIdLast.setScheduleIdLast(scheduleWithScheduleIdLast.getScheduleId() + listScheduleEntities.size()-1);
         scheduleDao.updateSchedule(scheduleWithScheduleIdLast);
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage("Route Successfully added"));
+                    new FacesMessage("Schedule successfully added"));
         return scheduleDao.findSchedule(route.getTrainByTrainId().getTrainName(),date);
     }
 

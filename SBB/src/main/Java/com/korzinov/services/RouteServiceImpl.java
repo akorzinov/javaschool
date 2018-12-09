@@ -61,6 +61,11 @@ public class RouteServiceImpl implements RouteService {
                     new FacesMessage("Route with order " + route.getOrderStation() + " already exist"));
             return;
         }
+        if (routeDao.findRouteByTrainNameAndStationName(train.getTrainName(), stationName) != null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station " + stationName + " already exist in this train route"));
+            return;
+        }
         trainDao.addTrain(convertTrainModel(train));
         StationEntity st = stationDao.findByNameStationUnique(stationName);
         if (st != null) {
@@ -79,13 +84,20 @@ public class RouteServiceImpl implements RouteService {
         RouteModel rm = (RouteModel)event.getObject();
         int index = listRoutes.indexOf(rm);
         listRoutes.set(index, oldValue);
-        for (int i = 0; i < listRoutes.size(); i++) {
-            if (listRoutes.get(i).getOrderStation() == rm.getOrderStation()) {
-                listRoutes.get(i).setOrderStation(oldValue.getOrderStation());
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage("Route with order " + rm.getOrderStation() + " already exist"));
-                return listRoutes;
+        if (rm.getOrderStation() != oldValue.getOrderStation()) {
+            for (int i = 0; i < listRoutes.size(); i++) {
+                if (listRoutes.get(i).getOrderStation() == rm.getOrderStation()) {
+                    listRoutes.get(i).setOrderStation(oldValue.getOrderStation());
+                    FacesContext.getCurrentInstance().addMessage(null,
+                            new FacesMessage("Route with order " + rm.getOrderStation() + " already exist"));
+                    return listRoutes;
+                }
             }
+        }
+        if (routeDao.findRouteByTrainNameAndStationName(rm.getTrainName(), rm.getStationName()) != null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage("Station " + rm.getStationName() + " already exist in this train route"));
+            return listRoutes;
         }
         listRoutes.set(index, rm);
         RouteEntity rt = new RouteEntity();

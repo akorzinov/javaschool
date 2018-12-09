@@ -55,7 +55,8 @@
                     <p:autoComplete id="trName" value="#{scheduleBean.trainNameRoute}" maxResults="10"
                                     completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                     <p:commandButton value="Load routes" action="#{scheduleController.loadRoutes}" update="panel"/>
-                    <p:commandButton value="Add schedule" action="#{scheduleController.addSchedule}" update="panel"/>
+                    <p:commandButton value="Add schedule" action="#{scheduleController.addSchedule}" update="panel"
+                                     rendered="#{scheduleBean.renderAddScheduleButton}"/>
                 </h:panelGrid>
             </p:fieldset>
 

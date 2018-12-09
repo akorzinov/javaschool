@@ -34,6 +34,7 @@ public class ScheduleBean {
     private boolean renderBackButton;
     private boolean renderConfigScheduleTable1;
     private boolean renderConfigScheduleTable2;
+    private boolean renderAddScheduleButton;
 
     public String getDepStation() {
         return depStation;
@@ -187,4 +188,11 @@ public class ScheduleBean {
         this.renderConfigScheduleTable2 = renderConfigScheduleTable2;
     }
 
+    public boolean isRenderAddScheduleButton() {
+        return renderAddScheduleButton;
+    }
+
+    public void setRenderAddScheduleButton(boolean renderAddScheduleButton) {
+        this.renderAddScheduleButton = renderAddScheduleButton;
+    }
 }

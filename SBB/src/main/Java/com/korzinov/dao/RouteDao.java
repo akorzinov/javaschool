@@ -27,4 +27,6 @@ public interface RouteDao {
     RouteEntity findRouteByOrderAndTrainName(String trainName, int order);
 
     List<RouteEntity> findRouteByTrainName(String trainName);
+
+    RouteEntity findRouteByTrainNameAndStationName(String trainName, String stationName);
 }

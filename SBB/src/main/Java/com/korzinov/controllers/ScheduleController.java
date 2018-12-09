@@ -54,6 +54,7 @@ public class ScheduleController implements Serializable{
     public void findSchedule() {
         scheduleBean.setRenderConfigScheduleTable2(false);
         scheduleBean.setRenderConfigScheduleTable1(true);
+        scheduleBean.setRenderAddScheduleButton(false);
         scheduleBean.setListSchedules(scheduleService.findSchedule(scheduleBean.getTrainName(), scheduleBean.getDate()));
     }
 
@@ -61,12 +62,14 @@ public class ScheduleController implements Serializable{
         scheduleBean.setListSchedules(routeService.loadSchedules(scheduleBean.getTrainNameRoute()));
         scheduleBean.setRenderConfigScheduleTable2(true);
         scheduleBean.setRenderConfigScheduleTable1(false);
+        scheduleBean.setRenderAddScheduleButton(true);
     }
 
     public void addSchedule() {
         scheduleBean.setListSchedules(scheduleService.addSchedule(scheduleBean.getListSchedules()));
         scheduleBean.setRenderConfigScheduleTable2(false);
         scheduleBean.setRenderConfigScheduleTable1(true);
+        scheduleBean.setRenderAddScheduleButton(false);
     }
 
     public void editSchedule(RowEditEvent event) {
