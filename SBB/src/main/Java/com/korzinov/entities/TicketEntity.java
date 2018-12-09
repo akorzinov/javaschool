@@ -6,16 +6,19 @@ import java.util.Date;
 @Entity
 @Table(name = "ticket")
 public class TicketEntity {
+
     private int ticketId;
-    private int departureStationId;
-    private int destinationStationId;
-    private UserEntity userByUserId;
-    private TrainEntity trainByTrainId;
+    private int scheduleIdDep;
+    private String departureStationName;
+    private String destinationStationName;
     private Date departureTime;
     private Date arrivalTime;
     private String firstName;
     private String lastName;
     private Date birthday;
+    private UserEntity userByUserId;
+    private TrainEntity trainByTrainId;
+
 
     @Id
     @Column(name = "ticket_id", nullable = false)
@@ -29,43 +32,33 @@ public class TicketEntity {
     }
 
     @Basic
-    @Column(name = "departure_station_id", nullable = false)
-    public int getDepartureStationId() {
-        return departureStationId;
+    @Column(name = "schedule_id_dep", nullable = false)
+    public int getScheduleIdDep() {
+        return scheduleIdDep;
     }
 
-    public void setDepartureStationId(int departureStationId) {
-        this.departureStationId = departureStationId;
+    public void setScheduleIdDep(int scheduleIdDep) {
+        this.scheduleIdDep = scheduleIdDep;
     }
 
     @Basic
-    @Column(name = "destination_station_id", nullable = false)
-    public int getDestinationStationId() {
-        return destinationStationId;
+    @Column(name = "departure_station_name", nullable = false, length = 45)
+    public String getDepartureStationName() {
+        return departureStationName;
     }
 
-    public void setDestinationStationId(int destinationStationId) {
-        this.destinationStationId = destinationStationId;
+    public void setDepartureStationName(String departureStationName) {
+        this.departureStationName = departureStationName;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
-    public UserEntity getUserByUserId() {
-        return userByUserId;
+    @Basic
+    @Column(name = "destination_station_name", nullable = false, length = 45)
+    public String getDestinationStationName() {
+        return destinationStationName;
     }
 
-    public void setUserByUserId(UserEntity userByUserId) {
-        this.userByUserId = userByUserId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "train_id", referencedColumnName = "train_id", nullable = false)
-    public TrainEntity getTrainByTrainId() {
-        return trainByTrainId;
-    }
-
-    public void setTrainByTrainId(TrainEntity trainByTrainId) {
-        this.trainByTrainId = trainByTrainId;
+    public void setDestinationStationName(String destinationStationName) {
+        this.destinationStationName = destinationStationName;
     }
 
     @Basic
@@ -126,8 +119,12 @@ public class TicketEntity {
         TicketEntity that = (TicketEntity) o;
 
         if (ticketId != that.ticketId) return false;
-        if (departureStationId != that.departureStationId) return false;
-        if (destinationStationId != that.destinationStationId) return false;
+        if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
+            return false;
+        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null) return false;
 
         return true;
     }
@@ -135,25 +132,48 @@ public class TicketEntity {
     @Override
     public int hashCode() {
         int result = ticketId;
-        result = 31 * result + departureStationId;
-        result = 31 * result + destinationStationId;
+        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         return result;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
+    public UserEntity getUserByUserId() {
+        return userByUserId;
+    }
+
+    public void setUserByUserId(UserEntity userByUserId) {
+        this.userByUserId = userByUserId;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "train_id", referencedColumnName = "train_id", nullable = false)
+    public TrainEntity getTrainByTrainId() {
+        return trainByTrainId;
+    }
+
+    public void setTrainByTrainId(TrainEntity trainByTrainId) {
+        this.trainByTrainId = trainByTrainId;
     }
 
     @Override
     public String toString() {
         return "TicketEntity{" +
                 "ticketId=" + ticketId +
-                ", departureStationId=" + departureStationId +
-                ", destinationStationId=" + destinationStationId +
-                ", userByUserId=" + userByUserId +
-                ", trainByTrainId=" + trainByTrainId +
+                ", scheduleIdDep=" + scheduleIdDep +
+                ", departureStationName='" + departureStationName + '\'' +
+                ", destinationStationName='" + destinationStationName + '\'' +
                 ", departureTime=" + departureTime +
                 ", arrivalTime=" + arrivalTime +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", birthday=" + birthday +
+                ", userByUserId=" + userByUserId +
+                ", trainByTrainId=" + trainByTrainId +
                 '}';
     }
-
 }

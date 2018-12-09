@@ -20,7 +20,8 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configTrains" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
@@ -44,10 +45,10 @@
 
         <h:form id="formStation">
             <p:dataTable id="foundStationTable" value="#{scheduleBean.listSchedule}" var="st" paginator="true"
-                         paginatorPosition="bottom" rows="10" selectionMode="single" rowKey="#{st.trainName}"
-                         dblClickSelect="true" rendered="#{scheduleBean.renderFoundStationTable}">
-                <p:ajax event="rowDblselect" listener="#{scheduleController.onDblClickRowSelect}"
-                        update="panel"/>
+                         paginatorPosition="bottom" rows="10"  rowKey="#{st.trainName}"
+                         dblClickSelect="false" rendered="#{scheduleBean.renderFoundStationTable}">
+                <!--<p:ajax event="rowDblselect" listener="#{scheduleController.onDblClickRowSelect}"-->
+                        <!--update="panel"/>-->
                 <p:column headerText="Train name">
                     <h:outputText value="#{st.trainName}"/>
                 </p:column>

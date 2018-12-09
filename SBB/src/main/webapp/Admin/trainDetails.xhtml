@@ -20,7 +20,8 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configTrains" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
@@ -31,7 +32,7 @@
         <h:form id="formInput">
             <p:growl/>
             <h:panelGrid columns="3" border="0">
-                <h:outputText value="Enter name of train to see details"/>
+                <h:outputText value="Enter name of train"/>
                 <h:outputText/>
                 <h:outputText/>
                 <p:autoComplete value="#{trainBean.trainName}" maxResults="10"
@@ -45,7 +46,7 @@
 
         <h:form id="formForTable">
             <p:dataTable id="trainDetails" var="tr" value="#{trainDetailsController.listTrains}" paginator="true" paginatorPosition="bottom"
-                         rows="10" selectionMode="single" rowKey="#{tr.trainName}"
+                         rows="10" selectionMode="single" rowKey="#{tr.scheduleId}"
                          dblClickSelect="true" rendered="#{trainBean.renderTrains}">
                 <p:ajax event="rowDblselect" listener="#{trainDetailsController.onDblClickRowSelect}"
                         update="panel"/>
@@ -57,6 +58,18 @@
                 </p:column>
                 <p:column headerText="Destination station">
                     <h:outputText value="#{tr.stationDest}"/>
+                </p:column>
+                <p:column headerText="Time departure">
+                    <h:outputText value="#{tr.departureTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm"
+                                           timeZone="Europe/Moscow"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Arrival time">
+                    <h:outputText value="#{tr.arrivalTime}">
+                        <f:convertDateTime dateStyle="short" timeStyle="short" pattern="yyyy-MM-dd HH:mm"
+                                           timeZone="Europe/Moscow"/>
+                    </h:outputText>
                 </p:column>
             </p:dataTable>
 

@@ -12,6 +12,7 @@ public class StationBean {
     private String stationNameForSearch;
     private List<StationModel> listStation;
     private StationModel station = new StationModel();
+    private StationModel oldValue = new StationModel();
 
     public String getStationNameForSearch() {
         return stationNameForSearch;
@@ -35,5 +36,13 @@ public class StationBean {
 
     public void setStation(StationModel station) {
         this.station = station;
+    }
+
+    public StationModel getOldValue() {
+        return oldValue;
+    }
+
+    public void setOldValue(StationModel oldValue) {
+        this.oldValue = oldValue;
     }
 }

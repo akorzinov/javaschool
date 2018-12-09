@@ -22,7 +22,8 @@ public class ScheduleBean {
     private String station;
     private List<FindTrain> listSchedule = new ArrayList<>();
     private String trainName;
-    private List<RouteModel> listRoute = new ArrayList<>();
+    private String trainNameRoute;
+    private List<RouteModel> listSchedules = new ArrayList<>();
     private ScheduleModel schedule = new ScheduleModel();
     private TrainModel train = new TrainModel();
     private String stationName;
@@ -31,6 +32,9 @@ public class ScheduleBean {
     private boolean renderFoundStationTable = true;
     private boolean renderTrainDetails;
     private boolean renderBackButton;
+    private boolean renderConfigScheduleTable1;
+    private boolean renderConfigScheduleTable2;
+    private boolean renderAddScheduleButton;
 
     public String getDepStation() {
         return depStation;
@@ -88,12 +92,12 @@ public class ScheduleBean {
         this.trainName = trainName;
     }
 
-    public List<RouteModel> getListRoute() {
-        return listRoute;
+    public List<RouteModel> getListSchedules() {
+        return listSchedules;
     }
 
-    public void setListRoute(List<RouteModel> listRoute) {
-        this.listRoute = listRoute;
+    public void setListSchedules(List<RouteModel> listSchedules) {
+        this.listSchedules = listSchedules;
     }
 
     public ScheduleModel getSchedule() {
@@ -158,5 +162,37 @@ public class ScheduleBean {
 
     public void setRenderBackButton(boolean renderBackButton) {
         this.renderBackButton = renderBackButton;
+    }
+
+    public String getTrainNameRoute() {
+        return trainNameRoute;
+    }
+
+    public void setTrainNameRoute(String trainNameRoute) {
+        this.trainNameRoute = trainNameRoute;
+    }
+
+    public boolean isRenderConfigScheduleTable1() {
+        return renderConfigScheduleTable1;
+    }
+
+    public void setRenderConfigScheduleTable1(boolean renderConfigScheduleTable1) {
+        this.renderConfigScheduleTable1 = renderConfigScheduleTable1;
+    }
+
+    public boolean isRenderConfigScheduleTable2() {
+        return renderConfigScheduleTable2;
+    }
+
+    public void setRenderConfigScheduleTable2(boolean renderConfigScheduleTable2) {
+        this.renderConfigScheduleTable2 = renderConfigScheduleTable2;
+    }
+
+    public boolean isRenderAddScheduleButton() {
+        return renderAddScheduleButton;
+    }
+
+    public void setRenderAddScheduleButton(boolean renderAddScheduleButton) {
+        this.renderAddScheduleButton = renderAddScheduleButton;
     }
 }

@@ -6,33 +6,22 @@ import java.util.Date;
 @Entity
 @Table(name = "schedule")
 public class ScheduleEntity {
-    private int recordId;
-    private int orderStation;
+    private int scheduleId;
     private int freeSeats;
     private Date arrivalTime;
     private Date departureTime;
-    private TrainEntity trainByTrainId;
-    private StationEntity stationByStationId;
+    private RouteEntity routeByRouteId;
+    private Integer scheduleIdLast;
 
     @Id
-    @Column(name = "record_id", nullable = false)
+    @Column(name = "schedule_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getRecordId() {
-        return recordId;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setRecordId(int recordId) {
-        this.recordId = recordId;
-    }
-
-    @Basic
-    @Column(name = "order_station", nullable = false)
-    public int getOrderStation() {
-        return orderStation;
-    }
-
-    public void setOrderStation(int orderStation) {
-        this.orderStation = orderStation;
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     @Basic
@@ -67,6 +56,26 @@ public class ScheduleEntity {
         this.departureTime = departureTime;
     }
 
+    @Basic
+    @Column(name = "schedule_id_last")
+    public Integer getScheduleIdLast() {
+        return scheduleIdLast;
+    }
+
+    public void setScheduleIdLast(Integer scheduleIdLast) {
+        this.scheduleIdLast = scheduleIdLast;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "route_id", referencedColumnName = "route_id", nullable = false)
+    public RouteEntity getRouteByRouteId() {
+        return routeByRouteId;
+    }
+
+    public void setRouteByRouteId(RouteEntity routeByRouteId) {
+        this.routeByRouteId = routeByRouteId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,57 +83,33 @@ public class ScheduleEntity {
 
         ScheduleEntity that = (ScheduleEntity) o;
 
-        if (recordId != that.recordId) return false;
-        if (orderStation != that.orderStation) return false;
+        if (scheduleId != that.scheduleId) return false;
         if (freeSeats != that.freeSeats) return false;
         if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
         if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
             return false;
-
-        return true;
+        return routeByRouteId != null ? routeByRouteId.equals(that.routeByRouteId) : that.routeByRouteId == null;
     }
 
     @Override
     public int hashCode() {
-        int result = recordId;
-        result = 31 * result + orderStation;
+        int result = scheduleId;
         result = 31 * result + freeSeats;
         result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
         result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (routeByRouteId != null ? routeByRouteId.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "ScheduleEntity{" +
-                "recordId=" + recordId +
-                ", orderStation=" + orderStation +
+                "scheduleId=" + scheduleId +
                 ", freeSeats=" + freeSeats +
                 ", arrivalTime=" + arrivalTime +
                 ", departureTime=" + departureTime +
-                ", trainByTrainId=" + trainByTrainId +
-                ", stationByStationId=" + stationByStationId +
+                ", routeByRouteId=" + routeByRouteId +
+                ", scheduleIdLast=" + scheduleIdLast +
                 '}';
     }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "train_id", referencedColumnName = "train_id", nullable = false)
-    public TrainEntity getTrainByTrainId() {
-        return trainByTrainId;
-    }
-
-    public void setTrainByTrainId(TrainEntity trainByTrainId) {
-        this.trainByTrainId = trainByTrainId;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id", referencedColumnName = "station_id", nullable = false)
-    public StationEntity getStationByStationId() {
-        return stationByStationId;
-    }
-
-    public void setStationByStationId(StationEntity stationByStationId) {
-        this.stationByStationId = stationByStationId;
-    }
-
 }

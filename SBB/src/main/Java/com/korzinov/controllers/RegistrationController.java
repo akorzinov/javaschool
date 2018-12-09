@@ -20,7 +20,7 @@ public class RegistrationController implements Serializable {
     private UserBean userBean;
 
     public String createUser() throws Exception {
-        if (userRegistrationService.validateUser(userBean.getUser().getPassword(), userBean.getConfirmPassword())) {
+        if (userRegistrationService.validateUser(userBean.getUser(), userBean.getConfirmPassword())) {
             userRegistrationService.createUser(userBean.getUser());
             return "login";
         } else return null;

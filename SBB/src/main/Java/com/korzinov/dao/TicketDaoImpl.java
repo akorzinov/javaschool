@@ -1,7 +1,6 @@
 package com.korzinov.dao;
 
 import com.korzinov.entities.TicketEntity;
-import com.korzinov.entities.TrainEntity;
 import com.korzinov.entities.UserEntity;
 import com.korzinov.models.TicketTableModel;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.List;
@@ -55,38 +53,43 @@ public class TicketDaoImpl implements TicketDao{
             }
         } catch (HibernateException e) {
             logger.error("Hibernate exception " + e.getMessage());
-            return;
         }
     }
 
     @Override
-    public boolean checkSamePass(TrainEntity train, String firstName, String lastName, Date birthday) {
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<TicketEntity> query = cb.createQuery(TicketEntity.class);
-        Root<TicketEntity> t = query.from(TicketEntity.class);
-        query.select(t).where(cb.and(
-                cb.equal(t.get("trainByTrainId"), train),
-                cb.equal(t.get("firstName"), firstName),
-                cb.equal(t.get("lastName"), lastName),
-                cb.equal(t.get("birthday"),birthday)));
-        Query<TicketEntity> q = getSession().createQuery(query);
-        List<TicketEntity> result = q.getResultList();
-        if (result.isEmpty()) {
+    public boolean checkSamePass(List<Integer> listSchedulesId, String firstName, String lastName, Date birthday) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<TicketEntity> query = cb.createQuery(TicketEntity.class);
+            Root<TicketEntity> t = query.from(TicketEntity.class);
+            query.select(t).where(cb.and(
+                    t.get("scheduleIdDep").in(listSchedulesId),
+                    cb.equal(t.get("firstName"), firstName),
+                    cb.equal(t.get("lastName"), lastName),
+                    cb.equal(t.get("birthday"), birthday)));
+            Query<TicketEntity> q = getSession().createQuery(query);
+            List<TicketEntity> result = q.getResultList();
+            return !result.isEmpty();
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
             return false;
-        } else return true;
+        }
     }
 
     @Override
-    public List<TicketTableModel> findPassengersByTrain(String trainName) {
-        CriteriaBuilder cb = getSession().getCriteriaBuilder();
-        CriteriaQuery<TicketTableModel> query = cb.createQuery(TicketTableModel.class);
-        Root<TicketEntity> tk = query.from(TicketEntity.class);
-        Join<TrainEntity, TrainEntity> tr = tk.join("trainByTrainId");
-        query.multiselect(tk.get("ticketId"), tk.get("firstName"), tk.get("lastName"), tk.get("birthday")).
-                where(cb.equal(tr.get("trainName"), trainName));
-        Query<TicketTableModel> q = getSession().createQuery(query);
-        List<TicketTableModel> result = q.getResultList();
-        return result;
+    public List<TicketTableModel> findPassengersBySchedulesId(int scheduleId, int scheduleIdLast) {
+        try {
+            CriteriaBuilder cb = getSession().getCriteriaBuilder();
+            CriteriaQuery<TicketTableModel> query = cb.createQuery(TicketTableModel.class);
+            Root<TicketEntity> tk = query.from(TicketEntity.class);
+            query.multiselect(tk.get("ticketId"), tk.get("firstName"), tk.get("lastName"), tk.get("birthday")).
+                    where(cb.between(tk.<Integer>get("scheduleIdDep"), scheduleId, scheduleIdLast));
+            Query<TicketTableModel> q = getSession().createQuery(query);
+            return q.getResultList();
+        } catch (HibernateException e) {
+            logger.error("Hibernate exception " + e.getMessage());
+            return null;
+        }
     }
 
     public Session getSession() {

@@ -25,7 +25,8 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configTrains" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
@@ -40,15 +41,19 @@
                 <p:ajax event="toggle"/>
                 <h:panelGrid columns="2" >
                     <h:outputText value="First name"/>
-                    <p:inputText id="fName" value="#{ticketBean.ticketForTable.firstName}"/>
+                    <p:inputText id="fName" value="#{ticketBean.ticketForTable.firstName}" required="true" requiredMessage="Need enter first name">
+                        <f:validateLength maximum="50"/>
+                    </p:inputText>
                     <h:outputText value="Last name"/>
-                    <p:inputText id="lName" value="#{ticketBean.ticketForTable.lastName}"/>
+                    <p:inputText id="lName" value="#{ticketBean.ticketForTable.lastName}" required="true" requiredMessage="Need enter last name">
+                        <f:validateLength maximum="50"/>
+                    </p:inputText>
                     <h:outputText value="Birthday"/>
                     <p:calendar id="calendar" value="#{ticketBean.ticketForTable.birthday}" showOn="button"
-                                locale="en_GB" pattern="yyyy-MM-dd" timeZone="Europe/Moscow">
+                                locale="en_GB" pattern="yyyy-MM-dd" timeZone="Europe/Moscow" required="true" requiredMessage="Need enter birthday">
                     </p:calendar>
                     <p:commandButton id="add" value="Add passanger" action="#{ticketController.addPassenger}"
-                                     update="formTicket :formTable:ticketTable"/>
+                                     update="formTicket :formTable:ticketTable :formTable:buy"/>
                 </h:panelGrid>
             </p:fieldset>
         </h:form>
@@ -86,7 +91,9 @@
                             <h:outputText value="#{tk.firstName}"/>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{tk.firstName}"/>
+                            <p:inputText value="#{tk.firstName}" required="true" requiredMessage="Need enter first name">
+                                <f:validateLength maximum="50"/>
+                            </p:inputText>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
@@ -96,7 +103,9 @@
                             <h:outputText value="#{tk.lastName}"/>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{tk.lastName}"/>
+                            <p:inputText value="#{tk.lastName}"  required="true" requiredMessage="Need enter last name">
+                                <f:validateLength maximum="50"/>
+                            </p:inputText>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
@@ -108,7 +117,7 @@
                             </h:outputText>
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{tk.birthday}">
+                            <p:inputText value="#{tk.birthday}" required="true" requiredMessage="Need enter birthday">
                                 <f:convertDateTime dateStyle="short" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
                             </p:inputText>
                         </f:facet>
@@ -119,19 +128,16 @@
                 </p:column>
                 <p:column headerText="Delete">
                     <p:commandButton action="#{ticketController.deleteTicket(tk)}"
-                                     update="formTicket :formTable:ticketTable" icon="ui-icon-close">
+                                     update="formTicket :formTable:ticketTable :formTable:buy" icon="ui-icon-close">
                         <p:confirm header="Confirm delete" message="Are you sure?"/>
                     </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
                 </p:column>
 
             </p:dataTable>
 
             <p:commandButton id="buy" value="Buy" action="#{ticketController.buyTickets}"
-                             update="formTicket :formTable:ticketTable :formTable2:boughtTickets"/>
+                             update="formTicket :formTable:ticketTable :formTable2:boughtTickets"
+                             disabled="#{ticketBean.listTicket.isEmpty()}"/>
 
         </h:form>
 
@@ -175,6 +181,12 @@
         </h:form>
 
     </p:panel>
+    <h:form id="confirm">
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:form>
 
 </h:body>
 </html>

@@ -8,4 +8,5 @@ public interface UserDao {
 
     UserEntity findByUserName(String username);
 
+    UserEntity findByEmail(String email);
 }

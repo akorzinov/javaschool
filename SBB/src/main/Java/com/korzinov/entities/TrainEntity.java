@@ -1,8 +1,6 @@
 package com.korzinov.entities;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,7 +9,7 @@ public class TrainEntity {
     private int trainId;
     private String trainName;
     private int quantitySeats;
-    private Set<ScheduleEntity> schedulesByTrainId;
+    private Set<RouteEntity> routesByTrainId;
     private Set<TicketEntity> ticketsByTrainId;
 
     @Id
@@ -67,22 +65,13 @@ public class TrainEntity {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "TrainEntity{" +
-                "trainId=" + trainId +
-                ", trainName='" + trainName + '\'' +
-                ", quantitySeats=" + quantitySeats +
-                '}';
-    }
-
     @OneToMany(mappedBy = "trainByTrainId", fetch = FetchType.LAZY)
-    public Set<ScheduleEntity> getSchedulesByTrainId() {
-        return schedulesByTrainId;
+    public Set<RouteEntity> getRoutesByTrainId() {
+        return routesByTrainId;
     }
 
-    public void setSchedulesByTrainId(Set<ScheduleEntity> schedulesByTrainId) {
-        this.schedulesByTrainId = schedulesByTrainId;
+    public void setRoutesByTrainId(Set<RouteEntity> routesByTrainId) {
+        this.routesByTrainId = routesByTrainId;
     }
 
     @OneToMany(mappedBy = "trainByTrainId", fetch = FetchType.LAZY)
@@ -92,5 +81,14 @@ public class TrainEntity {
 
     public void setTicketsByTrainId(Set<TicketEntity> ticketsByTrainId) {
         this.ticketsByTrainId = ticketsByTrainId;
+    }
+
+    @Override
+    public String toString() {
+        return "TrainEntity{" +
+                "trainId=" + trainId +
+                ", trainName='" + trainName + '\'' +
+                ", quantitySeats=" + quantitySeats +
+                '}';
     }
 }

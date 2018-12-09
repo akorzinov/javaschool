@@ -2,7 +2,7 @@ package com.korzinov.models;
 
 import java.util.Date;
 
-public class FindTrain {
+public class FindTrain implements Comparable<FindTrain> {
 
     private String trainName;
     private String stationName;
@@ -12,17 +12,33 @@ public class FindTrain {
     private int orderStation;
     private String stationDest;
     private Date currentTime = new Date(System.currentTimeMillis() + 600000L);
+    private int scheduleIdDep;
+    private int scheduleId;
+    private Integer scheduleIdLast;
 
     public FindTrain() {
     }
 
-    public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation) {
+    public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation, int scheduleIdDep) {
         this.trainName = trainName;
         this.stationName = stationName;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.freeSeats = freeSeats;
         this.orderStation = orderStation;
+        this.scheduleIdDep = scheduleIdDep;
+    }
+
+    public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation, String stationDest, Date currentTime, int scheduleIdDep) {
+        this.trainName = trainName;
+        this.stationName = stationName;
+        this.departureTime = departureTime;
+        this.arrivalTime = arrivalTime;
+        this.freeSeats = freeSeats;
+        this.orderStation = orderStation;
+        this.stationDest = stationDest;
+        this.currentTime = currentTime;
+        this.scheduleIdDep = scheduleIdDep;
     }
 
     public FindTrain(String trainName, Date arrivalTime, Date departureTime) {
@@ -35,6 +51,16 @@ public class FindTrain {
         this.trainName = trainName;
         this.stationName = stationName;
         this.orderStation = orderStation;
+    }
+
+    public FindTrain(int scheduleId, Integer scheduleIdLast, String trainName, int orderStation, String stationName, Date arrivalTime, Date departureTime) {
+        this.scheduleId = scheduleId;
+        this.scheduleIdLast = scheduleIdLast;
+        this.trainName = trainName;
+        this.orderStation = orderStation;
+        this.stationName = stationName;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
     }
 
     public String getTrainName() {
@@ -101,17 +127,49 @@ public class FindTrain {
         this.currentTime = currentTime;
     }
 
+    public int getScheduleIdDep() {
+        return scheduleIdDep;
+    }
+
+    public void setScheduleIdDep(int scheduleIdDep) {
+        this.scheduleIdDep = scheduleIdDep;
+    }
+
+    public int getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public Integer getScheduleIdLast() {
+        return scheduleIdLast;
+    }
+
+    public void setScheduleIdLast(Integer scheduleIdLast) {
+        this.scheduleIdLast = scheduleIdLast;
+    }
+
     @Override
     public String toString() {
-        return "FindTrain{"  +
-               "\n\t" + "trainName='" + trainName + '\'' +
-                "\n\t" + ", stationName='" + stationName + '\'' +
-                "\n\t" + ", departureTime=" + departureTime +
-                "\n\t" + ", arrivalTime=" + arrivalTime +
-                "\n\t" + ", freeSeats=" + freeSeats +
-                "\n\t" + ", orderStation=" + orderStation +
-                "\n\t" + ", stationDest=" + stationDest +
+        return "FindTrain{" +
+                "trainName='" + trainName + '\'' +
+                ", stationName='" + stationName + '\'' +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                ", freeSeats=" + freeSeats +
+                ", orderStation=" + orderStation +
+                ", stationDest='" + stationDest + '\'' +
+                ", currentTime=" + currentTime +
+                ", scheduleIdDep=" + scheduleIdDep +
+                ", scheduleId=" + scheduleId +
+                ", scheduleIdLast=" + scheduleIdLast +
                 '}';
     }
 
+    @Override
+    public int compareTo(FindTrain o) {
+        return departureTime.compareTo(o.getDepartureTime());
+    }
 }

@@ -1,5 +1,6 @@
 package com.korzinov.services;
 
+import com.korzinov.entities.ScheduleEntity;
 import com.korzinov.entities.TicketEntity;
 import com.korzinov.models.FindTrain;
 import com.korzinov.models.TicketTableModel;
@@ -16,7 +17,7 @@ public interface TicketService {
 
     UserEntity getUser();
 
-    boolean checkSamePassenger(TrainEntity train, String firstName, String lastName, Date birthday);
+    boolean checkSamePassenger(int scheduleId, String firstName, String lastName, Date birthday);
 
     boolean checkSamePassList(List<TicketTableModel> listTicket, String firstName, String lastName, Date birthday);
 
@@ -27,4 +28,6 @@ public interface TicketService {
     List<TicketTableModel> editTicket(List<TicketTableModel> listTicket, TicketTableModel ticket, TicketTableModel oldValue);
 
     List<TicketTableModel> deleteTicket(List<TicketTableModel> listTicket, TicketTableModel ticket);
+
+    List<ScheduleEntity> findUniqueScheduleList(String trainName, Date depTime, List<ScheduleEntity> listSchedule);
 }

@@ -25,130 +25,52 @@
             <p:menuitem value="Find train" outcome="/User/welcomeUser"/>
             <p:menuitem value="Stations schedule" outcome="/User/stationSchedule"/>
             <p:menuitem value="Buy tickets" outcome="/User/buyTickets"/>
-            <p:menuitem value="Configure trains" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure trains" outcome="/Admin/configTrains" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
+            <p:menuitem value="Configure schedule" outcome="/Admin/configSchedule" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="Configure stations" outcome="/Admin/configStation" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="See train details" outcome="/Admin/trainDetails" rendered="#{sec:areAllGranted('ROLE_ADMIN')}"/>
             <p:menuitem value="logout" url="#{request.contextPath}/logout" style="position:absolute; right: 10px;"/>
         </p:menubar>
     </h:form>
 
-    <p:panel>
+    <p:panel id="panel">
 
         <h:form id="schedule1">
             <p:growl id="growl"/>
-            <h:panelGrid columns="2" border="0">
-                <h:outputText value="Enter name of train to edit"/>
+            <h:panelGrid columns="3" border="0">
+                <h:outputText value="Enter train"/>
+                <h:outputText value="Enter date"/>
                 <h:outputText/>
                 <p:autoComplete value="#{scheduleBean.trainName}" maxResults="10" completeMethod="#{scheduleController.nameTrainSuggestions}"/>
-                <p:commandButton value="Search" action="#{scheduleController.findRoute}"
-                                 update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
+                <p:calendar id="calendar0" value="#{scheduleBean.date}" showOn="button"
+                            locale="en_GB" pattern="yyyy-MM-dd" timeZone="Europe/Moscow"/>
+                <p:commandButton value="Search" action="#{scheduleController.findSchedule}" update="panel"/>
             </h:panelGrid>
-            <p:fieldset id="addForm" collapsed="true" legend="Add new train route" toggleable="true" toggleSpeed="500">
+            <p:fieldset id="addForm" collapsed="true" legend="Add schedule" toggleable="true" toggleSpeed="500">
                 <p:ajax event="toggle"/>
                 <h:panelGrid columns="3" >
                     <h:outputText value="Train name"/>
-                    <p:autoComplete id="trName" value="#{scheduleBean.train.trainName}" maxResults="10"
-                                    completeMethod="#{scheduleController.nameTrainSuggestions}"/>
                     <h:outputText/>
-                    <h:outputText value="Quantity of seats"/>
-                    <p:inputText id="quantity" value="#{scheduleBean.train.quantitySeats}"/>
-                    <p:commandButton value="Add Train" action="#{scheduleController.addTrain}"
-                                     update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
-                </h:panelGrid>
-                <h:panelGrid columns="1">
-                    <p:fieldset id="addSceduleForm" collapsed="true" legend="Add new direction" toggleable="true" toggleSpeed="500">
-                        <p:ajax event="toggle"/>
-                        <h:panelGrid columns="2">
-                            <h:outputText value="Station name"/>
-                            <p:autoComplete value="#{scheduleBean.stationName}" maxResults="10" completeMethod="#{scheduleController.nameStationSuggestions}"/>
-                            <h:outputText value="Order station"/>
-                            <p:inputText value="#{scheduleBean.schedule.orderStation}"/>
-                            <h:outputText value="Arrival time"/>
-                            <p:calendar id="calendar1" value="#{scheduleBean.schedule.arrivalTime}" showOn="button"
-                                        locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow">
-                            </p:calendar>
-                            <h:outputText value="Departure time"/>
-                            <p:calendar id="calendar2" value="#{scheduleBean.schedule.departureTime}" showOn="button"
-                                        locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow">
-                            </p:calendar>
-                            <p:commandButton id="addButton" value="Add route" action="#{scheduleController.addRoute}"
-                                             update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
-                        </h:panelGrid>
-                    </p:fieldset>
+                    <h:outputText/>
+                    <p:autoComplete id="trName" value="#{scheduleBean.trainNameRoute}" maxResults="10"
+                                    completeMethod="#{scheduleController.nameTrainSuggestions}"/>
+                    <p:commandButton value="Load routes" action="#{scheduleController.loadRoutes}" update="panel"/>
+                    <p:commandButton value="Add schedule" action="#{scheduleController.addSchedule}" update="panel"
+                                     rendered="#{scheduleBean.renderAddScheduleButton}"/>
                 </h:panelGrid>
             </p:fieldset>
-        </h:form>
 
-        <h:form id="formForTable">
-
-            <p:dataTable id="trainTable" var="tr" value="#{scheduleBean.listTrain}" editable="true">
-                <p:ajax event="rowEdit" listener="#{scheduleController.editTrain}"
-                        update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"/>
-                <p:column headerText="Train name">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{tr.trainName}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{tr.trainName}"/>
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column headerText="Quantity of seats">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{tr.quantitySeats}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{tr.quantitySeats}"/>
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-                <p:column headerText="Edit">
-                    <p:rowEditor/>
-                </p:column>
-                <p:column headerText="Delete">
-                    <p:commandButton action="#{scheduleController.deleteTrain(tr)}"
-                                     update="schedule1 :formForTable2:ScheduleTable :formForTable:trainTable"
-                                     icon="ui-icon-close">
-                        <p:confirm header="Confirm delete" message="Are you sure?"/>
-                    </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
-                </p:column>
-            </p:dataTable>
-
-        </h:form>
-
-        <h:form id="formForTable2">
-
-            <p:dataTable id="ScheduleTable" var="sc" value="#{scheduleBean.listRoute}" editable="true" paginator="true"
-                         paginatorPosition="bottom" rows="10">
-                <p:ajax event="rowEdit" listener="#{scheduleController.editRoute}" update="schedule1 :formForTable2:ScheduleTable"/>
+            <p:dataTable id="scheduleTable" var="sc" value="#{scheduleBean.listSchedules}" editable="true" paginator="true"
+                         paginatorPosition="bottom" rows="10"  rendered="#{scheduleBean.renderConfigScheduleTable1}">
+                <p:ajax event="rowEdit" listener="#{scheduleController.editSchedule}" update="schedule1:growl schedule1:scheduleTable"/>
                 <f:facet name="header">
                     Schedule
                 </f:facet>
                 <p:column headerText="Order stations">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{sc.orderStation}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{sc.orderStation}"/>
-                        </f:facet>
-                    </p:cellEditor>
+                    <h:outputText value="#{sc.orderStation}"/>
                 </p:column>
                 <p:column headerText="Station name">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{sc.stationName}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{sc.stationName}"/>
-                        </f:facet>
-                    </p:cellEditor>
+                    <h:outputText value="#{sc.stationName}"/>
                 </p:column>
                 <p:column headerText="Arrival time">
                     <p:cellEditor>
@@ -182,20 +104,44 @@
                     <p:rowEditor/>
                 </p:column>
                 <p:column headerText="Delete">
-                    <p:commandButton action="#{scheduleController.deleteRoute(sc)}"
-                                     update="schedule1 :formForTable2:ScheduleTable" icon="ui-icon-close">
-                        <p:confirm header="Confirm delete" message="Are you sure?"/>
+                    <p:commandButton action="#{scheduleController.deleteScheduleDb(sc)}"
+                                     update="schedule1:growl schedule1:scheduleTable" icon="ui-icon-close">
+                        <p:confirm header="Confirm delete"
+                                   message="#{scheduleController.message(sc)}"/>
                     </p:commandButton>
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
-                    </p:confirmDialog>
+                </p:column>
+            </p:dataTable>
+
+            <p:dataTable id="scheduleTable2" var="sc" value="#{scheduleBean.listSchedules}" paginator="true"
+                         paginatorPosition="bottom" rows="10" rendered="#{scheduleBean.renderConfigScheduleTable2}">
+                <f:facet name="header">
+                    Schedule
+                </f:facet>
+                <p:column headerText="Order stations">
+                    <h:outputText value="#{sc.orderStation}"/>
+                </p:column>
+                <p:column headerText="Station name">
+                    <h:outputText value="#{sc.stationName}"/>
+                </p:column>
+                <p:column headerText="Arrival time">
+                        <p:calendar id="calendar5" value="#{sc.arrivalTime}" showOn="button"
+                                    locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow" immediate="true"/>
+                </p:column>
+                <p:column headerText="Departure time">
+                        <p:calendar id="calendar6" value="#{sc.departureTime}" showOn="button"
+                                    locale="en_GB" pattern="yyyy-MM-dd HH:mm" timeZone="Europe/Moscow" immediate="true"/>
                 </p:column>
             </p:dataTable>
 
         </h:form>
 
     </p:panel>
+    <h:form id="confirm">
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:form>
 
 </h:body>
 </html>

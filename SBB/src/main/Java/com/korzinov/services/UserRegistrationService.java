@@ -6,5 +6,5 @@ public interface UserRegistrationService {
 
     void createUser(UserModel user);
 
-    boolean validateUser(String password, String confirmPassword);
+    boolean validateUser(UserModel user, String confirmPassword);
 }

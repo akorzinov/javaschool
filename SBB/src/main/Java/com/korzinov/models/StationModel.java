@@ -19,6 +19,12 @@ public class StationModel {
         this.stationName = station.getStationName();
     }
 
+    public StationModel(StationModel station) {
+        this.stationId = station.getStationId();
+        this.stationName = station.getStationName();
+    }
+
+
     public int getStationId() {
         return stationId;
     }
@@ -33,5 +39,28 @@ public class StationModel {
 
     public void setStationName(String stationName) {
         this.stationName = stationName;
+    }
+
+    @Override
+    public String toString() {
+        return "StationModel{" +
+                "stationId=" + stationId +
+                ", stationName='" + stationName + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StationModel that = (StationModel) o;
+
+        return stationId == that.stationId;
+    }
+
+    @Override
+    public int hashCode() {
+        return stationId;
     }
 }
