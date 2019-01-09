@@ -19,6 +19,10 @@ public class FindTrain implements Comparable<FindTrain> {
     public FindTrain() {
     }
 
+    public FindTrain(String stationName) {
+        this.stationName = stationName;
+    }
+
     public FindTrain(String trainName, String stationName, Date departureTime, Date arrivalTime, int freeSeats, int orderStation, int scheduleIdDep) {
         this.trainName = trainName;
         this.stationName = stationName;
@@ -171,5 +175,46 @@ public class FindTrain implements Comparable<FindTrain> {
     @Override
     public int compareTo(FindTrain o) {
         return departureTime.compareTo(o.getDepartureTime());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FindTrain findTrain = (FindTrain) o;
+
+        if (freeSeats != findTrain.freeSeats) return false;
+        if (orderStation != findTrain.orderStation) return false;
+        if (scheduleIdDep != findTrain.scheduleIdDep) return false;
+        if (scheduleId != findTrain.scheduleId) return false;
+        if (trainName != null ? !trainName.equals(findTrain.trainName) : findTrain.trainName != null) return false;
+        if (stationName != null ? !stationName.equals(findTrain.stationName) : findTrain.stationName != null)
+            return false;
+        if (departureTime != null ? !departureTime.equals(findTrain.departureTime) : findTrain.departureTime != null)
+            return false;
+        if (arrivalTime != null ? !arrivalTime.equals(findTrain.arrivalTime) : findTrain.arrivalTime != null)
+            return false;
+        if (stationDest != null ? !stationDest.equals(findTrain.stationDest) : findTrain.stationDest != null)
+            return false;
+        if (currentTime != null ? !currentTime.equals(findTrain.currentTime) : findTrain.currentTime != null)
+            return false;
+        return scheduleIdLast != null ? scheduleIdLast.equals(findTrain.scheduleIdLast) : findTrain.scheduleIdLast == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = trainName != null ? trainName.hashCode() : 0;
+        result = 31 * result + (stationName != null ? stationName.hashCode() : 0);
+        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
+        result = 31 * result + freeSeats;
+        result = 31 * result + orderStation;
+        result = 31 * result + (stationDest != null ? stationDest.hashCode() : 0);
+        result = 31 * result + (currentTime != null ? currentTime.hashCode() : 0);
+        result = 31 * result + scheduleIdDep;
+        result = 31 * result + scheduleId;
+        result = 31 * result + (scheduleIdLast != null ? scheduleIdLast.hashCode() : 0);
+        return result;
     }
 }

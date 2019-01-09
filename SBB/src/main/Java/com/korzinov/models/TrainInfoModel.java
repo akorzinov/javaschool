@@ -34,6 +34,15 @@ public class TrainInfoModel implements Comparable<TrainInfoModel> {
 
     }
 
+    public TrainInfoModel(String stationDep, String stationDest, Date arrivalTime, Date departureTime, String status, String stationName) {
+        this.stationDep = stationDep;
+        this.stationDest = stationDest;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
+        this.status = status;
+        this.stationName = stationName;
+    }
+
     public String getTrainName() {
         return trainName;
     }
@@ -115,5 +124,36 @@ public class TrainInfoModel implements Comparable<TrainInfoModel> {
                 ", status='" + status + '\'' +
                 ", stationName='" + stationName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TrainInfoModel that = (TrainInfoModel) o;
+
+        if (scheduleId != that.scheduleId) return false;
+        if (trainName != null ? !trainName.equals(that.trainName) : that.trainName != null) return false;
+        if (stationDep != null ? !stationDep.equals(that.stationDep) : that.stationDep != null) return false;
+        if (stationDest != null ? !stationDest.equals(that.stationDest) : that.stationDest != null) return false;
+        if (arrivalTime != null ? !arrivalTime.equals(that.arrivalTime) : that.arrivalTime != null) return false;
+        if (departureTime != null ? !departureTime.equals(that.departureTime) : that.departureTime != null)
+            return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        return stationName != null ? stationName.equals(that.stationName) : that.stationName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = scheduleId;
+        result = 31 * result + (trainName != null ? trainName.hashCode() : 0);
+        result = 31 * result + (stationDep != null ? stationDep.hashCode() : 0);
+        result = 31 * result + (stationDest != null ? stationDest.hashCode() : 0);
+        result = 31 * result + (arrivalTime != null ? arrivalTime.hashCode() : 0);
+        result = 31 * result + (departureTime != null ? departureTime.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (stationName != null ? stationName.hashCode() : 0);
+        return result;
     }
 }
